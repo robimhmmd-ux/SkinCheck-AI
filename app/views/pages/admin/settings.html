@@ -1,0 +1,522 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}Pengaturan Sistem, Batasan AI & Penguji Koneksi{% endblock %}
+{% block topbar_title %}Pengaturan & Flow Sistem{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">
+            <i class="bi bi-sliders text-danger me-2"></i>Pengaturan Sistem, Batasan AI & Penguji Koneksi
+        </h4>
+        <p class="text-muted small mb-0">Kelola API Key, batasan parameter inferensi AI, alur flow project, serta instrumen uji koneksi layanan eksternal</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="#testing-hub" class="btn btn-outline-danger btn-sm fw-semibold">
+            <i class="bi bi-broadcast me-1"></i>Buka Penguji Koneksi Eksternal
+        </a>
+    </div>
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+    <i class="bi bi-check-circle-fill flex-shrink-0 fs-5 text-success"></i>
+    <div class="fw-semibold">{{ request.query_params.get('success') }}</div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<form method="POST" action="/admin/settings">
+    <!-- ROW 1: AI PARAMETERS & FLOW CONTROL -->
+    <div class="row g-4 mb-4">
+        <!-- 1. Google Gemini AI & Batasan Parameter AI -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="p-2 rounded" style="background:#ecfdf5;color:#0d9488;">
+                            <i class="bi bi-cpu-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Google Gemini AI & Batasan Inferensi</h6>
+                            <small class="text-muted" style="font-size:0.75rem;">Model, token limit, kuota, & parameter AI</small>
+                        </div>
+                    </div>
+                    <span class="badge" style="color:#065f46;border:1px solid rgba(16,185,129,0.3);background:#ecfdf5;">
+                        {{ settings_data.ai_model }}
+                    </span>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Google Gemini API Key</label>
+                        <div class="input-group">
+                            <input type="password" name="gemini_api_key" id="geminiKeyInput" class="form-control"
+                                   placeholder="AIzaSy..." value="{{ settings_data.gemini_api_key }}">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('geminiKeyInput', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-text small">Status Kunci: <strong>{{ settings_data.masked_gemini_key }}</strong></div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Pilihan Model LLM</label>
+                            <select name="ai_model" class="form-select form-select-sm">
+                                <option value="gemini-1.5-flash" {% if settings_data.ai_model == 'gemini-1.5-flash' %}selected{% endif %}>Gemini 1.5 Flash (Cepat & Hemat Kuota)</option>
+                                <option value="gemini-1.5-pro" {% if settings_data.ai_model == 'gemini-1.5-pro' %}selected{% endif %}>Gemini 1.5 Pro (Kapasitas Analisis Tinggi)</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Batas Kuota Scan Harian / User</label>
+                            <select name="ai_daily_scan_limit" class="form-select form-select-sm">
+                                <option value="3" {% if settings_data.ai_daily_scan_limit == '3' %}selected{% endif %}>3 Kali / Hari</option>
+                                <option value="5" {% if settings_data.ai_daily_scan_limit == '5' %}selected{% endif %}>5 Kali / Hari (Standar)</option>
+                                <option value="10" {% if settings_data.ai_daily_scan_limit == '10' %}selected{% endif %}>10 Kali / Hari</option>
+                                <option value="0" {% if settings_data.ai_daily_scan_limit == '0' %}selected{% endif %}>Tanpa Batas (Unlimited)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Max Output Tokens</label>
+                            <select name="ai_max_tokens" class="form-select form-select-sm">
+                                <option value="512" {% if settings_data.ai_max_tokens == '512' %}selected{% endif %}>512 Tokens (Ringkas)</option>
+                                <option value="1024" {% if settings_data.ai_max_tokens == '1024' %}selected{% endif %}>1024 Tokens (Standar)</option>
+                                <option value="2048" {% if settings_data.ai_max_tokens == '2048' %}selected{% endif %}>2048 Tokens (Lengkap)</option>
+                                <option value="4096" {% if settings_data.ai_max_tokens == '4096' %}selected{% endif %}>4096 Tokens (Maksimal)</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Tingkat Kreativitas (Temperature)</label>
+                            <select name="ai_temperature" class="form-select form-select-sm">
+                                <option value="0.2" {% if settings_data.ai_temperature == '0.2' %}selected{% endif %}>0.2 (Sangat Konservatif/Medis)</option>
+                                <option value="0.5" {% if settings_data.ai_temperature == '0.5' %}selected{% endif %}>0.5 (Seimbang)</option>
+                                <option value="0.7" {% if settings_data.ai_temperature == '0.7' %}selected{% endif %}>0.7 (Standar Disarankan)</option>
+                                <option value="1.0" {% if settings_data.ai_temperature == '1.0' %}selected{% endif %}>1.0 (Kreatif)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" name="ai_simulation_mode" value="1" id="simModeCheck"
+                               {% if settings_data.ai_simulation_mode == '1' %}checked{% endif %}>
+                        <label class="form-check-label small fw-semibold text-dark" for="simModeCheck">
+                            Aktifkan Mode Simulasi AI Fallback (Hemat Kuota API)
+                        </label>
+                    </div>
+                    <div class="form-text small" style="font-size:0.75rem;">
+                        Jika aktif, saat kuota API habis atau offline, sistem akan menggunakan basis data internal RAG SkinCheck secara otomatis.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Pengaturan Seluruh Flow Project -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="p-2 rounded bg-danger bg-opacity-10 text-danger">
+                            <i class="bi bi-diagram-3-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Kontrol Flow Alur Project</h6>
+                            <small class="text-muted" style="font-size:0.75rem;">Registrasi, kanal OTP, & status operasional</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">
+                        Flow Controller
+                    </span>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Mode Alur Verifikasi Akun (Registrasi)</label>
+                        <select name="registration_otp_mode" class="form-select">
+                            <option value="dual" {% if settings_data.registration_otp_mode == 'dual' %}selected{% endif %}>
+                                🌟 Dual-Channel OTP (Bisa Kirim via Email & WhatsApp) — Standar
+                            </option>
+                            <option value="email_only" {% if settings_data.registration_otp_mode == 'email_only' %}selected{% endif %}>
+                                ✉️ Hanya Email OTP (Wajib verifikasi via Gmail SMTP)
+                            </option>
+                            <option value="wa_only" {% if settings_data.registration_otp_mode == 'wa_only' %}selected{% endif %}>
+                                📱 Hanya WhatsApp OTP (Wajib verifikasi via nomor WhatsApp)
+                            </option>
+                            <option value="bypass" {% if settings_data.registration_otp_mode == 'bypass' %}selected{% endif %}>
+                                ⚡ Bypass OTP (Langsung Aktif Tanpa Verifikasi — Cocok untuk Uji Coba Dosen)
+                            </option>
+                        </select>
+                        <div class="form-text small">Admin dapat mengubah alur registrasi kapan saja tanpa mematikan server.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Status Operasional Web (Maintenance Mode)</label>
+                        <select name="maintenance_mode" class="form-select">
+                            <option value="off" {% if settings_data.maintenance_mode == 'off' %}selected{% endif %}>
+                                🟢 Mode Live Normal (Customer & Admin memiliki akses penuh)
+                            </option>
+                            <option value="on" {% if settings_data.maintenance_mode == 'on' %}selected{% endif %}>
+                                🟡 Mode Pemeliharaan (Hanya Admin yang dapat login, Customer melihat halaman maintenance)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="p-3 rounded-2 bg-light border">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-shield-lock-fill text-primary"></i>
+                            <span class="fw-bold small text-dark">Arsitektur Database Terikat:</span>
+                        </div>
+                        <p class="small text-muted mb-0">
+                            Project ini terhubung ke <strong>XAMPP MySQL (Port 3306)</strong> pada database <code>skincheck_db</code>. Seluruh konfigurasi di atas tersimpan permanen di tabel <code>system_settings</code>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. WhatsApp Gateway (OTP) -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="p-2 rounded bg-success bg-opacity-10 text-success">
+                            <i class="bi bi-whatsapp fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">WhatsApp Service (OTP Gateway)</h6>
+                            <small class="text-muted" style="font-size:0.75rem;">Konfigurasi API pesan WhatsApp</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                        REST API
+                    </span>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Gateway Endpoint URL</label>
+                        <input type="url" name="wa_api_url" class="form-control form-control-sm" value="{{ settings_data.wa_api_url }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">API Token / Secret Key</label>
+                        <input type="password" name="wa_api_token" id="waTokenInput" class="form-control form-control-sm"
+                               placeholder="Token Fonnte / Wablas" value="{{ settings_data.wa_api_token }}">
+                    </div>
+                    <div class="form-text small">
+                        Jika token dikosongkan, pengiriman OTP WhatsApp otomatis beralih ke <strong>Dev Mode</strong> (kode tercetak di log server).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Email Service (SMTP Gateway) & Vision Threshold -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="p-2 rounded bg-primary bg-opacity-10 text-primary">
+                            <i class="bi bi-envelope-fill fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Email Service (SMTP) & Vision Dual-AI</h6>
+                            <small class="text-muted" style="font-size:0.75rem;">Gmail SMTP TLS & ambang batas VGG16/YOLO</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
+                        Gmail Port 587
+                    </span>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row g-2 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Email Pengirim (SMTP User)</label>
+                            <input type="email" name="mail_username" class="form-control form-control-sm"
+                                   placeholder="nama@gmail.com" value="{{ settings_data.mail_username }}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Nama Tampilan Pengirim</label>
+                            <input type="text" name="mail_from_name" class="form-control form-control-sm" value="{{ settings_data.mail_from_name }}">
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">VGG16 Clinical Threshold (%)</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="vgg_threshold" class="form-control" min="10" max="90" value="{{ settings_data.vgg_threshold }}">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">YOLOv8 Acne Confidence</label>
+                            <input type="number" name="yolo_confidence" class="form-control form-control-sm" step="0.05" min="0.1" max="0.9" value="{{ settings_data.yolo_confidence }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tombol Simpan Konfigurasi -->
+    <div class="card border-0 shadow-sm mb-5">
+        <div class="card-body p-3 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <span class="text-muted small">
+                <i class="bi bi-info-circle-fill text-primary me-1"></i>Perubahan konfigurasi akan langsung aktif di database MySQL dan berlaku untuk seluruh user.
+            </span>
+            <button type="submit" class="btn btn-primary fw-bold px-4">
+                <i class="bi bi-floppy-fill me-2"></i>Simpan Seluruh Konfigurasi
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PENGUJI SISTEM KONEKSI EKSTERNAL (TESTING HUB)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="testing-hub" class="mb-5">
+    <div class="d-flex align-items-center gap-2 mb-3">
+        <div class="p-2 rounded bg-dark text-white">
+            <i class="bi bi-broadcast fs-5"></i>
+        </div>
+        <div>
+            <h5 class="fw-bold mb-0 text-dark">Instrumen Penguji Koneksi Eksternal (System Testing Hub)</h5>
+            <p class="text-muted small mb-0">Hak istimewa Admin untuk memverifikasi kesiapan layanan luar secara realtime</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- 1. Test OTP Email (SMTP) -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="p-2 rounded bg-primary bg-opacity-10 text-primary">
+                            <i class="bi bi-envelope-check-fill fs-5"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0 text-dark">Uji OTP Email</h6>
+                    </div>
+                    <p class="text-muted small mb-3">Tes pengiriman email verifikasi via Gmail SMTP TLS ke alamat uji coba.</p>
+                    
+                    <div class="mb-3 mt-auto">
+                        <label class="form-label small fw-semibold text-muted mb-1">Email Penerima Uji</label>
+                        <input type="email" id="testEmailInput" class="form-control form-control-sm"
+                               placeholder="email@domain.com" value="{{ admin_email }}">
+                    </div>
+
+                    <button type="button" class="btn btn-outline-primary btn-sm fw-bold w-100" id="btnTestEmail" onclick="runEmailTest()">
+                        <i class="bi bi-send-fill me-1"></i>Kirim Tes Email
+                    </button>
+                    <div id="resultTestEmail" class="mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Test WhatsApp Gateway -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="p-2 rounded bg-success bg-opacity-10 text-success">
+                            <i class="bi bi-whatsapp fs-5"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0 text-dark">Uji Gateway WhatsApp</h6>
+                    </div>
+                    <p class="text-muted small mb-3">Tes koneksi endpoint API gateway WhatsApp dan validasi nomor tujuan.</p>
+                    
+                    <div class="mb-3 mt-auto">
+                        <label class="form-label small fw-semibold text-muted mb-1">Nomor WhatsApp Uji</label>
+                        <input type="text" id="testPhoneInput" class="form-control form-control-sm"
+                               placeholder="08123456789" value="081234567890">
+                    </div>
+
+                    <button type="button" class="btn btn-outline-success btn-sm fw-bold w-100" id="btnTestWa" onclick="runWaTest()">
+                        <i class="bi bi-chat-dots-fill me-1"></i>Kirim Tes WhatsApp
+                    </button>
+                    <div id="resultTestWa" class="mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Test Google Gemini AI -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="p-2 rounded" style="background:#faf5ff;color:#7e22ce;">
+                            <i class="bi bi-stars fs-5"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0 text-dark">Uji Google Gemini AI</h6>
+                    </div>
+                    <p class="text-muted small mb-3">Kirim prompt uji coba untuk mengukur latensi inferensi dan validasi API Key.</p>
+                    
+                    <div class="mb-3 mt-auto p-2 rounded bg-light small text-muted">
+                        Model: <strong>{{ settings_data.ai_model }}</strong>
+                    </div>
+
+                    <button type="button" class="btn btn-outline-purple btn-sm fw-bold w-100" style="color:#7e22ce;border-color:#7e22ce;" id="btnTestAi" onclick="runAiTest()">
+                        <i class="bi bi-lightning-charge-fill me-1"></i>Ping Gemini AI
+                    </button>
+                    <div id="resultTestAi" class="mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Test Database XAMPP MySQL -->
+        <div class="col-md-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="p-2 rounded bg-warning bg-opacity-10 text-dark">
+                            <i class="bi bi-database-fill-check fs-5 text-warning"></i>
+                        </div>
+                        <h6 class="fw-bold mb-0 text-dark">Uji XAMPP MySQL</h6>
+                    </div>
+                    <p class="text-muted small mb-3">Periksa kestabilan koneksi engine MySQL, latensi query, dan integritas tabel.</p>
+                    
+                    <div class="mb-3 mt-auto p-2 rounded bg-light small text-muted">
+                        Database: <strong>skincheck_db (Port 3306)</strong>
+                    </div>
+
+                    <button type="button" class="btn btn-outline-dark btn-sm fw-bold w-100" id="btnTestDb" onclick="runDbTest()">
+                        <i class="bi bi-activity me-1"></i>Periksa MySQL
+                    </button>
+                    <div id="resultTestDb" class="mt-2" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '<i class="bi bi-eye-slash"></i>';
+    } else {
+        input.type = 'password';
+        btn.innerHTML = '<i class="bi bi-eye"></i>';
+    }
+}
+
+// 1. Run Email Test
+async function runEmailTest() {
+    const btn = document.getElementById('btnTestEmail');
+    const resBox = document.getElementById('resultTestEmail');
+    const targetEmail = document.getElementById('testEmailInput').value;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Menguji...';
+    resBox.style.display = 'block';
+    resBox.innerHTML = '<div class="alert alert-secondary py-1 px-2 small mb-0">Menghubungi SMTP Gmail...</div>';
+
+    try {
+        const formData = new FormData();
+        formData.append('test_email', targetEmail);
+        const resp = await fetch('/admin/settings/test-email', { method: 'POST', body: formData });
+        const data = await resp.json();
+
+        if (data.success) {
+            resBox.innerHTML = `<div class="alert alert-success py-1 px-2 small mb-0"><i class="bi bi-check-circle-fill me-1"></i>${data.message}</div>`;
+        } else {
+            resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i>${data.message}</div>`;
+        }
+    } catch (e) {
+        resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0">Error jaringan: ${e.message}</div>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-send-fill me-1"></i>Kirim Tes Email';
+    }
+}
+
+// 2. Run WhatsApp Test
+async function runWaTest() {
+    const btn = document.getElementById('btnTestWa');
+    const resBox = document.getElementById('resultTestWa');
+    const targetPhone = document.getElementById('testPhoneInput').value;
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Menguji...';
+    resBox.style.display = 'block';
+    resBox.innerHTML = '<div class="alert alert-secondary py-1 px-2 small mb-0">Menghubungi Gateway...</div>';
+
+    try {
+        const formData = new FormData();
+        formData.append('test_phone', targetPhone);
+        const resp = await fetch('/admin/settings/test-wa', { method: 'POST', body: formData });
+        const data = await resp.json();
+
+        if (data.success) {
+            resBox.innerHTML = `<div class="alert alert-success py-1 px-2 small mb-0"><i class="bi bi-check-circle-fill me-1"></i>${data.message}</div>`;
+        } else {
+            resBox.innerHTML = `<div class="alert alert-warning py-1 px-2 small mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i>${data.message}</div>`;
+        }
+    } catch (e) {
+        resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0">Error jaringan: ${e.message}</div>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-chat-dots-fill me-1"></i>Kirim Tes WhatsApp';
+    }
+}
+
+// 3. Run AI Test
+async function runAiTest() {
+    const btn = document.getElementById('btnTestAi');
+    const resBox = document.getElementById('resultTestAi');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Menghubungi AI...';
+    resBox.style.display = 'block';
+    resBox.innerHTML = '<div class="alert alert-secondary py-1 px-2 small mb-0">Mengirim ping ke Google Gemini...</div>';
+
+    try {
+        const resp = await fetch('/admin/settings/test-ai', { method: 'POST' });
+        const data = await resp.json();
+
+        if (data.success) {
+            resBox.innerHTML = `
+                <div class="alert alert-success py-1 px-2 small mb-0">
+                    <div><i class="bi bi-check-circle-fill me-1"></i><strong>${data.message}</strong></div>
+                    <div style="font-size:0.75rem;margin-top:4px;" class="text-truncate">"${data.sample_output}"</div>
+                </div>`;
+        } else {
+            resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i>${data.message}</div>`;
+        }
+    } catch (e) {
+        resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0">Error jaringan: ${e.message}</div>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-lightning-charge-fill me-1"></i>Ping Gemini AI';
+    }
+}
+
+// 4. Run DB Test
+async function runDbTest() {
+    const btn = document.getElementById('btnTestDb');
+    const resBox = document.getElementById('resultTestDb');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Memeriksa...';
+    resBox.style.display = 'block';
+    resBox.innerHTML = '<div class="alert alert-secondary py-1 px-2 small mb-0">Query XAMPP MySQL...</div>';
+
+    try {
+        const resp = await fetch('/admin/settings/test-db', { method: 'POST' });
+        const data = await resp.json();
+
+        if (data.success) {
+            resBox.innerHTML = `
+                <div class="alert alert-success py-1 px-2 small mb-0">
+                    <i class="bi bi-check-circle-fill me-1"></i><strong>${data.message}</strong>
+                    <div style="font-size:0.75rem;margin-top:2px;">Tabel: ${data.tables.join(', ')}</div>
+                </div>`;
+        } else {
+            resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0"><i class="bi bi-exclamation-triangle-fill me-1"></i>${data.message}</div>`;
+        }
+    } catch (e) {
+        resBox.innerHTML = `<div class="alert alert-danger py-1 px-2 small mb-0">Error: ${e.message}</div>`;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-activity me-1"></i>Periksa MySQL';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,349 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:900px;">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-4">
+        <a href="/dashboard" class="btn btn-sm btn-light rounded-circle me-3 shadow-sm" style="width:38px;height:38px;">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <div>
+            <h3 class="fw-bold mb-0">AI Skincare Assistant</h3>
+            <p class="text-muted small mb-0">Tanyakan apa saja seputar hasil scan & panduan skincare</p>
+        </div>
+        <div class="ms-auto d-flex align-items-center gap-2">
+            <button id="btn-clear-chat" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Bersihkan riwayat percakapan">
+                <i class="bi bi-trash3 me-1"></i>Hapus Obrolan
+            </button>
+            <a href="/history" class="btn btn-sm btn-light rounded-pill px-3">
+                <i class="bi bi-clock-history me-1"></i>Riwayat Scan
+            </a>
+        </div>
+    </div>
+
+    <!-- Context Indicator -->
+    {% if scan_id %}
+    <div class="alert alert-info d-flex align-items-center gap-2 mb-3" role="alert" id="context-indicator">
+        <i class="bi bi-link-45deg flex-shrink-0"></i>
+        <span class="small">
+            {% if context_type == "sunscreen" %}
+                AI menggunakan konteks <strong>Sunscreen Check #{{ scan_id }}</strong>
+            {% else %}
+                AI menggunakan konteks <strong>Skin Scan #{{ scan_id }}</strong>
+            {% endif %}
+        </span>
+        <button class="btn-close btn-close-sm ms-auto" onclick="clearScanContext()" title="Hapus konteks"></button>
+    </div>
+    {% endif %}
+
+    <!-- Medical Disclaimer -->
+    <div class="medical-disclaimer d-flex gap-2 align-items-start mb-3">
+        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1" style="color:#d97706;"></i>
+        <span class="small">AI Assistant memberikan <strong>edukasi skincare</strong>, bukan diagnosis medis. Untuk kondisi kulit serius, konsultasikan dengan dokter spesialis kulit.</span>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-container mb-3" style="height:480px;">
+        <div class="chat-messages" id="chat-messages">
+            <!-- Welcome message (shown if no previous history) -->
+            <div class="d-flex gap-2 align-items-end animate-fade-in-up" id="welcome-message" {% if chat_history %}style="display:none !important;"{% endif %}>
+                <div class="chat-avatar chat-avatar-ai">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <div>
+                    <div class="chat-bubble chat-bubble-ai">
+                        Saya adalah <strong>SkinCheck AI Assistant</strong>.<br><br>
+                        Saya siap membantu Anda:
+                        <ul class="mb-0 mt-1 ps-3 small" style="line-height:1.8;">
+                            <li>Memahami hasil scan kulit Anda</li>
+                            <li>Menjawab pertanyaan seputar kesehatan kulit &amp; ingredients</li>
+                            <li>Rekomendasi produk BPOM resmi di Indonesia &amp; link Shopee</li>
+                            <li>Panduan urutan penggunaan skincare harian</li>
+                        </ul>
+                        <br>Ada yang ingin Anda tanyakan seputar kondisi kulit wajah Anda?
+                    </div>
+                    <div class="mt-1 ps-1" style="font-size:0.75rem;color:var(--gray-400);">SkinCheck AI · Asisten Kulit Wajah</div>
+                </div>
+            </div>
+
+            <!-- Stored conversation history from database -->
+            {% if chat_history %}
+                {% for msg in chat_history %}
+                    <div class="d-flex gap-2 align-items-end animate-fade-in-up {% if msg.role == 'user' %}flex-row-reverse{% endif %}">
+                        <div class="chat-avatar flex-shrink-0 {% if msg.role == 'user' %}chat-avatar-user{% else %}chat-avatar-ai{% endif %}">
+                            {% if msg.role == 'user' %}
+                                <i class="bi bi-person-fill"></i>
+                            {% else %}
+                                <i class="bi bi-stars"></i>
+                            {% endif %}
+                        </div>
+                        <div style="max-width: 80%;">
+                            <div class="chat-bubble {% if msg.role == 'user' %}chat-bubble-user{% else %}chat-bubble-ai raw-format-text{% endif %}" data-raw="{{ msg.content | e }}">
+                                {% if msg.role == 'user' %}
+                                    {{ msg.content }}
+                                {% else %}
+                                    {{ msg.content }}
+                                {% endif %}
+                            </div>
+                            <div style="font-size:0.72rem;color:var(--gray-400);margin-top:4px;padding:0 4px;{% if msg.role == 'user' %}text-align:right;{% endif %}">
+                                {% if msg.role == 'user' %}Anda{% else %}SkinCheck AI{% endif %} · {{ msg.created_at.strftime('%H:%M') }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+            <div class="d-flex gap-2">
+                <input type="text" id="chat-input" class="form-control"
+                       placeholder="Ketik pertanyaan Anda tentang skincare..."
+                       maxlength="2000" autocomplete="off">
+                <button id="btn-send" class="btn btn-primary px-3 d-flex align-items-center gap-2 flex-shrink-0 fw-semibold" style="min-width:90px;">
+                    <i class="bi bi-send-fill" id="send-icon"></i>
+                    <span id="send-text">Kirim</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suggested Questions -->
+    <div id="suggested-questions" class="d-flex flex-wrap gap-2 mb-3">
+        <span class="small text-muted fw-semibold me-1 align-self-center">💡 Pertanyaan populer:</span>
+        <button class="suggested-chip suggested-q" data-q="Rekomendasikan sunscreen lokal terbaik di Indonesia beserta link Shopee nya">
+            ☀️ Sunscreen Lokal &amp; Link Shopee
+        </button>
+        <button class="suggested-chip suggested-q" data-q="Serum apa yang bagus untuk memudarkan bekas jerawat dan flek hitam? Berikan link Shopee nya">
+            🧴 Serum Bekas Jerawat &amp; Link Shopee
+        </button>
+        <button class="suggested-chip suggested-q" data-q="Rekomendasikan moisturizer untuk memperbaiki skin barrier yang ada di Shopee">
+            💧 Moisturizer Barrier di Shopee
+        </button>
+        <button class="suggested-chip suggested-q" data-q="Jelaskan hasil scan kulit wajah terakhir saya dan produk yang cocok">
+            📊 Analisis Hasil Scan Kulit Saya
+        </button>
+    </div>
+
+    <!-- Error Display -->
+    <div id="chat-error" class="alert alert-danger d-flex align-items-center gap-2 d-none">
+        <i class="bi bi-wifi-off flex-shrink-0"></i>
+        <span id="chat-error-msg"></span>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const chatMessages  = document.getElementById("chat-messages");
+    const chatInput     = document.getElementById("chat-input");
+    const btnSend       = document.getElementById("btn-send");
+    const sendIcon      = document.getElementById("send-icon");
+    const sendText      = document.getElementById("send-text");
+    const suggestedDiv  = document.getElementById("suggested-questions");
+    const chatError     = document.getElementById("chat-error");
+    const chatErrorMsg  = document.getElementById("chat-error-msg");
+
+    const scanId = "{{ scan_id or '' }}";
+    let currentScanId = scanId || null;
+    let isLoading = false;
+
+    function scrollBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getTimestamp() {
+        const now = new Date();
+        return now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function addMessage(role, text) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "d-flex gap-2 align-items-end animate-fade-in-up" + (role === "user" ? " flex-row-reverse" : "");
+
+        const avatar = document.createElement("div");
+        avatar.className = "chat-avatar flex-shrink-0 " + (role === "user" ? "chat-avatar-user" : "chat-avatar-ai");
+        avatar.innerHTML = role === "user" ? '<i class="bi bi-person-fill"></i>' : '<i class="bi bi-stars"></i>';
+
+        const contentDiv = document.createElement("div");
+        contentDiv.style.maxWidth = "80%";
+
+        const bubble = document.createElement("div");
+        bubble.className = "chat-bubble " + (role === "user" ? "chat-bubble-user" : "chat-bubble-ai");
+        if (role === "user") {
+            bubble.textContent = text;
+        } else {
+            bubble.innerHTML = formatText(text);
+        }
+
+        const timestamp = document.createElement("div");
+        timestamp.style.cssText = "font-size:0.72rem;color:var(--gray-400);margin-top:4px;padding:0 4px;";
+        timestamp.textContent = (role === "user" ? "Anda" : "SkinCheck AI") + " · " + getTimestamp();
+        if (role === "user") timestamp.style.textAlign = "right";
+
+        contentDiv.appendChild(bubble);
+        contentDiv.appendChild(timestamp);
+        wrapper.appendChild(avatar);
+        wrapper.appendChild(contentDiv);
+        chatMessages.appendChild(wrapper);
+        scrollBottom();
+    }
+
+    function formatText(text) {
+        let safe = text
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        // Markdown Links: [Title](URL)
+        safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, function(match, title, url) {
+            if (url.includes("shopee.co.id")) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm text-white fw-bold d-inline-flex align-items-center gap-1 my-1 px-3 py-1 shadow-sm rounded-pill" style="background:#ee4d2d;text-decoration:none;"><i class="bi bi-bag-check-fill"></i> ${title}</a>`;
+            } else if (url.includes("tokopedia.com")) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm text-white fw-bold d-inline-flex align-items-center gap-1 my-1 px-3 py-1 shadow-sm rounded-pill" style="background:#03ac0e;text-decoration:none;"><i class="bi bi-bag-check-fill"></i> ${title}</a>`;
+            } else {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary fw-semibold text-decoration-underline">${title}</a>`;
+            }
+        });
+
+        // Standalone Shopee URLs (not already wrapped in <a>)
+        safe = safe.replace(/(^|[^"'>])(https?:\/\/(?:www\.)?shopee\.co\.id\/[^\s<]+)/g, function(match, prefix, url) {
+            return prefix + `<a href="${url}" target="_blank" rel="noopener noreferrer" class="btn btn-sm text-white fw-bold d-inline-flex align-items-center gap-1 my-1 px-3 py-1 shadow-sm rounded-pill" style="background:#ee4d2d;text-decoration:none;"><i class="bi bi-bag-check-fill"></i> Beli di Shopee</a>`;
+        });
+
+        // Bold & Italic & Linebreaks
+        safe = safe
+            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.+?)\*/g, "<em>$1</em>")
+            .replace(/\n/g, "<br>");
+
+        return safe;
+    }
+
+    function showLoading() {
+        isLoading = true;
+        btnSend.disabled = true;
+        chatInput.disabled = true;
+        sendIcon.className = "bi bi-hourglass-split";
+        sendText.textContent = "";
+
+        const loader = document.createElement("div");
+        loader.id = "typing-indicator";
+        loader.className = "d-flex gap-2 align-items-end";
+        loader.innerHTML = `
+            <div class="chat-avatar chat-avatar-ai flex-shrink-0"><i class="bi bi-stars"></i></div>
+            <div class="chat-bubble chat-bubble-ai">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>`;
+        chatMessages.appendChild(loader);
+        scrollBottom();
+    }
+
+    function hideLoading() {
+        isLoading = false;
+        btnSend.disabled = false;
+        chatInput.disabled = false;
+        sendIcon.className = "bi bi-send-fill";
+        sendText.textContent = "Kirim";
+        chatInput.focus();
+        const loader = document.getElementById("typing-indicator");
+        if (loader) loader.remove();
+    }
+
+    // Format stored history on load
+    document.querySelectorAll(".raw-format-text").forEach(el => {
+        const raw = el.dataset.raw || el.textContent;
+        el.innerHTML = formatText(raw);
+    });
+    scrollBottom();
+
+    // Clear chat history
+    const btnClearChat = document.getElementById("btn-clear-chat");
+    if (btnClearChat) {
+        btnClearChat.addEventListener("click", async function() {
+            if (!confirm("Apakah Anda yakin ingin menghapus riwayat percakapan dengan AI pada akun ini?")) return;
+            try {
+                const res = await fetch("/assistant/clear", { method: "POST" });
+                if (res.ok) {
+                    chatMessages.innerHTML = `
+                        <div class="d-flex gap-2 align-items-end animate-fade-in-up" id="welcome-message">
+                            <div class="chat-avatar chat-avatar-ai">
+                                <i class="bi bi-stars"></i>
+                            </div>
+                            <div>
+                                <div class="chat-bubble chat-bubble-ai">
+                                    Riwayat obrolan akun Anda telah dibersihkan.<br><br>
+                                    Silakan tanyakan pertanyaan seputar kesehatan kulit wajah Anda!
+                                </div>
+                                <div class="mt-1 ps-1" style="font-size:0.75rem;color:var(--gray-400);">SkinCheck AI · Baru saja</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    alert("Gagal menghapus riwayat obrolan.");
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan jaringan.");
+            }
+        });
+    }
+
+    async function sendMessage(text) {
+        if (!text.trim() || isLoading) return;
+        const welcomeMsg = document.getElementById("welcome-message");
+        if (welcomeMsg) welcomeMsg.style.display = "none";
+        addMessage("user", text);
+        chatInput.value = "";
+        suggestedDiv.classList.add("d-none");
+        chatError.classList.add("d-none");
+        showLoading();
+
+        try {
+            const payload = { message: text };
+            if (currentScanId) payload.scan_id = currentScanId;
+
+            const res  = await fetch("/assistant/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            hideLoading();
+
+            if (res.ok && data.response) {
+                addMessage("ai", data.response);
+            } else {
+                chatErrorMsg.textContent = data.error || "Gagal mendapatkan respons AI. Coba lagi.";
+                chatError.classList.remove("d-none");
+            }
+        } catch (err) {
+            hideLoading();
+            chatErrorMsg.textContent = "Terjadi kesalahan jaringan. Periksa koneksi internet Anda.";
+            chatError.classList.remove("d-none");
+        }
+    }
+
+    btnSend.addEventListener("click", () => sendMessage(chatInput.value));
+    chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage(chatInput.value);
+        }
+    });
+
+    document.querySelectorAll(".suggested-q").forEach(btn => {
+        btn.addEventListener("click", () => sendMessage(btn.dataset.q));
+    });
+
+    window.clearScanContext = function() {
+        currentScanId = null;
+        const el = document.getElementById("context-indicator");
+        if (el) { el.style.opacity = 0; setTimeout(() => el.remove(), 300); }
+    };
+});
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}AI Copilot — Tren Kulit & Usulan Produk{% endblock %}
+{% block topbar_title %}AI Copilot{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+    <div>
+        <h4 class="fw-bold mb-1">
+            <i class="bi bi-robot me-2 text-success" style="color:#10b981;"></i>AI Copilot: Analisis Tren Kulit & R&D Skincare
+        </h4>
+        <p class="text-muted small mb-0">Agregasi cerdas data scan wajah pengguna untuk formulasi usulan produk otomatis</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary btn-sm" onclick="syncRAG(this)">
+            <i class="bi bi-arrow-repeat me-1"></i>Sinkronisasi Basis RAG
+        </button>
+        <span class="badge px-3 py-2 fw-semibold" style="color:#065f46;border:1px solid rgba(16,185,129,0.3)!important;background:#ecfdf5;">
+            <i class="bi bi-stars me-1 text-success"></i>Gemini 1.5 Flash Engine
+        </span>
+    </div>
+</div>
+
+<!-- Alert notifications -->
+<div id="syncAlertContainer"></div>
+
+<!-- Top Insight Banner -->
+<div class="card border-0 shadow-sm mb-4" style="background:linear-gradient(135deg, #f0fdf9 0%, #f0f5f2 100%);border:1px solid rgba(16,185,129,0.25)!important;">
+    <div class="card-body p-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge px-2.5 py-1 rounded-pill small" style="background:#131f18;color:#a7f3d0;border:1px solid rgba(167,243,208,0.25);font-weight:700;">Insight Utama</span>
+                    <span class="text-muted small">Berdasarkan {{ insights.trends.total_analyzed_scans }} data pemindaian customer</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">
+                    Tren Masalah Kulit Tertinggi: <span style="color:#0d9488;">{{ insights.trends.dominant_concern.label }} ({{ insights.trends.dominant_concern.percentage }}%)</span>
+                </h5>
+                <p class="text-muted small mb-0" style="line-height:1.6;">
+                    {{ insights.proposal.rationale }}
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <div class="p-3 rounded-3 d-inline-block text-center" style="background:#fff;border:1px solid #ccfbf1;box-shadow:0 4px 12px rgba(13,148,136,0.06);">
+                    <div class="small text-muted fw-semibold mb-1">Total Scan Dianalisis</div>
+                    <div class="h3 fw-bold mb-0" style="color:#0d9488;">{{ insights.trends.total_analyzed_scans }}</div>
+                    <div class="small text-success mt-1" style="font-size:0.75rem;">
+                        <i class="bi bi-check2-circle me-1"></i>Valid & Terverifikasi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Left: Condition Prevalence Breakdown -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white py-3 border-0">
+                <h6 class="fw-bold mb-0 d-flex align-items-center gap-2">
+                    <i class="bi bi-bar-chart-fill text-primary"></i>Distribusi 5 Kondisi Kulit
+                </h6>
+            </div>
+            <div class="card-body pt-0">
+                {% for item in insights.trends.trends %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center small mb-1">
+                        <span class="fw-semibold text-dark">{{ item.label }}</span>
+                        <span class="fw-bold {% if item.percentage >= 50 %}text-danger{% elif item.percentage >= 30 %}text-warning{% else %}text-muted{% endif %}">
+                            {{ item.percentage }}% ({{ item.count }} user)
+                        </span>
+                    </div>
+                    <div class="progress" style="height: 8px; border-radius: 4px; background: #f1f5f9;">
+                        <div class="progress-bar {% if loop.index == 1 %}bg-purple{% elif loop.index == 2 %}bg-primary{% elif loop.index == 3 %}bg-info{% else %}bg-secondary{% endif %}"
+                             role="progressbar"
+                             style="width: {{ item.percentage }}%; {% if loop.index == 1 %}background:#7e22ce!important;{% endif %}"
+                             aria-valuenow="{{ item.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="text-end text-muted" style="font-size:0.7rem;margin-top:2px;">
+                        Rata-rata skor klinis: {{ item.avg_score }}/100
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Auto Skincare Proposal Box (Form for Auto-Insert) -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm h-100" style="border: 1px solid rgba(16, 185, 129, 0.3) !important;">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background:#f0fdf9;border-bottom:1px solid #ccfbf1;">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="p-1.5 rounded-2 bg-white shadow-sm" style="color:#0d9488;">
+                        <i class="bi bi-magic"></i>
+                    </div>
+                    <h6 class="fw-bold mb-0 text-dark">Proposal Formulasi Produk AI</h6>
+                </div>
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 small">
+                    Siap Auto-Insert
+                </span>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="/admin/products/auto-insert">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Brand</label>
+                            <input type="text" name="brand" class="form-control form-control-sm fw-semibold" value="{{ insights.proposal.brand }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">Kategori</label>
+                            <select name="category" class="form-select form-select-sm fw-semibold">
+                                <option value="serum" {% if insights.proposal.category == 'serum' %}selected{% endif %}>Serum</option>
+                                <option value="cleanser" {% if insights.proposal.category == 'cleanser' %}selected{% endif %}>Cleanser</option>
+                                <option value="toner" {% if insights.proposal.category == 'toner' %}selected{% endif %}>Toner</option>
+                                <option value="moisturizer" {% if insights.proposal.category == 'moisturizer' %}selected{% endif %}>Moisturizer</option>
+                                <option value="treatment" {% if insights.proposal.category == 'treatment' %}selected{% endif %}>Treatment</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-muted mb-1">Nama Produk yang Diusulkan AI</label>
+                            <input type="text" name="name" class="form-control fw-bold text-dark" value="{{ insights.proposal.name }}" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-muted mb-1">Bahan Aktif Kunci (Formulasi)</label>
+                            <input type="text" name="ingredients" class="form-control form-control-sm" value="{{ ', '.join(insights.proposal.ingredients) }}" placeholder="BHA, Niacinamide, Centella..." required>
+                            <div class="form-text" style="font-size:0.75rem;">Pisahkan dengan koma. AI merekomendasikan bahan berdasarkan keluhan dominan.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-muted mb-1">Target Skin Concern</label>
+                            <input type="text" name="skin_concern" class="form-control form-control-sm" value="{{ ', '.join(insights.proposal.skin_concern) }}" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-muted mb-1">Deskripsi Produk</label>
+                            <textarea name="description" class="form-control form-control-sm" rows="2">{{ insights.proposal.description }}</textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold text-muted mb-1">Petunjuk Penggunaan</label>
+                            <input type="text" name="usage_guidance" class="form-control form-control-sm" value="{{ insights.proposal.usage_guidance }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">
+                                <i class="bi bi-bag text-warning me-1"></i>Link Shopee Official Store
+                            </label>
+                            <input type="url" name="shopee_link" class="form-control form-control-sm" value="{{ insights.proposal.shopee_link }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted mb-1">
+                                <i class="bi bi-shop text-success me-1"></i>Link Tokopedia Store
+                            </label>
+                            <input type="url" name="tokopedia_link" class="form-control form-control-sm" value="{{ insights.proposal.tokopedia_link }}">
+                        </div>
+
+                        <div class="col-12 mt-4 pt-2 border-top d-flex justify-content-between align-items-center">
+                            <div class="small text-muted">
+                                <i class="bi bi-info-circle me-1"></i>Status produk langsung aktif & terindeks RAG
+                            </div>
+                            <button type="submit" class="btn btn-primary fw-bold px-4 shadow-sm">
+                                <i class="bi bi-check-circle me-1"></i>Approve & Auto-Insert ke Katalog
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function syncRAG(btn) {
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Sinkronisasi...';
+    try {
+        const res = await fetch('/admin/ai-copilot/sync-rag', { method: 'POST' });
+        const data = await res.json();
+        const container = document.getElementById('syncAlertContainer');
+        container.innerHTML = `
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+                <i class="bi bi-check-circle-fill flex-shrink-0"></i>
+                <div>
+                    <strong>Sinkronisasi Berhasil:</strong> Basis pengetahuan RAG Gemini telah diperbarui dengan ${data.active_products_indexed} produk aktif.
+                </div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    } catch(err) {
+        alert('Gagal menyinkronkan basis pengetahuan RAG.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    }
+}
+</script>
+{% endblock %}

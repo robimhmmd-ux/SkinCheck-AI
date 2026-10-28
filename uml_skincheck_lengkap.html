@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkinCheck AI — UML Lengkap (Alur Panah Presisi &amp; Jelas)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #cbd5e1;
+      color: #0f172a;
+      line-height: 1.5
+    }
+
+    .top-nav {
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .3)
+    }
+
+    .top-nav .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem
+    }
+
+    .top-nav .brand i {
+      color: #38bdf8
+    }
+
+    .top-nav .nav-tabs {
+      display: flex;
+      gap: 8px
+    }
+
+    .tab-btn {
+      padding: 9px 20px;
+      background: none;
+      border: none;
+      font-size: .9rem;
+      font-weight: 700;
+      color: #94a3b8;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .tab-btn:hover {
+      color: #f8fafc;
+      background: #1e293b
+    }
+
+    .tab-btn.active {
+      color: #fff;
+      background: #0284c7;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, .4)
+    }
+
+    .top-nav .acts {
+      display: flex;
+      gap: 10px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: .84rem;
+      font-weight: 600;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #f8fafc;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .btn:hover {
+      background: #334155
+    }
+
+    .btn.primary {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #fff
+    }
+
+    .btn.primary:hover {
+      background: #0369a1
+    }
+
+    .canvas-wrapper {
+      max-width: 1980px;
+      margin: 20px auto;
+      padding: 10px 20px 50px;
+      overflow-x: auto
+    }
+
+    .poster-container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+      padding: 32px;
+      width: fit-content;
+      margin: 0 auto
+    }
+
+    .panel {
+      display: none
+    }
+
+    .panel.active {
+      display: block
+    }
+
+    svg {
+      display: block;
+      background: #fff
+    }
+
+    .spec-box {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid #cbd5e1;
+      padding: 32px;
+      max-width: 1400px;
+      margin: 0 auto;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .06)
+    }
+
+    .spec-box h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .rule-card {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 22px;
+      margin-bottom: 16px;
+      font-size: .92rem;
+      color: #1e3a8a;
+      line-height: 1.7
+    }
+
+    @media print {
+      .top-nav {
+        display: none !important
+      }
+
+      body {
+        background: #fff !important;
+        padding: 0 !important
+      }
+
+      .canvas-wrapper {
+        padding: 0 !important;
+        margin: 0 !important
+      }
+
+      .poster-container {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important
+      }
+
+      .panel {
+        display: none !important
+      }
+
+      .panel.active {
+        display: block !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="top-nav">
+    <div class="brand">
+      <i class="fa-solid fa-graduation-cap"></i>
+      <span>SkinCheck AI &bull; Master UML Diagram</span>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchMainTab('act-full',this)">
+        <i class="fa-solid fa-diagram-project"></i> Activity Diagram Full (Poster Utuh)
+      </button>
+      <button class="tab-btn" onclick="switchMainTab('uc-view',this)">
+        <i class="fa-solid fa-circle-nodes"></i> Use Case Diagram Terpadu
+      </button>
+      <button class="tab-btn" onclick="switchMainTab('spec-view',this)">
+        <i class="fa-solid fa-book-open"></i> Spesifikasi Modul RPL
+      </button>
+    </div>
+
+    <div class="acts">
+      <button class="btn" onclick="downloadCurrentSVG()"><i class="fa-solid fa-file-code"></i> Download SVG</button>
+      <button class="btn primary" onclick="downloadCurrentPNG()"><i class="fa-solid fa-image"></i> Download PNG
+        HD</button>
+      <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Cetak / Simpan PDF</button>
+    </div>
+  </header>
+
+  <div class="canvas-wrapper">
+
+    <!-- TAB 1: ACTIVITY DIAGRAM FULL -->
+    <div id="act-full" class="panel active">
+      <div class="poster-container">
+        <svg id="svg-act-master" viewBox="0 0 1920 1780" width="1920" height="1780" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Arrow Markers -->
+            <marker id="arr-solid" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#0f172a" />
+            </marker>
+            <marker id="arr-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#16a34a" />
+            </marker>
+            <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#dc2626" />
+            </marker>
+            <marker id="arr-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#7e22ce" />
+            </marker>
+
+            <!-- Dashed Interaction Markers (Right and Left) -->
+            <marker id="dash-right" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#0284c7" />
+            </marker>
+            <marker id="dash-left" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M10,1.5 L2,5 L10,8.5z" fill="#0284c7" />
+            </marker>
+            <marker id="dash-right-admin" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M0,1.5 L8,5 L0,8.5z" fill="#b91c1c" />
+            </marker>
+            <marker id="dash-left-admin" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6.5" markerHeight="6.5"
+              orient="auto-start-reverse">
+              <path d="M10,1.5 L2,5 L10,8.5z" fill="#b91c1c" />
+            </marker>
+          </defs>
+
+          <!-- Background -->
+          <rect width="1920" height="1780" fill="#ffffff" />
+
+          <!-- Poster Main Header -->
+          <text x="960" y="44" text-anchor="middle" fill="#0f172a" font-size="28" font-weight="900"
+            letter-spacing="-0.02em">SkinCheck AI – Activity Diagram</text>
+          <text x="960" y="70" text-anchor="middle" fill="#475569" font-size="14.5" font-weight="500">Platform Analisis
+            Kesehatan Kulit &amp; Rekomendasi Skincare dengan Dukungan AI</text>
+
+
+          <!-- ═════════════════════════════════════════════════════════════════════════
+     PANEL 1: AKTIVITAS CUSTOMER
+     ═════════════════════════════════════════════════════════════════════════ -->
+          <g id="panel-customer">
+            <!-- Frame -->
+            <rect x="30" y="95" width="915" height="1040" rx="14" fill="#f8fafc" stroke="#38bdf8" stroke-width="2" />
+
+            <!-- Header Bar -->
+            <rect x="30" y="95" width="915" height="52" rx="14" fill="#e0f2fe" />
+            <rect x="30" y="133" width="915" height="14" fill="#e0f2fe" />
+            <line x1="30" y1="147" x2="945" y2="147" stroke="#bae6fd" stroke-width="1.5" />
+
+            <!-- Icon Circle -->
+            <circle cx="58" cy="121" r="16" fill="#0284c7" />
+            <text x="58" y="127" text-anchor="middle" fill="#fff" font-size="15" font-family="'Font Awesome 6 Free'"
+              font-weight="900">&#xf007;</text>
+
+            <!-- Titles -->
+            <text x="86" y="118" fill="#0369a1" font-size="15" font-weight="800">Aktivitas Peserta Didik (Customer /
+              Pengguna Wajah)</text>
+            <text x="86" y="136" fill="#0284c7" font-size="11" font-weight="500">Dari registrasi hingga melakukan scan
+              wajah dual-AI dan melihat rekomendasi Shopee</text>
+
+            <!-- Swimlane Column Headers -->
+            <rect x="30" y="147" width="445" height="34" fill="#f0f9ff" />
+            <text x="252" y="169" text-anchor="middle" fill="#0369a1" font-size="13" font-weight="700">Peserta Didik
+              (Customer)</text>
+
+            <rect x="475" y="147" width="470" height="34" fill="#f8fafc" />
+            <text x="710" y="169" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="700">Sistem</text>
+
+            <!-- Vertical Divider -->
+            <line x1="475" y1="147" x2="475" y2="1135" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- ── ROW 0: INITIAL NODE (y=195) ── -->
+            <circle cx="252" cy="195" r="9" fill="#0f172a" />
+            <line x1="252" y1="204" x2="252" y2="228" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 1: REGISTRASI (y=245, h=34) ── -->
+            <rect x="132" y="228" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="249" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Akses halaman
+              registrasi</text>
+
+            <!-- Horizontal dashed to Sistem -->
+            <line x1="372" y1="245" x2="595" y2="245" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="595" y="228" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="249" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Simpan data
+              registrasi &amp; kirim OTP</text>
+
+            <!-- Solid down to Row 2 in Customer -->
+            <line x1="252" y1="262" x2="252" y2="288" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 2: ISI DATA REGISTRASI (y=305, h=34) ── -->
+            <rect x="132" y="288" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="304" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Isi data
+              registrasi</text>
+            <text x="252" y="316" text-anchor="middle" fill="#64748b" font-size="8">(nama, email, no. WhatsApp,
+              password)</text>
+
+            <!-- Solid down to Row 3 in Customer -->
+            <line x1="252" y1="322" x2="252" y2="353" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 3: VERIFIKASI OTP (y=370, h=34) ── -->
+            <rect x="132" y="353" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="374" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Verifikasi
+              WhatsApp / Email (OTP)</text>
+
+            <!-- Dashed to Sistem Validasi OTP -->
+            <line x1="372" y1="370" x2="605" y2="370" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="605" y="353" width="210" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="374" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Validasi
+              OTP</text>
+
+            <!-- Solid down from Validasi to Decision Diamond -->
+            <line x1="710" y1="387" x2="710" y2="408" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Diamond OTP valid? (y=408..438, center cy=423) -->
+            <polygon points="710,408 748,423 710,438 672,423" fill="#fff" stroke="#d97706" stroke-width="1.8" />
+            <text x="710" y="426" text-anchor="middle" fill="#92400e" font-size="9" font-weight="700">OTP valid?</text>
+
+            <!-- TIDAK: Straight horizontal dashed back to Customer Verifikasi OTP -->
+            <line x1="672" y1="423" x2="372" y2="423" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3" />
+            <line x1="372" y1="423" x2="372" y2="387" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-red)" />
+            <text x="520" y="417" text-anchor="middle" fill="#dc2626" font-size="9" font-weight="700">Tidak (Coba
+              Lagi)</text>
+
+            <!-- YA: Solid down to Row 4 Sistem -->
+            <line x1="710" y1="438" x2="710" y2="458" stroke="#16a34a" stroke-width="1.8"
+              marker-end="url(#arr-green)" />
+            <text x="722" y="451" fill="#15803d" font-size="9" font-weight="700">Ya</text>
+
+            <!-- ── ROW 4: AUTENTIKASI & DASHBOARD (y=475, h=34) ── -->
+            <rect x="585" y="458" width="250" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6" />
+            <text x="710" y="479" text-anchor="middle" fill="#15803d" font-size="10.5" font-weight="700">Autentikasi
+              &amp; arahkan ke dashboard</text>
+
+            <!-- Dashed horizontal LEFT to Customer Login -->
+            <line x1="585" y1="475" x2="372" y2="475" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-left)" />
+
+            <rect x="132" y="458" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="479" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="700">Login Customer
+              &amp; Masuk Menu</text>
+
+            <!-- Solid down to Fork Node Row 5 -->
+            <line x1="252" y1="492" x2="252" y2="515" stroke="#0f172a" stroke-width="1.8" />
+
+            <!-- ── ROW 5: FORK / BRANCH PILIH SUMBER FOTO (y=545) ── -->
+            <!-- Horizontal Fork Line -->
+            <line x1="165" y1="515" x2="339" y2="515" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="165" y1="515" x2="165" y2="528" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+            <line x1="339" y1="515" x2="339" y2="528" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Option A: Kamera Langsung -->
+            <rect x="95" y="528" width="140" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="165" y="544" text-anchor="middle" fill="#0369a1" font-size="10" font-weight="700">Ambil Foto
+              Langsung</text>
+            <text x="165" y="556" text-anchor="middle" fill="#64748b" font-size="8">(live camera WebRTC)</text>
+
+            <!-- Option B: Upload Galeri -->
+            <rect x="269" y="528" width="140" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="339" y="544" text-anchor="middle" fill="#0369a1" font-size="10" font-weight="700">Unggah Foto
+              Galeri</text>
+            <text x="339" y="556" text-anchor="middle" fill="#64748b" font-size="8">(format JPG / PNG)</text>
+
+            <!-- Horizontal Join Line -->
+            <line x1="165" y1="562" x2="165" y2="578" stroke="#0f172a" stroke-width="1.8" />
+            <line x1="339" y1="562" x2="339" y2="578" stroke="#0f172a" stroke-width="1.8" />
+            <line x1="165" y1="578" x2="339" y2="578" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="252" y1="578" x2="252" y2="598" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 6: SUBMIT CITRA WAJAH (y=615, h=34) ── -->
+            <rect x="132" y="598" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="619" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Submit citra
+              wajah</text>
+
+            <!-- Dashed horizontal to Sistem Preprocessing -->
+            <line x1="372" y1="615" x2="585" y2="615" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="585" y="598" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="614" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Preprocessing
+              Citra (CLAHE Lab)</text>
+            <text x="710" y="626" text-anchor="middle" fill="#64748b" font-size="8">&amp; Normalisasi Ukuran
+              Piksel</text>
+
+            <!-- Solid down in Sistem to Dual-AI -->
+            <line x1="710" y1="632" x2="710" y2="658" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+            <line x1="252" y1="632" x2="252" y2="718" stroke="#0f172a" stroke-width="1.8" />
+
+            <!-- ── ROW 7: DUAL-AI INFERENCE & DB (y=675, h=34) ── -->
+            <rect x="585" y="658" width="250" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="710" y="674" text-anchor="middle" fill="#581c87" font-size="10" font-weight="700">Inferensi Dual-AI
+              Paralel</text>
+            <text x="710" y="686" text-anchor="middle" fill="#6b21a8" font-size="8">(VGG16 Multi-Skor + YOLOv8 Box
+              Jerawat)</text>
+
+            <!-- Solid down to Sistem Simpan DB -->
+            <line x1="710" y1="692" x2="710" y2="718" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 8: SIMPAN DB & LIHAT HASIL (y=735, h=34) ── -->
+            <rect x="585" y="718" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="734" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Simpan hasil scan
+              ke database</text>
+            <text x="710" y="746" text-anchor="middle" fill="#64748b" font-size="8">&amp; siapkan visualisasi radar
+              chart</text>
+
+            <!-- Dashed horizontal LEFT to Customer Lihat Hasil -->
+            <line x1="585" y1="735" x2="372" y2="735" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-left)" />
+
+            <rect x="132" y="718" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="734" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Lihat hasil
+              analisis wajah</text>
+            <text x="252" y="746" text-anchor="middle" fill="#64748b" font-size="8">(radar chart 5 skor + box
+              jerawat)</text>
+
+            <!-- Solid down to Row 9 in Customer -->
+            <line x1="252" y1="752" x2="252" y2="778" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 9: KONSULTASI AI SKINCARE (y=795, h=34) ── -->
+            <rect x="132" y="778" width="240" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="252" y="794" text-anchor="middle" fill="#581c87" font-size="10.5" font-weight="700">Ketik keluhan
+              pada Chat AI</text>
+            <text x="252" y="806" text-anchor="middle" fill="#7e22ce" font-size="8">(tanya solusi &amp; rekomendasi
+              produk)</text>
+
+            <!-- Dashed horizontal to Sistem RAG Gemini -->
+            <line x1="372" y1="795" x2="585" y2="795" stroke="#7e22ce" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-purple)" />
+
+            <rect x="585" y="778" width="250" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="710" y="794" text-anchor="middle" fill="#6b21a8" font-size="10" font-weight="700">RAG Gemini +
+              Injeksi Shopee</text>
+            <text x="710" y="806" text-anchor="middle" fill="#475569" font-size="8">Bangun konteks skor user + link
+              official</text>
+
+            <!-- Solid down to Row 10 in Customer -->
+            <line x1="252" y1="812" x2="252" y2="838" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 10: TAMPILKAN & BACA REKOMENDASI (y=855, h=34) ── -->
+            <rect x="585" y="838" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="854" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Tampilkan saran
+              edukatif</text>
+            <text x="710" y="866" text-anchor="middle" fill="#64748b" font-size="8">&amp; tautan toko resmi
+              Shopee</text>
+
+            <!-- Dashed horizontal LEFT to Customer -->
+            <line x1="585" y1="855" x2="372" y2="855" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-left)" />
+
+            <rect x="132" y="838" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="854" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Baca
+              rekomendasi &amp; klik link</text>
+            <text x="252" y="866" text-anchor="middle" fill="#0284c7" font-size="8">(membuka Shopee official
+              store)</text>
+
+            <!-- Solid down to Row 11 in Customer -->
+            <line x1="252" y1="872" x2="252" y2="898" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 11: LIHAT RIWAYAT SCAN (y=915, h=34) ── -->
+            <rect x="132" y="898" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="919" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Lihat riwayat
+              &amp; progres kulit</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="372" y1="915" x2="605" y2="915" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="605" y="898" width="210" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="919" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Tampilkan log
+              riwayat scan</text>
+
+            <!-- Solid down to Row 12 in Customer -->
+            <line x1="252" y1="932" x2="252" y2="958" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 12: KELOLA PROFIL (y=975, h=34) ── -->
+            <rect x="142" y="958" width="220" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="979" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Kelola profil
+              pengguna</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="362" y1="975" x2="605" y2="975" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="605" y="958" width="210" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="979" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Simpan
+              perubahan profil</text>
+
+            <!-- Solid down to Row 13 in Customer -->
+            <line x1="252" y1="992" x2="252" y2="1018" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 13: LOGOUT (y=1035, h=34) ── -->
+            <rect x="152" y="1018" width="200" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="252" y="1039" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="700">Logout
+              Customer</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="352" y1="1035" x2="605" y2="1035" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="605" y="1018" width="210" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="710" y="1039" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Hapus sesi JWT
+              &amp; cookie</text>
+
+            <!-- Solid down to Final Node -->
+            <line x1="252" y1="1052" x2="252" y2="1085" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Final Node Customer -->
+            <circle cx="252" cy="1098" r="12" fill="none" stroke="#0f172a" stroke-width="2.5" />
+            <circle cx="252" cy="1098" r="6.5" fill="#0f172a" />
+          </g>
+
+
+          <!-- ═════════════════════════════════════════════════════════════════════════
+     PANEL 2: AKTIVITAS ADMIN
+     ═════════════════════════════════════════════════════════════════════════ -->
+          <g id="panel-admin">
+            <!-- Frame -->
+            <rect x="975" y="95" width="915" height="1040" rx="14" fill="#f8fafc" stroke="#f87171" stroke-width="2" />
+
+            <!-- Header Bar -->
+            <rect x="975" y="95" width="915" height="52" rx="14" fill="#fee2e2" />
+            <rect x="975" y="133" width="915" height="14" fill="#fee2e2" />
+            <line x1="975" y1="147" x2="1890" y2="147" stroke="#fca5a5" stroke-width="1.5" />
+
+            <!-- Icon Circle -->
+            <circle cx="1003" cy="121" r="16" fill="#dc2626" />
+            <text x="1003" y="127" text-anchor="middle" fill="#fff" font-size="15" font-family="'Font Awesome 6 Free'"
+              font-weight="900">&#xf3ed;</text>
+
+            <!-- Titles -->
+            <text x="1031" y="118" fill="#991b1b" font-size="15" font-weight="800">Aktivitas Admin</text>
+            <text x="1031" y="136" fill="#b91c1c" font-size="11" font-weight="500">Mengelola sistem, data pengguna,
+              katalog produk Shopee, audit log scan, dan AI Copilot</text>
+
+            <!-- Swimlane Column Headers -->
+            <rect x="975" y="147" width="445" height="34" fill="#fff1f2" />
+            <text x="1197" y="169" text-anchor="middle" fill="#991b1b" font-size="13" font-weight="700">Admin
+              (SuperAdmin)</text>
+
+            <rect x="1420" y="147" width="470" height="34" fill="#f8fafc" />
+            <text x="1655" y="169" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="700">Sistem</text>
+
+            <!-- Vertical Divider -->
+            <line x1="1420" y1="147" x2="1420" y2="1135" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- ── ROW 0: INITIAL NODE (y=195) ── -->
+            <circle cx="1197" cy="195" r="9" fill="#0f172a" />
+            <line x1="1197" y1="204" x2="1197" y2="228" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 1: LOGIN ADMIN (y=245, h=34) ── -->
+            <rect x="1077" y="228" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="249" text-anchor="middle" fill="#0f172a" font-size="11" font-weight="600">Login Admin
+              (SuperAdmin)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="245" x2="1530" y2="245" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1530" y="228" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="242" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Autentikasi
+              Bcrypt &amp;</text>
+            <text x="1655" y="255" text-anchor="middle" fill="#64748b" font-size="8">arahkan ke dashboard panel
+              admin</text>
+
+            <!-- Solid down to Row 2 in Admin -->
+            <line x1="1197" y1="262" x2="1197" y2="288" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 2: KELOLA DATA PENGGUNA (y=305, h=34) ── -->
+            <rect x="1077" y="288" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="304" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Kelola data
+              user (CRUD)</text>
+            <text x="1197" y="316" text-anchor="middle" fill="#64748b" font-size="8">(customer, admin, status
+              verifikasi)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="305" x2="1540" y2="305" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1540" y="288" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="310" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Simpan
+              perubahan data user</text>
+
+            <!-- Solid down to Row 3 in Admin -->
+            <line x1="1197" y1="322" x2="1197" y2="353" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 3: CEK TREN KULIT VIA AI COPILOT (y=370, h=34) ── -->
+            <rect x="1077" y="353" width="240" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="1197" y="369" text-anchor="middle" fill="#581c87" font-size="10.5" font-weight="700">Minta cek tren
+              masalah kulit</text>
+            <text x="1197" y="381" text-anchor="middle" fill="#7e22ce" font-size="8">&amp; usulan produk baru ke AI
+              Copilot</text>
+
+            <!-- Dashed horizontal to Sistem AI Copilot -->
+            <line x1="1317" y1="370" x2="1530" y2="370" stroke="#7e22ce" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-purple)" />
+
+            <rect x="1530" y="353" width="250" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="1655" y="369" text-anchor="middle" fill="#6b21a8" font-size="10" font-weight="700">AI Copilot
+              hitung tren keluhan</text>
+            <text x="1655" y="381" text-anchor="middle" fill="#475569" font-size="8">(agregasi DB: jerawat 70%, usul
+              BHA)</text>
+
+            <!-- Solid down to Row 4 in Admin -->
+            <line x1="1197" y1="387" x2="1197" y2="458" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 4: TINJAU USULAN PRODUK AI (y=475, h=34) ── -->
+            <rect x="1530" y="458" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="479" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Tampilkan
+              proposal bahan &amp; link</text>
+
+            <!-- Dashed horizontal LEFT to Admin -->
+            <line x1="1530" y1="475" x2="1317" y2="475" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-left-admin)" />
+
+            <rect x="1077" y="458" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="479" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Tinjau
+              rekomendasi produk AI</text>
+
+            <!-- Solid down to Fork Node Row 5 -->
+            <line x1="1197" y1="492" x2="1197" y2="515" stroke="#0f172a" stroke-width="1.8" />
+
+            <!-- ── ROW 5: FORK / PILIH CARA INPUT KATALOG (y=545) ── -->
+            <!-- Horizontal Fork Line -->
+            <line x1="1110" y1="515" x2="1284" y2="515" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="1110" y1="515" x2="1110" y2="528" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+            <line x1="1284" y1="515" x2="1284" y2="528" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Option A: Approve Usulan AI -->
+            <rect x="1040" y="528" width="140" height="34" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6" />
+            <text x="1110" y="544" text-anchor="middle" fill="#15803d" font-size="10" font-weight="700">Approve Usulan
+              AI</text>
+            <text x="1110" y="556" text-anchor="middle" fill="#166534" font-size="8">(auto-insert ke katalog)</text>
+
+            <!-- Option B: Input Manual -->
+            <rect x="1214" y="528" width="140" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1284" y="544" text-anchor="middle" fill="#991b1b" font-size="10" font-weight="700">Input Produk
+              Manual</text>
+            <text x="1284" y="556" text-anchor="middle" fill="#64748b" font-size="8">(deskripsi, link Shopee)</text>
+
+            <!-- Horizontal Join Line -->
+            <line x1="1110" y1="562" x2="1110" y2="578" stroke="#0f172a" stroke-width="1.8" />
+            <line x1="1284" y1="562" x2="1284" y2="578" stroke="#0f172a" stroke-width="1.8" />
+            <line x1="1110" y1="578" x2="1284" y2="578" stroke="#0f172a" stroke-width="2.5" />
+            <line x1="1197" y1="578" x2="1197" y2="598" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 6: KELOLA KATALOG PRODUK (y=615, h=34) ── -->
+            <rect x="1077" y="598" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="619" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Kelola katalog
+              produk (CRUD)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="615" x2="1540" y2="615" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1540" y="598" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="619" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Simpan
+              perubahan data produk</text>
+
+            <!-- Solid down to Row 7 in Admin -->
+            <line x1="1197" y1="632" x2="1197" y2="658" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 7: INPUT LINK SHOPEE (y=675, h=34) ── -->
+            <rect x="1077" y="658" width="240" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="1197" y="674" text-anchor="middle" fill="#0369a1" font-size="10.5" font-weight="700">Input link
+              Shopee / Tokopedia</text>
+            <text x="1197" y="686" text-anchor="middle" fill="#0284c7" font-size="8">(tautan official store untuk RAG
+              AI)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="675" x2="1530" y2="675" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right)" />
+
+            <rect x="1530" y="658" width="250" height="34" rx="8" fill="#fff" stroke="#0284c7" stroke-width="1.6" />
+            <text x="1655" y="679" text-anchor="middle" fill="#0369a1" font-size="10.5" font-weight="700">Validasi URL
+              toko resmi mitra</text>
+
+            <!-- Solid down to Row 8 in Admin -->
+            <line x1="1197" y1="692" x2="1197" y2="718" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 8: SINKRONISASI RAG KNOWLEDGE (y=735, h=34) ── -->
+            <rect x="1087" y="718" width="220" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="1197" y="739" text-anchor="middle" fill="#581c87" font-size="10.5" font-weight="700">Sinkronisasi
+              RAG Knowledge</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1307" y1="735" x2="1530" y2="735" stroke="#7e22ce" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-purple)" />
+
+            <rect x="1530" y="718" width="250" height="34" rx="8" fill="#faf5ff" stroke="#7e22ce" stroke-width="1.8" />
+            <text x="1655" y="739" text-anchor="middle" fill="#6b21a8" font-size="10.5" font-weight="700">Update vector
+              database produk</text>
+
+            <!-- Solid down to Row 9 in Admin -->
+            <line x1="1197" y1="752" x2="1197" y2="778" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 9: PANTAU LOG RIWAYAT SCAN (y=795, h=34) ── -->
+            <rect x="1077" y="778" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="794" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Pantau log
+              riwayat scan customer</text>
+            <text x="1197" y="806" text-anchor="middle" fill="#64748b" font-size="8">(filter tanggal, jenis kulit,
+              status)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="795" x2="1530" y2="795" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1530" y="778" width="250" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="794" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Kueri foto
+              citra, skor VGG16</text>
+            <text x="1655" y="806" text-anchor="middle" fill="#64748b" font-size="8">&amp; koordinat bounding box
+              YOLOv8</text>
+
+            <!-- Solid down to Row 10 in Admin -->
+            <line x1="1197" y1="812" x2="1197" y2="838" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 10: EVALUASI QA & FLAGGING (y=855, h=34) ── -->
+            <rect x="1077" y="838" width="240" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="854" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Evaluasi QA
+              &amp; tandai (flag) log</text>
+            <text x="1197" y="866" text-anchor="middle" fill="#64748b" font-size="8">(verifikasi false positive
+              jerawat)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1317" y1="855" x2="1540" y2="855" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1540" y="838" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="859" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Simpan status
+              flagging log</text>
+
+            <!-- Solid down to Row 11 in Admin -->
+            <line x1="1197" y1="872" x2="1197" y2="898" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 11: LAPORAN STATISTIK (y=915, h=34) ── -->
+            <rect x="1087" y="898" width="220" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="919" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Lihat laporan
+              statistik sistem</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1307" y1="915" x2="1540" y2="915" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1540" y="898" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="919" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Tampilkan
+              laporan analitik</text>
+
+            <!-- Solid down to Row 12 in Admin -->
+            <line x1="1197" y1="932" x2="1197" y2="958" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 12: PENGATURAN FLOW, BATASAN AI, & UJI KONEKSI (y=975, h=34) ── -->
+            <rect x="1067" y="958" width="260" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="974" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="700">Atur flow, batasan AI &amp; uji koneksi</text>
+            <text x="1197" y="986" text-anchor="middle" fill="#64748b" font-size="8">(model, token, kuota harian &amp; tes OTP/AI)</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1327" y1="975" x2="1520" y2="975" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1520" y="958" width="270" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="974" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="700">Simpan konfigurasi ke MySQL</text>
+            <text x="1655" y="986" text-anchor="middle" fill="#64748b" font-size="8">&amp; probe status layanan eksternal realtime</text>
+
+            <!-- Solid down to Row 13 in Admin -->
+            <line x1="1197" y1="992" x2="1197" y2="1018" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 13: LOGOUT ADMIN (y=1035, h=34) ── -->
+            <rect x="1107" y="1018" width="180" height="34" rx="8" fill="#fff" stroke="#dc2626" stroke-width="1.6" />
+            <text x="1197" y="1039" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="700">Logout
+              Admin</text>
+
+            <!-- Dashed horizontal to Sistem -->
+            <line x1="1287" y1="1035" x2="1540" y2="1035" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#dash-right-admin)" />
+
+            <rect x="1540" y="1018" width="230" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1655" y="1039" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Hapus sesi
+              admin &amp; token</text>
+
+            <!-- Solid down to Final Node -->
+            <line x1="1197" y1="1052" x2="1197" y2="1085" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Final Node Admin -->
+            <circle cx="1197" cy="1098" r="12" fill="none" stroke="#0f172a" stroke-width="2.5" />
+            <circle cx="1197" cy="1098" r="6.5" fill="#0f172a" />
+          </g>
+
+
+          <!-- ═════════════════════════════════════════════════════════════════════════
+     PANEL 3: AKTIVITAS AI (VISION & LLM ENGINE)
+     ═════════════════════════════════════════════════════════════════════════ -->
+          <g id="panel-ai">
+            <!-- Outer Card Frame (Purple) -->
+            <rect x="30" y="1165" width="915" height="465" rx="14" fill="#faf5ff" stroke="#c084fc" stroke-width="2" />
+
+            <!-- Header Bar -->
+            <rect x="30" y="1165" width="915" height="48" rx="14" fill="#f3e8ff" />
+            <rect x="30" y="1201" width="915" height="12" fill="#f3e8ff" />
+            <line x1="30" y1="1213" x2="945" y2="1213" stroke="#e9d5ff" stroke-width="1.5" />
+
+            <circle cx="58" cy="1189" r="15" fill="#7e22ce" />
+            <text x="58" y="1195" text-anchor="middle" fill="#fff" font-size="14" font-family="'Font Awesome 6 Free'"
+              font-weight="900">&#xf544;</text>
+
+            <text x="86" y="1185" fill="#581c87" font-size="14.5" font-weight="800">Aktivitas AI (Vision &amp; LLM
+              Engine)</text>
+            <text x="86" y="1202" fill="#7e22ce" font-size="11" font-weight="500">Proses inferensi citra wajah VGG16 +
+              YOLOv8 dan RAG Gemini 1.5 Flash</text>
+
+            <!-- Sub-process 1: Face Scan -->
+            <text x="50" y="1242" fill="#6b21a8" font-size="12" font-weight="700">1. Dual-AI Face Skin Scan (VGG16 +
+              YOLOv8 Paralel)</text>
+
+            <circle cx="70" cy="1280" r="8" fill="#0f172a" />
+            <line x1="78" y1="1280" x2="100" y2="1280" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="100" y="1260" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="182" y="1277" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Terima Citra
+              Wajah</text>
+            <text x="182" y="1290" text-anchor="middle" fill="#64748b" font-size="7.5">(CLAHE Lab Normalization)</text>
+
+            <line x1="265" y1="1280" x2="295" y2="1280" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="295" y="1260" width="190" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="390" y="1277" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Eksekusi Paralel
+              Model</text>
+            <text x="390" y="1290" text-anchor="middle" fill="#64748b" font-size="7.5">(VGG16 Skor + YOLOv8 Box)</text>
+
+            <line x1="485" y1="1280" x2="515" y2="1280" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="515" y="1260" width="175" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="602" y="1277" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Validasi
+              Threshold</text>
+            <text x="602" y="1290" text-anchor="middle" fill="#64748b" font-size="7.5">(filter false positive
+              jerawat)</text>
+
+            <line x1="690" y1="1280" x2="720" y2="1280" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="720" y="1260" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="802" y="1277" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Kembalikan Hasil
+              Analisis</text>
+            <text x="802" y="1290" text-anchor="middle" fill="#64748b" font-size="7.5">(matriks JSON skor &amp;
+              box)</text>
+
+            <line x1="885" y1="1280" x2="908" y2="1280" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <circle cx="918" cy="1280" r="9" fill="none" stroke="#0f172a" stroke-width="2" />
+            <circle cx="918" cy="1280" r="5" fill="#0f172a" />
+
+            <!-- Sub-process 2: RAG Gemini -->
+            <text x="50" y="1355" fill="#6b21a8" font-size="12" font-weight="700">2. RAG Skincare Assistant &amp;
+              Rekomendasi Marketplace Shopee (Gemini 1.5 Flash)</text>
+
+            <circle cx="70" cy="1390" r="8" fill="#0f172a" />
+            <line x1="78" y1="1390" x2="100" y2="1390" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="100" y="1370" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="182" y="1387" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Terima Prompt
+              Keluhan</text>
+            <text x="182" y="1400" text-anchor="middle" fill="#64748b" font-size="7.5">&amp; riwayat skor scan
+              user</text>
+
+            <line x1="265" y1="1390" x2="295" y2="1390" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="295" y="1370" width="190" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="390" y="1387" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Retrieval Vektor
+              Produk</text>
+            <text x="390" y="1400" text-anchor="middle" fill="#64748b" font-size="7.5">(kueri kemiripan produk
+              Shopee)</text>
+
+            <line x1="485" y1="1390" x2="515" y2="1390" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="515" y="1370" width="175" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="602" y="1387" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Generate Respon
+              Skincare</text>
+            <text x="602" y="1400" text-anchor="middle" fill="#64748b" font-size="7.5">(solusi personal + link
+              Shopee)</text>
+
+            <line x1="690" y1="1390" x2="720" y2="1390" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="720" y="1370" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="802" y="1387" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Guardrail
+              Keselamatan</text>
+            <text x="802" y="1400" text-anchor="middle" fill="#64748b" font-size="7.5">(validasi disclaimer medis &amp;
+              URL)</text>
+
+            <line x1="885" y1="1390" x2="908" y2="1390" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <circle cx="918" cy="1390" r="9" fill="none" stroke="#0f172a" stroke-width="2" />
+            <circle cx="918" cy="1390" r="5" fill="#0f172a" />
+
+            <!-- Sub-process 3: AI Copilot Admin -->
+            <text x="50" y="1465" fill="#6b21a8" font-size="12" font-weight="700">3. AI Copilot Admin &amp; Vector
+              Knowledge Ingestion (Sinkronisasi RAG)</text>
+
+            <circle cx="70" cy="1500" r="8" fill="#0f172a" />
+            <line x1="78" y1="1500" x2="100" y2="1500" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="100" y="1480" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="182" y="1497" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Hitung Tren
+              Kasus Scan</text>
+            <text x="182" y="1510" text-anchor="middle" fill="#64748b" font-size="7.5">(prevalensi kasus
+              tertinggi)</text>
+
+            <line x1="265" y1="1500" x2="295" y2="1500" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="295" y="1480" width="190" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="390" y="1497" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Formulasi Usulan
+              Produk</text>
+            <text x="390" y="1510" text-anchor="middle" fill="#64748b" font-size="7.5">(rekomendasi bahan BHA &amp;
+              link)</text>
+
+            <line x1="485" y1="1500" x2="515" y2="1500" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="515" y="1480" width="175" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="602" y="1497" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Generate Vector
+              Index</text>
+            <text x="602" y="1510" text-anchor="middle" fill="#64748b" font-size="7.5">(model text-embedding
+              Gemini)</text>
+
+            <line x1="690" y1="1500" x2="720" y2="1500" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="720" y="1480" width="165" height="40" rx="8" fill="#fff" stroke="#7e22ce" stroke-width="1.5" />
+            <text x="802" y="1497" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="600">Update Basis RAG
+              DB</text>
+            <text x="802" y="1510" text-anchor="middle" fill="#64748b" font-size="7.5">(aktif untuk bot customer)</text>
+
+            <line x1="885" y1="1500" x2="908" y2="1500" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <circle cx="918" cy="1500" r="9" fill="none" stroke="#0f172a" stroke-width="2" />
+            <circle cx="918" cy="1500" r="5" fill="#0f172a" />
+          </g>
+
+
+          <!-- ═════════════════════════════════════════════════════════════════════════
+     PANEL 4: AKTIVITAS VERIFIKASI OTP EMAIL & WA
+     ═════════════════════════════════════════════════════════════════════════ -->
+          <g id="panel-otp">
+            <!-- Outer Card Frame (Yellow/Gold) -->
+            <rect x="975" y="1165" width="915" height="465" rx="14" fill="#fffbeb" stroke="#fbbf24" stroke-width="2" />
+
+            <!-- Header Bar -->
+            <rect x="975" y="1165" width="915" height="48" rx="14" fill="#fef3c7" />
+            <rect x="975" y="1201" width="915" height="12" fill="#fef3c7" />
+            <line x1="975" y1="1213" x2="1890" y2="1213" stroke="#fde68a" stroke-width="1.5" />
+
+            <circle cx="1003" cy="1189" r="15" fill="#d97706" />
+            <text x="1003" y="1195" text-anchor="middle" fill="#fff" font-size="14" font-family="'Font Awesome 6 Free'"
+              font-weight="900">&#xf084;</text>
+
+            <text x="1031" y="1185" fill="#92400e" font-size="14.5" font-weight="800">Aktivitas Verifikasi OTP WhatsApp
+              &amp; Email</text>
+            <text x="1031" y="1202" fill="#b45309" font-size="11" font-weight="500">Digunakan oleh Peserta Didik dan
+              Guru / Admin saat registrasi dan aksi keamanan</text>
+
+            <!-- Swimlane Column Headers -->
+            <rect x="975" y="1213" width="445" height="30" fill="#fffbeb" />
+            <text x="1197" y="1233" text-anchor="middle" fill="#92400e" font-size="12" font-weight="700">Pengguna
+              (Customer / Admin)</text>
+
+            <rect x="1420" y="1213" width="470" height="30" fill="#fefce8" />
+            <text x="1655" y="1233" text-anchor="middle" fill="#713f12" font-size="12" font-weight="700">Sistem (SMTP
+              Email / WA API &amp; Redis Cache)</text>
+
+            <line x1="1420" y1="1213" x2="1420" y2="1625" stroke="#fef08a" stroke-width="1.5" />
+
+            <!-- ── ROW 1: MINTA KODE OTP (y=1275) ── -->
+            <circle cx="1045" cy="1275" r="8" fill="#0f172a" />
+            <line x1="1053" y1="1275" x2="1080" y2="1275" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="1080" y="1258" width="220" height="34" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.6" />
+            <text x="1190" y="1279" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Minta kirim
+              kode OTP</text>
+
+            <!-- Dashed horizontal to Sistem Generate OTP -->
+            <line x1="1300" y1="1275" x2="1470" y2="1275" stroke="#d97706" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="1470" y="1258" width="180" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1560" y="1279" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Generate kode
+              OTP (6 digit)</text>
+
+            <line x1="1650" y1="1275" x2="1685" y2="1275" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="1685" y="1258" width="180" height="34" rx="8" fill="#fff" stroke="#b45309" stroke-width="1.6" />
+            <text x="1775" y="1279" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Kirim OTP via
+              Email / WA</text>
+
+            <!-- Solid down in Pengguna to Row 2 -->
+            <line x1="1190" y1="1292" x2="1190" y2="1335" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 2: MASUKKAN KODE OTP (y=1352) ── -->
+            <rect x="1080" y="1335" width="220" height="34" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.6" />
+            <text x="1190" y="1356" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Masukkan kode
+              OTP</text>
+
+            <!-- Dashed horizontal to Sistem Validasi OTP -->
+            <line x1="1300" y1="1352" x2="1490" y2="1352" stroke="#d97706" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-solid)" />
+
+            <rect x="1490" y="1335" width="180" height="34" rx="8" fill="#fff" stroke="#1e3a8a" stroke-width="1.6" />
+            <text x="1580" y="1356" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Validasi
+              OTP</text>
+
+            <!-- Solid down to Decision Diamond -->
+            <line x1="1580" y1="1369" x2="1580" y2="1395" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- ── ROW 3: DECISION OTP VALID? (cy=1412) ── -->
+            <polygon points="1580,1395 1622,1412 1580,1429 1538,1412" fill="#fff" stroke="#d97706" stroke-width="1.8" />
+            <text x="1580" y="1415" text-anchor="middle" fill="#92400e" font-size="8.5" font-weight="700">OTP
+              valid?</text>
+
+            <!-- TIDAK: Straight horizontal dashed right to Pesan Error -->
+            <line x1="1622" y1="1412" x2="1685" y2="1412" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-red)" />
+            <text x="1650" y="1405" text-anchor="middle" fill="#dc2626" font-size="8.5" font-weight="700">Tidak</text>
+
+            <rect x="1685" y="1395" width="180" height="34" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" />
+            <text x="1775" y="1409" text-anchor="middle" fill="#991b1b" font-size="9" font-weight="600">Tampilkan pesan
+              error</text>
+            <text x="1775" y="1421" text-anchor="middle" fill="#b91c1c" font-size="7.5">(catat jumlah percobaan)</text>
+
+            <!-- Loop from Pesan Error to Coba Lagi in Pengguna -->
+            <path d="M1775,1429 V1465 H1300" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 3" />
+            <line x1="1300" y1="1465" x2="1300" y2="1465" stroke="#dc2626" stroke-width="1.5"
+              marker-end="url(#arr-red)" />
+
+            <!-- Coba lagi / Kirim ulang OTP -->
+            <rect x="1080" y="1448" width="220" height="34" rx="8" fill="#fff" stroke="#d97706" stroke-width="1.6" />
+            <text x="1190" y="1469" text-anchor="middle" fill="#0f172a" font-size="10.5" font-weight="600">Coba lagi /
+              Kirim ulang OTP</text>
+
+            <!-- Loop upward back to Masukkan kode OTP -->
+            <line x1="1190" y1="1448" x2="1190" y2="1369" stroke="#d97706" stroke-width="1.6"
+              marker-end="url(#arr-solid)" />
+
+            <!-- YA: Solid down to Aktifkan Akun -->
+            <line x1="1580" y1="1429" x2="1580" y2="1515" stroke="#16a34a" stroke-width="1.8"
+              marker-end="url(#arr-green)" />
+            <text x="1592" y="1470" fill="#15803d" font-size="9" font-weight="700">Ya</text>
+
+            <rect x="1465" y="1515" width="230" height="36" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6" />
+            <text x="1580" y="1531" text-anchor="middle" fill="#15803d" font-size="10.5" font-weight="700">Aktifkan
+              akun</text>
+            <text x="1580" y="1543" text-anchor="middle" fill="#166534" font-size="8">(update DB:
+              email_verified_at)</text>
+
+            <!-- Dashed horizontal LEFT to Registrasi Berhasil -->
+            <line x1="1465" y1="1533" x2="1300" y2="1533" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="5 3"
+              marker-end="url(#arr-green)" />
+
+            <rect x="1080" y="1515" width="220" height="36" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8" />
+            <text x="1190" y="1537" text-anchor="middle" fill="#15803d" font-size="11" font-weight="700">Registrasi /
+              Login berhasil</text>
+
+            <!-- Solid to Final Node -->
+            <line x1="1080" y1="1533" x2="1058" y2="1533" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+
+            <!-- Final Node OTP -->
+            <circle cx="1045" cy="1533" r="9" fill="none" stroke="#0f172a" stroke-width="2" />
+            <circle cx="1045" cy="1533" r="5" fill="#0f172a" />
+          </g>
+
+
+          <!-- ═════════════════════════════════════════════════════════════════════════
+     FOOTER: LEGENDA & SLOGAN
+     ═════════════════════════════════════════════════════════════════════════ -->
+          <g id="poster-footer">
+            <rect x="30" y="1650" width="915" height="90" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+            <text x="50" y="1672" fill="#475569" font-size="12" font-weight="800">Legenda Diagram</text>
+
+            <circle cx="65" cy="1702" r="7" fill="#0f172a" />
+            <text x="80" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Mulai</text>
+
+            <circle cx="155" cy="1702" r="9" fill="none" stroke="#0f172a" stroke-width="2" />
+            <circle cx="155" cy="1702" r="4.5" fill="#0f172a" />
+            <text x="175" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Selesai</text>
+
+            <rect x="250" y="1690" width="50" height="24" rx="6" fill="#fff" stroke="#0284c7" stroke-width="1.5" />
+            <text x="310" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Aktivitas</text>
+
+            <polygon points="405,1690 417,1702 405,1714 393,1702" fill="#fff" stroke="#d97706" stroke-width="1.5" />
+            <text x="428" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Keputusan</text>
+
+            <line x1="520" y1="1702" x2="560" y2="1702" stroke="#0f172a" stroke-width="1.8"
+              marker-end="url(#arr-solid)" />
+            <text x="575" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Alur Proses</text>
+
+            <line x1="680" y1="1702" x2="720" y2="1702" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="4 2"
+              marker-end="url(#dash-right)" />
+            <text x="735" y="1706" fill="#334155" font-size="10.5" font-weight="600">= Alur Interaksi</text>
+
+            <!-- SLOGAN & BRANDING -->
+            <rect x="975" y="1650" width="915" height="90" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+
+            <rect x="1170" y="1663" width="525" height="38" rx="19" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1" />
+            <text x="1432" y="1688" text-anchor="middle" fill="#0369a1" font-size="13.5" font-weight="800">"Kenali
+              Kulitmu, Raih Kulit Sehat Impianmu"</text>
+
+            <text x="1432" y="1722" text-anchor="middle" fill="#64748b" font-size="11" font-weight="600">SkinCheck AI —
+              Platform Analisis Kesehatan Kulit &amp; Rekomendasi Skincare Cerdas</text>
+
+            <text x="1860" y="1725" text-anchor="end" fill="#94a3b8" font-size="10" font-weight="700">v1.0</text>
+          </g>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- TAB 2: USE CASE DIAGRAM -->
+    <div id="uc-view" class="panel">
+      <div class="poster-container">
+        <svg id="svg-uc-master" viewBox="0 0 1280 840" width="1280" height="840" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Open Arrowheads for UML <<include>> and <<extend>> -->
+    <marker id="uc-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1,2 L8,5 L1,8" fill="none" stroke="#1e293b" stroke-width="1.5" />
+    </marker>
+    <marker id="uc-arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1,2 L8,5 L1,8" fill="none" stroke="#dc2626" stroke-width="1.5" />
+    </marker>
+    <marker id="uc-arr-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M1,2 L8,5 L1,8" fill="none" stroke="#ca8a04" stroke-width="1.5" />
+    </marker>
+  </defs>
+
+  <!-- White Background -->
+  <rect width="1280" height="840" fill="#ffffff" />
+
+  <!-- ═════════════════════════════════════════════════════════════════════════
+       HEADER ATAS (PERSIS LAYOUT GAMBAR REFERENSI SMARTUTBK)
+       ═════════════════════════════════════════════════════════════════════════ -->
+  <!-- Logo Kiri Atas -->
+  <g id="brand-logo" transform="translate(30, 20)">
+    <rect x="0" y="0" width="36" height="36" rx="8" fill="#0284c7" />
+    <path d="M18,9 L27,15 L27,24 L18,29 L9,24 L9,15 Z" fill="none" stroke="#ffffff" stroke-width="2" />
+    <circle cx="18" cy="19" r="4" fill="#38bdf8" />
+    <text x="44" y="18" fill="#0f172a" font-family="'Inter', sans-serif" font-size="16" font-weight="900" letter-spacing="-0.02em">SkinCheck<tspan fill="#0284c7">AI</tspan></text>
+    <text x="44" y="30" fill="#64748b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="600">Analisis Kulit Wajah &amp; AI Skincare</text>
+    <text x="0" y="48" fill="#0284c7" font-family="'Inter', sans-serif" font-size="8" font-style="italic" font-weight="600">Kenali Kulitmu, Raih Kulit Sehat Impianmu</text>
+  </g>
+
+  <!-- Judul Tengah & Badge Pill -->
+  <text x="610" y="30" text-anchor="middle" fill="#0f172a" font-family="'Times New Roman', serif" font-size="24" font-weight="700">Use Case Diagram – SkinCheck AI</text>
+  <text x="610" y="50" text-anchor="middle" fill="#0f172a" font-family="'Times New Roman', serif" font-size="14.5" font-weight="700">Sistem Analisis Kesehatan Kulit &amp; Rekomendasi Skincare Berbasis Web dengan AI</text>
+
+  <!-- Pill Badge Tengah -->
+  <rect x="420" y="62" width="380" height="20" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" />
+  <text x="610" y="76" text-anchor="middle" fill="#1e40af" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Platform Deteksi Masalah Kulit Wajah &amp; Personal Skincare Ecosystem</text>
+
+  <!-- Kotak Pesan Kanan Atas -->
+  <rect x="990" y="16" width="245" height="66" rx="6" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1" />
+  <text x="1005" y="34" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="600">Akses analisis kulit gratis dengan</text>
+  <text x="1005" y="48" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="600">teknologi AI untuk mendukung</text>
+  <text x="1005" y="62" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="600">kesehatan kulit masyarakat Indonesia.</text>
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════════
+       BATAS SISTEM (SYSTEM BOUNDARY) — SISTEM SKINCHECK AI
+       ═════════════════════════════════════════════════════════════════════════ -->
+  <rect x="235" y="98" width="750" height="715" rx="6" fill="#ffffff" stroke="#1e3a8a" stroke-width="1.8" />
+
+  <!-- Header Teks Batas Sistem Memotong Garis Border (Persis SmartUTBK) -->
+  <rect x="515" y="88" width="190" height="20" fill="#ffffff" />
+  <text x="610" y="103" text-anchor="middle" fill="#0f172a" font-family="'Inter', sans-serif" font-size="14" font-weight="800">Sistem SkinCheck AI</text>
+
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       KOTAK 1: USE CASE – CUSTOMER (PENGGUNA AKHIR) [BORDER BIRU]
+       ───────────────────────────────────────────────────────────────────────── -->
+  <rect x="245" y="122" width="730" height="378" rx="5" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.4" />
+  <text x="260" y="142" fill="#0369a1" font-family="'Inter', sans-serif" font-size="11.5" font-weight="800">Use Case – Customer (Pengguna Akhir / Siswa)</text>
+
+  <!-- ── STACK VERTIKAL ELIPS CUSTOMER (KIRI DALAM KOTAK 1, cx=370, rx=92, ry=11.5) ── -->
+  <!-- UC 1: Registrasi Akun -->
+  <ellipse cx="370" cy="168" rx="90" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="171.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Registrasi Akun</text>
+
+  <!-- UC 2: Login Customer -->
+  <ellipse cx="370" cy="196" rx="82" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="199.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Login Customer</text>
+
+  <!-- UC 3: Logout Customer -->
+  <ellipse cx="370" cy="224" rx="82" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="227.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Logout Customer</text>
+
+  <!-- UC 4: Ambil / Unggah Foto Wajah -->
+  <ellipse cx="370" cy="252" rx="95" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="255.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Ambil / Unggah Foto Wajah</text>
+
+  <!-- UC 5: Melakukan Face Skin Scan -->
+  <ellipse cx="370" cy="280" rx="95" ry="12" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5" />
+  <text x="370" y="283.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9.5" font-weight="800">Melakukan Face Skin Scan</text>
+
+  <!-- UC 6: Melihat Hasil Analisis Kulit -->
+  <ellipse cx="370" cy="308" rx="95" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="311.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Melihat Hasil Analisis Kulit</text>
+
+  <!-- UC 7: Konsultasi AI Skincare Assistant -->
+  <ellipse cx="370" cy="336" rx="98" ry="12" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5" />
+  <text x="370" y="339.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="800">Konsultasi AI Skincare Assistant</text>
+
+  <!-- UC 8: Melihat Riwayat Scan Kulit -->
+  <ellipse cx="370" cy="364" rx="95" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="367.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Melihat Riwayat Scan Kulit</text>
+
+  <!-- UC 9: Melihat Statistik & Progres -->
+  <ellipse cx="370" cy="392" rx="95" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="395.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Melihat Statistik &amp; Progres</text>
+
+  <!-- UC 10: Akses Rekomendasi Link Shopee -->
+  <ellipse cx="370" cy="420" rx="98" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="423.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Akses Rekomendasi Link Shopee</text>
+
+  <!-- UC 11: Mengelola Profil Pengguna -->
+  <ellipse cx="370" cy="448" rx="90" ry="11.5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.3" />
+  <text x="370" y="451.5" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Mengelola Profil Pengguna</text>
+
+
+  <!-- ── ELIPS KANAN DALAM KOTAK 1 (OTP KUNING & AI UNGU) ── -->
+  <!-- OTP 1: Verifikasi Email (Kuning) -->
+  <ellipse cx="680" cy="168" rx="74" ry="12" fill="#fef08a" stroke="#ca8a04" stroke-width="1.4" />
+  <text x="680" y="171.5" text-anchor="middle" fill="#713f12" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Verifikasi Email OTP</text>
+
+  <!-- OTP 2: Verifikasi WhatsApp (Kuning) -->
+  <ellipse cx="680" cy="205" rx="80" ry="12" fill="#fef08a" stroke="#ca8a04" stroke-width="1.4" />
+  <text x="680" y="208.5" text-anchor="middle" fill="#713f12" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Verifikasi WhatsApp OTP</text>
+
+  <!-- AI 1: Inferensi Dual-AI (Ungu) -->
+  <ellipse cx="680" cy="280" rx="94" ry="13" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5" />
+  <text x="680" y="283.5" text-anchor="middle" fill="#581c87" font-family="'Inter', sans-serif" font-size="9" font-weight="800">Inferensi Dual-AI (VGG16 + YOLO)</text>
+
+  <!-- AI 2: RAG Gemini Solusi & Produk (Ungu) -->
+  <ellipse cx="680" cy="336" rx="94" ry="13" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5" />
+  <text x="680" y="339.5" text-anchor="middle" fill="#581c87" font-family="'Inter', sans-serif" font-size="8.5" font-weight="800">RAG Gemini: Solusi &amp; Produk</text>
+
+  <!-- RELASI INCLUDE & EXTEND DALAM KOTAK 1 -->
+  <!-- Registrasi -> Verifikasi Email <<include>> -->
+  <line x1="460" y1="168" x2="604" y2="168" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="532" y="163" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;include&raquo;</text>
+
+  <!-- Registrasi -> Verifikasi WhatsApp <<include>> -->
+  <line x1="452" y1="175" x2="602" y2="202" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="532" y="185" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;include&raquo;</text>
+
+  <!-- Face Skin Scan -> Inferensi Dual-AI <<include>> -->
+  <line x1="465" y1="280" x2="584" y2="280" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="525" y="275" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;include&raquo;</text>
+
+  <!-- Melihat Hasil -> Inferensi Dual-AI <<extend>> -->
+  <line x1="465" y1="306" x2="588" y2="286" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="525" y="293" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;extend&raquo;</text>
+
+  <!-- Konsultasi AI -> RAG Gemini <<include>> -->
+  <line x1="468" y1="336" x2="584" y2="336" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="526" y="331" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;include&raquo;</text>
+
+
+  <!-- ─────────────────────────────────────────────────────────────────────────
+       KOTAK 2: USE CASE – SUPER USER (ADMINISTRATOR) [BORDER MERAH]
+       ───────────────────────────────────────────────────────────────────────── -->
+  <rect x="245" y="515" width="730" height="286" rx="5" fill="#fff1f2" stroke="#dc2626" stroke-width="1.4" />
+  <text x="260" y="534" fill="#991b1b" font-family="'Inter', sans-serif" font-size="11.5" font-weight="800">Use Case – Super User (Administrator &amp; System Controller)</text>
+
+  <!-- KOLOM 1 ADMIN (KIRI DALAM KOTAK 2, cx=370) - ELIPS MERAH -->
+  <!-- 1. Login Admin -->
+  <ellipse cx="370" cy="558" rx="85" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="561.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Login Admin</text>
+
+  <!-- 2. Mengelola Data Pengguna (CRUD) -->
+  <ellipse cx="370" cy="602" rx="98" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="605.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Mengelola Data Pengguna (CRUD)</text>
+
+  <!-- 3. Mengelola Katalog Produk (Shopee) -->
+  <ellipse cx="370" cy="646" rx="98" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="649.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Mengelola Katalog Produk (Shopee)</text>
+
+  <!-- 4. Memantau Log Riwayat Scan -->
+  <ellipse cx="370" cy="690" rx="98" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="693.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Memantau Log Riwayat Scan</text>
+
+  <!-- 5. Melihat Statistik & Laporan -->
+  <ellipse cx="370" cy="734" rx="98" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="737.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Melihat Statistik &amp; Laporan</text>
+
+  <!-- 6. Mengelola Profil Admin -->
+  <ellipse cx="370" cy="776" rx="88" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="370" y="779.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">Mengelola Profil Admin</text>
+
+
+  <!-- KOLOM 2 ADMIN (KANAN DALAM KOTAK 2, cx=680) -->
+  <!-- 1. Logout Admin -->
+  <ellipse cx="680" cy="558" rx="85" ry="11.5" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.3" />
+  <text x="680" y="561.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="9" font-weight="700">Logout Admin</text>
+
+  <!-- 2. AI Copilot (Ungu untuk AI) -->
+  <ellipse cx="680" cy="602" rx="98" ry="11.5" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.4" />
+  <text x="680" y="605.5" text-anchor="middle" fill="#581c87" font-family="'Inter', sans-serif" font-size="8.5" font-weight="800">AI Copilot: Analisis Tren Kulit</text>
+
+  <!-- 3. Auto-Insert Rekomendasi (Ungu untuk AI) -->
+  <ellipse cx="680" cy="646" rx="98" ry="11.5" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.4" />
+  <text x="680" y="649.5" text-anchor="middle" fill="#581c87" font-family="'Inter', sans-serif" font-size="8.5" font-weight="800">Auto-Insert Usulan Produk AI</text>
+
+  <!-- 4. Mengatur Flow Sistem & Batasan AI -->
+  <ellipse cx="680" cy="690" rx="100" ry="12" fill="#ffe4e6" stroke="#dc2626" stroke-width="1.4" />
+  <text x="680" y="693.5" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="8.2" font-weight="800">Mengatur Flow Sistem &amp; Batasan AI</text>
+
+  <!-- 5. Menguji Koneksi Eksternal (OTP & AI) -->
+  <ellipse cx="680" cy="734" rx="100" ry="12" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.4" />
+  <text x="680" y="737.5" text-anchor="middle" fill="#854d0e" font-family="'Inter', sans-serif" font-size="8.2" font-weight="800">Uji Koneksi Eksternal (OTP &amp; AI)</text>
+
+  <!-- Relasi Extend AI Copilot -> Auto-Insert (Vertical) -->
+  <line x1="680" y1="614" x2="680" y2="633" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 2" marker-end="url(#uc-arr)" />
+  <text x="715" y="626" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7.5">&laquo;extend&raquo;</text>
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════════
+       KOLOM KIRI: AKTOR UTAMA (STICK FIGURES & GARIS FAN-OUT)
+       ═════════════════════════════════════════════════════════════════════════ -->
+  <!-- ── AKTOR 1: CUSTOMER (BIRU, PUSAT DI cy=308) ── -->
+  <circle cx="105" cy="280" r="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" />
+  <line x1="105" y1="294" x2="105" y2="335" stroke="#0284c7" stroke-width="2" />
+  <line x1="80" y1="308" x2="130" y2="308" stroke="#0284c7" stroke-width="2" />
+  <line x1="105" y1="335" x2="85" y2="370" stroke="#0284c7" stroke-width="2" />
+  <line x1="105" y1="335" x2="125" y2="370" stroke="#0284c7" stroke-width="2" />
+  <text x="105" y="388" text-anchor="middle" fill="#0369a1" font-family="'Inter', sans-serif" font-size="11.5" font-weight="800">Customer</text>
+  <text x="105" y="402" text-anchor="middle" fill="#0284c7" font-family="'Inter', sans-serif" font-size="9.5" font-weight="700">(Peserta Didik / Pasien)</text>
+
+  <!-- Garis Asosiasi Customer (Memancar Rapi & Simetris dari Pusat 130, 308) -->
+  <line x1="130" y1="308" x2="280" y2="168" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="288" y2="196" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="288" y2="224" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="275" y2="252" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="275" y2="280" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="275" y2="308" stroke="#0284c7" stroke-width="1.4" />
+  <line x1="130" y1="308" x2="272" y2="336" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="275" y2="364" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="275" y2="392" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="272" y2="420" stroke="#0284c7" stroke-width="1.3" />
+  <line x1="130" y1="308" x2="280" y2="448" stroke="#0284c7" stroke-width="1.3" />
+
+  <!-- ── AKTOR 2: SUPER USER / ADMIN (MERAH, PUSAT DI cy=650) ── -->
+  <circle cx="105" cy="622" r="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2" />
+  <line x1="105" y1="636" x2="105" y2="677" stroke="#dc2626" stroke-width="2" />
+  <line x1="80" y1="650" x2="130" y2="650" stroke="#dc2626" stroke-width="2" />
+  <line x1="105" y1="677" x2="85" y2="712" stroke="#dc2626" stroke-width="2" />
+  <line x1="105" y1="677" x2="125" y2="712" stroke="#dc2626" stroke-width="2" />
+  <text x="105" y="730" text-anchor="middle" fill="#991b1b" font-family="'Inter', sans-serif" font-size="11.5" font-weight="800">Super User</text>
+  <text x="105" y="744" text-anchor="middle" fill="#dc2626" font-family="'Inter', sans-serif" font-size="9.5" font-weight="700">(Administrator)</text>
+
+  <!-- Garis Asosiasi Admin ke Kolom 1 (Memancar Rapi & Simetris, Tidak Ada Tabrakan) -->
+  <line x1="130" y1="642" x2="285" y2="558" stroke="#dc2626" stroke-width="1.3" />
+  <line x1="130" y1="646" x2="272" y2="602" stroke="#dc2626" stroke-width="1.3" />
+  <line x1="130" y1="650" x2="272" y2="646" stroke="#dc2626" stroke-width="1.4" />
+  <line x1="130" y1="654" x2="272" y2="690" stroke="#dc2626" stroke-width="1.3" />
+  <line x1="130" y1="658" x2="272" y2="734" stroke="#dc2626" stroke-width="1.3" />
+  <line x1="130" y1="662" x2="282" y2="776" stroke="#dc2626" stroke-width="1.3" />
+
+  <!-- ── GARIS ASOSIASI ADMIN KE KOLOM 2 (ROUTED NON-NABRAK PERSIS PERMINTAAN USER) ── -->
+  <!-- 1. Super User -> Logout Admin: Melalui bawah elips Mengelola Data Pengguna (y=624), belok ke atas di lorong tengah (x=516), lalu masuk ke Logout Admin (595, 558) -->
+  <path d="M 130,638 L 205,624 L 508,624 Q 516,624 516,614 L 516,568 Q 516,558 526,558 L 595,558" fill="none" stroke="#dc2626" stroke-width="1.3" />
+
+  <!-- 2. Super User -> Mengatur Flow Sistem & Batasan AI: Melalui celah bawah Mengelola Katalog (y=668), belok ke bawah di lorong tengah (x=516), lalu masuk ke (580, 690) -->
+  <path d="M 130,660 L 205,668 L 508,668 Q 516,668 516,678 L 516,682 Q 516,690 526,690 L 580,690" fill="none" stroke="#dc2626" stroke-width="1.3" />
+
+  <!-- 3. Super User -> Uji Koneksi Eksternal: Melalui celah bawah Memantau Log (y=712), belok ke bawah di lorong tengah (x=534), lalu masuk ke (580, 734) -->
+  <path d="M 130,672 L 205,712 L 524,712 Q 534,712 534,722 L 534,726 Q 534,734 544,734 L 580,734" fill="none" stroke="#dc2626" stroke-width="1.3" />
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════════
+       KOLOM KANAN: SEMUA AKTOR BERBENTUK STIKMAN (SESUAI REVISI USER)
+       ═════════════════════════════════════════════════════════════════════════ -->
+  <!-- ── AKTOR 1: EMAIL SERVICE (STICKMAN KUNING, cx=1120, cy=135) ── -->
+  <g id="actor-email">
+    <circle cx="1120" cy="135" r="13" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="148" x2="1120" y2="183" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1095" y1="160" x2="1145" y2="160" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="183" x2="1103" y2="213" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="183" x2="1137" y2="213" stroke="#ca8a04" stroke-width="2" />
+    <text x="1120" y="230" text-anchor="middle" fill="#713f12" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800">Email Service</text>
+    <text x="1120" y="243" text-anchor="middle" fill="#a16207" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">(OTP Verifikasi)</text>
+  </g>
+  <!-- Garis Asosiasi Email Service -> Verifikasi Email OTP -->
+  <line x1="1095" y1="162" x2="754" y2="168" stroke="#ca8a04" stroke-width="1.3" />
+  <!-- Garis Verifikasi Uji Coba: Email Service -> Uji Koneksi Eksternal -->
+  <path d="M 1095,175 C 950,220 890,710 780,730" fill="none" stroke="#ca8a04" stroke-width="1.1" stroke-dasharray="3 2" />
+
+  <!-- ── AKTOR 2: WHATSAPP SERVICE (STICKMAN KUNING/HIJAU, cx=1120, cy=258) ── -->
+  <g id="actor-wa">
+    <circle cx="1120" cy="258" r="13" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="271" x2="1120" y2="306" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1095" y1="283" x2="1145" y2="283" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="306" x2="1103" y2="336" stroke="#ca8a04" stroke-width="2" />
+    <line x1="1120" y1="306" x2="1137" y2="336" stroke="#ca8a04" stroke-width="2" />
+    <!-- WhatsApp phone badge on chest -->
+    <circle cx="1120" cy="283" r="5" fill="#22c55e" stroke="#16a34a" stroke-width="1" />
+    <text x="1120" y="353" text-anchor="middle" fill="#713f12" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800">WhatsApp Service</text>
+    <text x="1120" y="366" text-anchor="middle" fill="#a16207" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">(OTP Verifikasi)</text>
+  </g>
+  <!-- Garis Asosiasi WhatsApp Service -> Verifikasi WhatsApp OTP -->
+  <line x1="1095" y1="283" x2="760" y2="205" stroke="#ca8a04" stroke-width="1.3" />
+  <!-- Garis Verifikasi Uji Coba: WhatsApp Service -> Uji Koneksi Eksternal -->
+  <path d="M 1095,295 C 930,340 880,720 780,734" fill="none" stroke="#ca8a04" stroke-width="1.1" stroke-dasharray="3 2" />
+
+  <!-- ── AKTOR 3: AI PROVIDER (STICKMAN UNGU, cx=1120, cy=382) ── -->
+  <g id="actor-ai">
+    <circle cx="1120" cy="382" r="13" fill="#f3e8ff" stroke="#7e22ce" stroke-width="2" />
+    <line x1="1120" y1="395" x2="1120" y2="430" stroke="#7e22ce" stroke-width="2" />
+    <line x1="1095" y1="407" x2="1145" y2="407" stroke="#7e22ce" stroke-width="2" />
+    <line x1="1120" y1="430" x2="1103" y2="460" stroke="#7e22ce" stroke-width="2" />
+    <line x1="1120" y1="430" x2="1137" y2="460" stroke="#7e22ce" stroke-width="2" />
+    <!-- AI sparkle badge on head -->
+    <polygon points="1133,375 1135,380 1140,382 1135,384 1133,389 1131,384 1126,382 1131,380" fill="#a855f7" />
+    <text x="1120" y="477" text-anchor="middle" fill="#581c87" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800">AI Provider</text>
+    <text x="1120" y="490" text-anchor="middle" fill="#7e22ce" font-family="'Inter', sans-serif" font-size="8.5" font-weight="700">(VGG16 / YOLO / Gemini)</text>
+  </g>
+  <!-- Garis Asosiasi AI Provider -> Dual-AI, RAG Gemini, & AI Copilot -->
+  <line x1="1095" y1="402" x2="774" y2="280" stroke="#7e22ce" stroke-width="1.3" />
+  <line x1="1095" y1="407" x2="774" y2="336" stroke="#7e22ce" stroke-width="1.3" />
+  <line x1="1095" y1="416" x2="778" y2="602" stroke="#7e22ce" stroke-width="1.3" />
+  <!-- Garis Verifikasi Uji Coba: AI Provider -> Uji Koneksi Eksternal -->
+  <path d="M 1095,425 C 930,470 870,725 780,738" fill="none" stroke="#7e22ce" stroke-width="1.1" stroke-dasharray="3 2" />
+
+
+  <!-- ═════════════════════════════════════════════════════════════════════════
+       KANAN BAWAH: KETERANGAN & CATATAN (PERSIS GAMBAR REFERENSI SMARTUTBK)
+       ═════════════════════════════════════════════════════════════════════════ -->
+  <!-- ── KOTAK KETERANGAN ── -->
+  <g id="uc-keterangan">
+    <rect x="990" y="515" width="265" height="152" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="1005" y="533" fill="#0f172a" font-family="'Inter', sans-serif" font-size="10.5" font-weight="800">Keterangan:</text>
+
+    <!-- 4 Stick figures aktor berwarna (Biru=Customer, Merah=Admin, Kuning=OTP, Ungu=AI) -->
+    <g transform="translate(1012, 546)">
+      <!-- Biru (Customer) -->
+      <circle cx="0" cy="0" r="3.2" fill="#0284c7" />
+      <line x1="0" y1="3.2" x2="10" stroke="#0284c7" stroke-width="1.2" />
+      <line x1="-4.5" y1="5.5" x2="4.5" y2="5.5" stroke="#0284c7" stroke-width="1.2" />
+      <line x1="0" y1="10" x2="-3.5" y2="15" stroke="#0284c7" stroke-width="1.2" />
+      <line x1="0" y1="10" x2="3.5" y2="15" stroke="#0284c7" stroke-width="1.2" />
+
+      <!-- Merah (Admin) -->
+      <circle cx="13" cy="0" r="3.2" fill="#dc2626" />
+      <line x1="13" y1="3.2" x2="13" y2="10" stroke="#dc2626" stroke-width="1.2" />
+      <line x1="8.5" y1="5.5" x2="17.5" y2="5.5" stroke="#dc2626" stroke-width="1.2" />
+      <line x1="13" y1="10" x2="9.5" y2="15" stroke="#dc2626" stroke-width="1.2" />
+      <line x1="13" y1="10" x2="16.5" y2="15" stroke="#dc2626" stroke-width="1.2" />
+
+      <!-- Kuning (OTP Service) -->
+      <circle cx="26" cy="0" r="3.2" fill="#ca8a04" />
+      <line x1="26" y1="3.2" x2="26" y2="10" stroke="#ca8a04" stroke-width="1.2" />
+      <line x1="21.5" y1="5.5" x2="30.5" y2="5.5" stroke="#ca8a04" stroke-width="1.2" />
+      <line x1="26" y1="10" x2="22.5" y2="15" stroke="#ca8a04" stroke-width="1.2" />
+      <line x1="26" y1="10" x2="29.5" y2="15" stroke="#ca8a04" stroke-width="1.2" />
+
+      <!-- Ungu (AI) -->
+      <circle cx="39" cy="0" r="3.2" fill="#7e22ce" />
+      <line x1="39" y1="3.2" x2="39" y2="10" stroke="#7e22ce" stroke-width="1.2" />
+      <line x1="34.5" y1="5.5" x2="43.5" y2="5.5" stroke="#7e22ce" stroke-width="1.2" />
+      <line x1="39" y1="10" x2="35.5" y2="15" stroke="#7e22ce" stroke-width="1.2" />
+      <line x1="39" y1="10" x2="42.5" y2="15" stroke="#7e22ce" stroke-width="1.2" />
+    </g>
+    <text x="1065" y="557" fill="#0f172a" font-family="'Inter', sans-serif" font-size="8.5" font-weight="600">= Actor (Customer, Admin, OTP, AI)</text>
+
+    <!-- Ellipse Use Case -->
+    <ellipse cx="1025" cy="576" rx="14" ry="6" fill="#fff" stroke="#0284c7" stroke-width="1.2" />
+    <text x="1065" y="579" fill="#0f172a" font-family="'Inter', sans-serif" font-size="9" font-weight="600">= Use Case</text>
+
+    <!-- Garis Asosiasi -->
+    <line x1="1010" y1="597" x2="1040" y2="597" stroke="#334155" stroke-width="1.5" />
+    <text x="1065" y="600" fill="#0f172a" font-family="'Inter', sans-serif" font-size="9" font-weight="600">= Asosiasi</text>
+
+    <!-- Include -->
+    <line x1="1005" y1="620" x2="1045" y2="620" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#uc-arr)" />
+    <text x="1025" y="616" text-anchor="middle" fill="#1e293b" font-family="'Inter', sans-serif" font-size="7">&laquo;include&raquo;</text>
+    <text x="1065" y="620" fill="#0f172a" font-family="'Inter', sans-serif" font-size="8.5" font-weight="600">= Include <tspan fill="#64748b" font-size="7.5">(wajib)</tspan></text>
+
+    <!-- Extend -->
+    <line x1="1005" y1="645" x2="1045" y2="645" stroke="#dc2626" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#uc-arr-red)" />
+    <text x="1025" y="641" text-anchor="middle" fill="#dc2626" font-family="'Inter', sans-serif" font-size="7">&laquo;extend&raquo;</text>
+    <text x="1065" y="645" fill="#0f172a" font-family="'Inter', sans-serif" font-size="8.5" font-weight="600">= Extend <tspan fill="#64748b" font-size="7.5">(kondisional)</tspan></text>
+  </g>
+
+  <!-- ── KOTAK CATATAN (PERSIS FORMAT GAMBAR SMARTUTBK) ── -->
+  <g id="uc-catatan">
+    <rect x="990" y="675" width="265" height="138" rx="5" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.2" />
+    <text x="1005" y="692" fill="#0369a1" font-family="'Inter', sans-serif" font-size="10" font-weight="800">Catatan:</text>
+    <text x="1005" y="706" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">1. Semua aktor berbentuk figur stikman (OMG UML 2.5.1).</text>
+    <text x="1005" y="718" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">2. Admin memiliki hak menguji koneksi eksternal (OTP &amp; AI).</text>
+    <text x="1005" y="730" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">3. Garis asosiasi Admin ditata rapi tanpa menabrak elips use case.</text>
+    <text x="1005" y="742" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">4. Admin dapat mengatur flow sistem (bypass/dual OTP) &amp; batasan AI.</text>
+    <text x="1005" y="754" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">5. AI Provider menangani pipeline inferensi citra &amp; chatbot RAG.</text>
+    <text x="1005" y="766" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">6. Logout tersedia untuk Customer dan Super User.</text>
+    <text x="1005" y="778" fill="#334155" font-family="'Inter', sans-serif" font-size="7.5">7. Relasi include &amp; extend ditampilkan presisi berpanah terbuka.</text>
+    <text x="1005" y="792" fill="#0284c7" font-family="'Inter', sans-serif" font-size="7.5" font-weight="700">8. Warna Aktor: Biru=Customer, Merah=Admin, Kuning=OTP, Ungu=AI.</text>
+  </g>
+
+</svg>
+      </div>
+    </div>
+
+    <!-- TAB 3: SPESIFIKASI -->
+    <div id="spec-view" class="panel">
+      <div class="spec-box">
+        <h3><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> Kepatuhan Modul Perkuliahan RPL (STMIK
+          IKMI Cirebon)</h3>
+
+        <div class="rule-card">
+          <b>1. Pemodelan Alur Kerja Bisnis &amp; Logika Sistem Baris demi Baris</b><br>
+          Diagram Activity ditata secara sejajar (simetris per baris) antara aksi pengguna dan aksi sistem. Setiap alur
+          proses vertikal ditandai dengan garis pejal berpanah (<code>──►</code>), sedangkan alur komunikasi/interaksi
+          pesan antar-swimlane ditandai dengan garis putus-putus horizontal (<code>- - -►</code>). Tidak ada garis
+          miring silang (diagonal) maupun garis yang memotong kotak aktivitas.
+        </div>
+
+        <div class="rule-card" style="border-left-color:#16a34a;background:#f0fdf4;color:#166534">
+          <b>2. Standar Notasi UML 2.x yang Digunakan</b><br>
+          <ul style="padding-left:20px;margin-top:6px">
+            <li><b>Initial Node (●):</b> Titik awal eksekusi aktivitas.</li>
+            <li><b>Activity Final Node (◎):</b> Titik penghentian seluruh alur kerja.</li>
+            <li><b>Action State:</b> Langkah kerja aktif berorientasi bisnis (Verb + Noun).</li>
+            <li><b>Decision &amp; Merge Node (◇):</b> Percabangan kondisional eksklusif dengan guard condition ([Ya] /
+              [Tidak]).</li>
+            <li><b>Fork &amp; Join Node (Bar Hitam):</b> Percabangan pilihan paralel/eksklusif yang terstruktur rapi.
+            </li>
+            <li><b>Alur Proses (Solid Line ──►):</b> Urutan langkah sekuensial.</li>
+            <li><b>Alur Interaksi (Dashed Line - - -►):</b> Komunikasi data atau pemicuan antar-swimlane.</li>
+          </ul>
+        </div>
+
+        <div class="rule-card" style="border-left-color:#7e22ce;background:#faf5ff;color:#581c87">
+          <b>3. Integrasi Use Case &amp; Activity Diagram</b><br>
+          Seluruh Use Case yang dimodelkan (registrasi, login, face skin scan, konsultasi AI skincare, kelola katalog
+          Shopee, audit log riwayat scan) memiliki representasi alur eksekusi yang konsisten pada diagram aktivitas full
+          poster.
+        </div>
+
+        <div class="rule-card" style="border-left-color:#0284c7;background:#f0f9ff;color:#0369a1">
+          <b>4. Matriks Traceability (Kesesuaian 100% UML Use Case, Activity &amp; Source Code Project)</b><br>
+          <p style="margin-top:6px;font-size:0.85rem;color:#334155;">Tabel berikut memvalidasi keterhubungan langsung (1-to-1 traceability) antara elemen model UML dengan implementasi sistem pada backend, frontend, model database, dan layanan AI:</p>
+          <div style="overflow-x:auto;margin-top:10px;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.82rem;background:#ffffff;color:#0f172a;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+              <thead>
+                <tr style="background:#0f172a;color:#ffffff;text-align:left;">
+                  <th style="padding:8px 10px;">No</th>
+                  <th style="padding:8px 10px;">Aktor</th>
+                  <th style="padding:8px 10px;">Use Case UML</th>
+                  <th style="padding:8px 10px;">Aktivitas Diagram</th>
+                  <th style="padding:8px 10px;">Route / Endpoint</th>
+                  <th style="padding:8px 10px;">Controller &amp; Service</th>
+                  <th style="padding:8px 10px;">Template / View</th>
+                  <th style="padding:8px 10px;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">1</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Registrasi Akun</td>
+                  <td style="padding:7px 10px;">Input data diri &amp; verifikasi data</td>
+                  <td style="padding:7px 10px;"><code>/register</code></td>
+                  <td style="padding:7px 10px;"><code>AuthController.handle_customer_register</code></td>
+                  <td style="padding:7px 10px;"><code>register.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">2</td>
+                  <td style="padding:7px 10px;"><span style="color:#ca8a04;font-weight:700;">OTP Gateway</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Verifikasi Email OTP</td>
+                  <td style="padding:7px 10px;">Kirim &amp; validasi kode OTP 6 digit email</td>
+                  <td style="padding:7px 10px;"><code>/auth/verify-otp</code></td>
+                  <td style="padding:7px 10px;"><code>otp_service.send_registration_otp</code></td>
+                  <td style="padding:7px 10px;"><code>verify_otp.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">3</td>
+                  <td style="padding:7px 10px;"><span style="color:#ca8a04;font-weight:700;">OTP Gateway</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Verifikasi WhatsApp OTP</td>
+                  <td style="padding:7px 10px;">Kirim &amp; validasi kode OTP WhatsApp API</td>
+                  <td style="padding:7px 10px;"><code>/auth/resend-otp</code></td>
+                  <td style="padding:7px 10px;"><code>otp_service._send_whatsapp</code></td>
+                  <td style="padding:7px 10px;"><code>verify_otp.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">4</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Login Customer</td>
+                  <td style="padding:7px 10px;">Autentikasi Bcrypt &amp; set sesi aktif</td>
+                  <td style="padding:7px 10px;"><code>/login</code></td>
+                  <td style="padding:7px 10px;"><code>AuthController.handle_customer_login</code></td>
+                  <td style="padding:7px 10px;"><code>login.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">5</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Logout Customer</td>
+                  <td style="padding:7px 10px;">Hapus token sesi &amp; redirect</td>
+                  <td style="padding:7px 10px;"><code>/logout</code></td>
+                  <td style="padding:7px 10px;"><code>AuthController.handle_logout</code></td>
+                  <td style="padding:7px 10px;">Redirect <code>/</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">6</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Ambil / Unggah Foto</td>
+                  <td style="padding:7px 10px;">Kamera WebRTC &amp; validasi pencahayaan</td>
+                  <td style="padding:7px 10px;"><code>/scan/face</code></td>
+                  <td style="padding:7px 10px;"><code>CustomerController.face_scan_view</code></td>
+                  <td style="padding:7px 10px;"><code>scan_face.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">7</td>
+                  <td style="padding:7px 10px;"><span style="color:#7e22ce;font-weight:700;">AI Provider</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Face Skin Scan (Dual-AI)</td>
+                  <td style="padding:7px 10px;">Preprocessing CLAHE + VGG16 + YOLOv8</td>
+                  <td style="padding:7px 10px;"><code>/scan/face/upload</code></td>
+                  <td style="padding:7px 10px;"><code>SkinAnalysisService</code> + <code>AIService</code></td>
+                  <td style="padding:7px 10px;">JSON &amp; Redirect</td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">8</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Melihat Hasil Analisis</td>
+                  <td style="padding:7px 10px;">Tampilkan skor visual 5 kondisi &amp; kotak jerawat</td>
+                  <td style="padding:7px 10px;"><code>/history/{id}</code></td>
+                  <td style="padding:7px 10px;"><code>CustomerController.scan_detail</code></td>
+                  <td style="padding:7px 10px;"><code>scan_detail.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">9</td>
+                  <td style="padding:7px 10px;"><span style="color:#7e22ce;font-weight:700;">AI Provider</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Konsultasi AI &amp; RAG</td>
+                  <td style="padding:7px 10px;">RAG Gemini 1.5 Flash sintesis riwayat &amp; Shopee</td>
+                  <td style="padding:7px 10px;"><code>/assistant/chat</code></td>
+                  <td style="padding:7px 10px;"><code>AIAssistantService.ask_assistant</code></td>
+                  <td style="padding:7px 10px;"><code>assistant.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">10</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Melihat Riwayat Scan</td>
+                  <td style="padding:7px 10px;">Daftar kronologis riwayat pemindaian</td>
+                  <td style="padding:7px 10px;"><code>/history</code></td>
+                  <td style="padding:7px 10px;"><code>CustomerController.history</code></td>
+                  <td style="padding:7px 10px;"><code>history.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#f8fafc;">
+                  <td style="padding:7px 10px;">11</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Melihat Statistik &amp; Progres</td>
+                  <td style="padding:7px 10px;">Grafik perkembangan skor kondisi kulit</td>
+                  <td style="padding:7px 10px;"><code>/dashboard</code></td>
+                  <td style="padding:7px 10px;"><code>CustomerController.dashboard</code></td>
+                  <td style="padding:7px 10px;"><code>dashboard.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">12</td>
+                  <td style="padding:7px 10px;"><span style="color:#0284c7;font-weight:700;">Customer</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Mengelola Profil</td>
+                  <td style="padding:7px 10px;">Edit profil &amp; hapus akun dengan OTP</td>
+                  <td style="padding:7px 10px;"><code>/profile</code></td>
+                  <td style="padding:7px 10px;"><code>CustomerController.profile</code></td>
+                  <td style="padding:7px 10px;"><code>profile.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#fff1f2;">
+                  <td style="padding:7px 10px;">13</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Login Admin</td>
+                  <td style="padding:7px 10px;">Autentikasi role admin khusus</td>
+                  <td style="padding:7px 10px;"><code>/admin/login</code></td>
+                  <td style="padding:7px 10px;"><code>AuthController.handle_admin_login</code></td>
+                  <td style="padding:7px 10px;"><code>admin/login.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">14</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Mengelola Data Pengguna</td>
+                  <td style="padding:7px 10px;">CRUD data user &amp; kontrol aktivasi status</td>
+                  <td style="padding:7px 10px;"><code>/admin/users</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.users_index</code></td>
+                  <td style="padding:7px 10px;"><code>admin/users/</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#fff1f2;">
+                  <td style="padding:7px 10px;">15</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Mengelola Katalog Shopee</td>
+                  <td style="padding:7px 10px;">CRUD produk kosmetik &amp; tautan toko resmi</td>
+                  <td style="padding:7px 10px;"><code>/admin/products</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.products_index</code></td>
+                  <td style="padding:7px 10px;"><code>admin/products/</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">16</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Memantau Log Scan</td>
+                  <td style="padding:7px 10px;">Audit citra wajah, skor VGG16 &amp; koordinat YOLO</td>
+                  <td style="padding:7px 10px;"><code>/admin/scans</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.scans_index</code></td>
+                  <td style="padding:7px 10px;"><code>admin/scans/index.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#fff1f2;">
+                  <td style="padding:7px 10px;">17</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Statistik &amp; Laporan</td>
+                  <td style="padding:7px 10px;">Metrik pengguna, tingkat keberhasilan &amp; total scan</td>
+                  <td style="padding:7px 10px;"><code>/admin/dashboard</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.dashboard</code></td>
+                  <td style="padding:7px 10px;"><code>admin/dashboard.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">18</td>
+                  <td style="padding:7px 10px;"><span style="color:#7e22ce;font-weight:700;">Admin &bull; AI</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">AI Copilot: Analisis Tren</td>
+                  <td style="padding:7px 10px;">Agregasi keluhan jerawat/kering &amp; usulan produk</td>
+                  <td style="padding:7px 10px;"><code>/admin/ai-copilot</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.ai_copilot_view</code></td>
+                  <td style="padding:7px 10px;"><code>admin/ai_copilot.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#fff1f2;">
+                  <td style="padding:7px 10px;">19</td>
+                  <td style="padding:7px 10px;"><span style="color:#7e22ce;font-weight:700;">Admin &bull; AI</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Auto-Insert Usulan AI</td>
+                  <td style="padding:7px 10px;">Approve &amp; auto-insert formulasi AI ke DB</td>
+                  <td style="padding:7px 10px;"><code>/admin/products/auto-insert</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.product_auto_insert</code></td>
+                  <td style="padding:7px 10px;">Redirect <code>/admin/products</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                                <tr style="border-bottom:1px solid #e2e8f0;background:#fff1f2;">
+                  <td style="padding:7px 10px;">20</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Mengatur Flow Sistem &amp; Batasan AI</td>
+                  <td style="padding:7px 10px;">Atur model LLM, token limit, kuota scan harian &amp; mode registrasi OTP</td>
+                  <td style="padding:7px 10px;"><code>/admin/settings</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.settings_update</code></td>
+                  <td style="padding:7px 10px;"><code>admin/settings.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:7px 10px;">21</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin &bull; Eksternal</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Uji Koneksi Layanan Eksternal (OTP &amp; AI)</td>
+                  <td style="padding:7px 10px;">Pengujian live SMTP Gmail, WA Gateway, Gemini API &amp; MySQL</td>
+                  <td style="padding:7px 10px;"><code>/admin/settings/test-*</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.test_*_connection</code></td>
+                  <td style="padding:7px 10px;"><code>admin/settings.html#testing-hub</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+                <tr style="background:#fff1f2;">
+                  <td style="padding:7px 10px;">22</td>
+                  <td style="padding:7px 10px;"><span style="color:#dc2626;font-weight:700;">Admin</span></td>
+                  <td style="padding:7px 10px;font-weight:600;">Mengelola Profil Admin</td>
+                  <td style="padding:7px 10px;">Update data admin &amp; verifikasi kata sandi</td>
+                  <td style="padding:7px 10px;"><code>/admin/profile</code></td>
+                  <td style="padding:7px 10px;"><code>AdminController.profile_view</code></td>
+                  <td style="padding:7px 10px;"><code>admin/profile.html</code></td>
+                  <td style="padding:7px 10px;"><span style="color:#16a34a;font-weight:700;">✔ Sesuai</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchMainTab(id, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function getActiveSVG() {
+      if (document.getElementById('act-full').classList.contains('active')) {
+        return document.getElementById('svg-act-master');
+      }
+      if (document.getElementById('uc-view').classList.contains('active')) {
+        return document.getElementById('svg-uc-master');
+      }
+      return document.getElementById('svg-act-master');
+    }
+
+    function downloadCurrentSVG() {
+      const s = getActiveSVG();
+      const ser = new XMLSerializer();
+      let src = ser.serializeToString(s);
+      if (!src.includes('xmlns=')) src = src.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+      const blob = new Blob([src], { type: 'image/svg+xml;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const name = s.id === 'svg-uc-master' ? 'SkinCheck_AI_Use_Case_Diagram.svg' : 'SkinCheck_AI_Master_Activity_Diagram.svg';
+      a.download = name;
+      a.click();
+    }
+
+    function downloadCurrentPNG() {
+      const s = getActiveSVG();
+      const ser = new XMLSerializer();
+      let src = ser.serializeToString(s);
+      if (!src.includes('xmlns=')) src = src.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+      const vb = s.viewBox.baseVal;
+      const W = vb.width || 1920;
+      const H = vb.height || 1780;
+      const sc = 2; // Ultra High Definition 2x
+      const cv = document.createElement('canvas');
+      cv.width = W * sc;
+      cv.height = H * sc;
+      const ctx = cv.getContext('2d');
+      const img = new Image();
+      const url = URL.createObjectURL(new Blob([src], { type: 'image/svg+xml;charset=utf-8' }));
+      img.onload = () => {
+        ctx.scale(sc, sc);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+        URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        const name = s.id === 'svg-uc-master' ? 'SkinCheck_AI_Use_Case_Diagram.png' : 'SkinCheck_AI_Master_Activity_Diagram.png';
+        a.download = name;
+        a.href = cv.toDataURL('image/png');
+        a.click();
+      };
+      img.src = url;
+    }
+  </script>
+</body>
+
+</html>

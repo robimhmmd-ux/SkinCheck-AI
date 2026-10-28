@@ -1,0 +1,17 @@
+{
+  "id": "robimuhammadw/skincheck-yolov8-acne-detection-training",
+  "title": "SkinCheck YOLOv8 Acne Detection Training",
+  "code_file": "train_acne_yolov8_kaggle.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "osmankagankurnaz/acne-dataset-in-yolov8-format"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

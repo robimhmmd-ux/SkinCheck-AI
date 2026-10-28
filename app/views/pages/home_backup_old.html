@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+
+<html class="light scroll-smooth" lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>SkinCheck AI — Simfoni Kecerdasan Buatan &amp; Kemurnian Dermatologi Masa Depan</title>
+  <!-- Google Fonts: Cormorant Garamond, Outfit & Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Outfit:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <!-- Material Symbols Outlined -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <!-- Tailwind CSS v3 with Plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            sage: {
+              50: "#f4f7f5",
+              100: "#e5ece7",
+              200: "#ccdcd1",
+              300: "#a9c4b3",
+              400: "#7fa78e",
+              500: "#5d8a6e",
+              600: "#476f55",
+              700: "#395844",
+              800: "#304738",
+              900: "#293c30",
+            },
+            mint: {
+              50: "#f0fdf9",
+              100: "#ccfbef",
+              200: "#99f6df",
+              300: "#5eead1",
+              400: "#2dd4b7",
+              500: "#14b89d",
+              600: "#0d9480",
+            },
+            slateforest: {
+              950: "#0d1410",
+              900: "#131f18",
+              800: "#1a2c22",
+              700: "#223b2e",
+              600: "#2f4f3e",
+            },
+            pearl: "#f8faf9",
+            champagne: "#f7f9f7"
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Biometric Photon Scanning Laser Bar */
+    @keyframes scanLaserVertical {
+      0% {
+        top: 2%;
+        opacity: 0;
+      }
+
+      12% {
+        opacity: 0.95;
+      }
+
+      88% {
+        opacity: 0.95;
+      }
+
+      100% {
+        top: 96%;
+        opacity: 0;
+      }
+    }
+
+    /* Intermittent elegant pulse & blink for biometric bounding boxes */
+    @keyframes intermittentBlink {
+
+      0%,
+      100% {
+        opacity: 0.95;
+        transform: scale(1);
+        border-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 14px rgba(255, 255, 255, 0.5), inset 0 0 8px rgba(94, 234, 209, 0.3);
+      }
+
+      40% {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+
+      45% {
+        opacity: 0.25;
+        transform: scale(0.98);
+        border-color: rgba(169, 196, 179, 0.4);
+        box-shadow: none;
+      }
+
+      50% {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+
+      55% {
+        opacity: 0.3;
+        transform: scale(0.98);
+      }
+
+      60% {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+
+      85% {
+        opacity: 0.95;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulseGlowSoft {
+
+      0%,
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+    }
+
+    .biometric-laser-line {
+      animation: scanLaserVertical 4s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .biometric-laser-line-fast {
+      animation: scanLaserVertical 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .hairline-ai-box {
+      animation: intermittentBlink 4.5s ease-in-out infinite;
+    }
+
+    .hairline-ai-box-delayed {
+      animation: intermittentBlink 5.2s ease-in-out infinite 1.8s;
+    }
+
+    /* Glassmorphism panels */
+    .glass-panel-sage {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(169, 196, 179, 0.35);
+      box-shadow: 0 16px 40px -10px rgba(47, 79, 62, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    }
+
+    .pearl-sage-mesh-bg {
+      background-color: #f8faf9;
+      background-image:
+        radial-gradient(at 10% 10%, rgba(204, 220, 209, 0.45) 0px, transparent 50%),
+        radial-gradient(at 90% 15%, rgba(229, 236, 231, 0.65) 0px, transparent 55%),
+        radial-gradient(at 50% 45%, rgba(240, 253, 249, 0.5) 0px, transparent 65%),
+        radial-gradient(at 80% 90%, rgba(204, 220, 209, 0.35) 0px, transparent 55%);
+    }
+
+    /* Soft Multi-Directional Gradient Blend for Full-Width Hero Characters */
+    .hero-fullwidth-blend {
+      mask-image: radial-gradient(ellipse 92% 82% at 50% 40%, black 50%, rgba(0, 0, 0, 0.85) 68%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 92% 82% at 50% 40%, black 50%, rgba(0, 0, 0, 0.85) 68%, transparent 100%);
+    }
+
+    /* Scroll Reveal Transitions */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-on-scroll.is-revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* === CAPTURED-STYLE SCANNING HERO ANIMATIONS === */
+
+    @keyframes gridPulse {
+
+    .scan-grid-overlay {
+      background-image:
+        linear-gradient(rgba(94, 234, 209, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 234, 209, 0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridPulse 6s ease-in-out infinite;
+    }
+
+    .hero-laser-sweep {
+      animation: laserSweepDown 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    .scan-particle {
+      animation: particleSpawn 3s ease-out infinite;
+    }
+
+    .scan-progress-bar {
+      animation: scanProgress 5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    }
+
+    /* Captured Capsule 'O' */
+    .capsule-o {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(1.15em, 1.4vw + 1.05em, 1.55em);
+      height: 0.82em;
+      border: clamp(2.5px, 0.35vw, 3.5px) solid #ffffff;
+      border-radius: 9999px;
+      position: relative;
+      vertical-align: middle;
+      margin: 0 0.03em;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.35), inset 0 0 15px rgba(94, 234, 209, 0.2);
+    }
+
+    .capsule-o::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.35);
+      top: 50%;
+    }
+
+    .capsule-o::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.35);
+      left: 50%;
+    }
+
+    .hero-captured-headline {
+      font-size: clamp(3.2rem, 11.5vw, 11rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-captured-subtitle {
+      font-size: clamp(2.4rem, 7.5vw, 7.2rem);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    /* Precision Ruler Pattern */
+    .ruler-strip {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(34, 59, 46, 0.45) 0px,
+        rgba(34, 59, 46, 0.45) 1px,
+        transparent 1px,
+        transparent 12px
+      );
+    }
+
+    .ruler-strip-major {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(34, 59, 46, 0.75) 0px,
+        rgba(34, 59, 46, 0.75) 1.5px,
+        transparent 1.5px,
+        transparent 60px
+      );
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scan-grid-overlay,
+      .scan-particle,
+      .scan-progress-bar,
+      .biometric-laser-line,
+      .biometric-laser-line-fast,
+      .hairline-ai-box,
+      .hairline-ai-box-delayed {
+        animation: none !important;
+      }
+    }
+
+
+    /* Browser Surfaces: Custom Sleek Scrollbar & Focus States */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8faf9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ccdcd1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7fa78e;
+    }
+
+    :focus-visible {
+      outline: 2px solid #395844;
+      outline-offset: 2px;
+    }
+
+    /* Fixed header scrolled state */
+    header.is-scrolled {
+      background: rgba(255, 255, 255, 0.88) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-bottom: 1px solid rgba(204, 220, 209, 0.6) !important;
+      box-shadow: 0 4px 20px -4px rgba(47, 79, 62, 0.08) !important;
+    }
+    header.is-scrolled .brand-title {
+      color: #131f18 !important;
+    }
+    header.is-scrolled .brand-sub {
+      color: #476f55 !important;
+    }
+    header.is-scrolled .nav-link {
+      color: #223b2e !important;
+    }
+    header.is-scrolled .nav-link:hover {
+      color: #476f55 !important;
+    }
+    header.is-scrolled .auth-link {
+      color: #223b2e !important;
+    }
+    header.is-scrolled .auth-btn {
+      background: #395844 !important;
+      color: #ffffff !important;
+    }
+
+  </style>
+</head>
+
+<body
+  class="pearl-sage-mesh-bg text-slateforest-900 font-sans antialiased selection:bg-sage-200 selection:text-slateforest-900 min-h-screen flex flex-col">
+  <!-- TOP NAVIGATION BAR (CAPTURED EDITORIAL STYLE: FLOATING OVERLAY OVER FULL-BLEED HERO) -->
+  <header id="main-nav-header" class="fixed top-0 inset-x-0 z-50 w-full bg-gradient-to-b from-black/75 via-black/35 to-transparent transition-all duration-300">
+    <div class="w-full px-6 md:px-12 h-20 flex items-center justify-between">
+      <!-- Col 1: Brand Signature -->
+      <a href="#manifesto" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/25 flex items-center justify-center text-white shadow-sm group-hover:bg-white/20 transition-colors">
+          <span class="material-symbols-outlined text-[18px]" data-icon="auto_awesome">auto_awesome</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="brand-title font-display font-bold tracking-[0.2em] text-white text-sm uppercase transition-colors">SkinCheck AI</span>
+          <span class="brand-sub text-[9px] tracking-[0.25em] text-white/60 uppercase font-medium transition-colors">Cyber-Dermatology Lab</span>
+        </div>
+      </a>
+
+      <!-- Col 2: Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-8">
+        <a class="nav-link text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 hover:text-white transition-colors duration-150" href="#manifesto">Manifesto</a>
+        <a class="nav-link text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 hover:text-white transition-colors duration-150" href="#cara-kerja">Cara Kerja</a>
+        <a class="nav-link text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 hover:text-white transition-colors duration-150" href="#pilar-teknologi">Pilar Teknologi</a>
+        <a class="nav-link text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 hover:text-white transition-colors duration-150" href="#spektrum-uv">Spektrum UV</a>
+        <a class="nav-link text-[11px] uppercase tracking-[0.2em] font-medium text-white/80 hover:text-white transition-colors duration-150" href="#arsitektur">Akreditasi</a>
+      </nav>
+
+      <!-- Col 3: Auth / Status Actions -->
+      <div class="flex items-center gap-3">
+        {% if request.session.get("user") %}
+          {% if request.session.get("user").get("role") == "admin" %}
+            <a class="auth-link text-xs uppercase tracking-wider font-semibold text-white/90 hover:text-white px-4 py-2 rounded-full border border-white/20 backdrop-blur-md bg-white/10 transition-colors" href="/admin/dashboard">
+              Dashboard Admin
+            </a>
+          {% else %}
+            <a class="auth-link text-xs uppercase tracking-wider font-semibold text-white/90 hover:text-white px-4 py-2 rounded-full border border-white/20 backdrop-blur-md bg-white/10 transition-colors" href="/dashboard">
+              Dashboard Saya
+            </a>
+            <button type="button" onclick="window.openVenChat();" class="auth-btn text-xs uppercase tracking-wider font-semibold text-slateforest-950 bg-white hover:bg-white/90 px-5 py-2.5 rounded-full shadow-md transition-all duration-200 active:scale-95 border-0 cursor-pointer">
+              Tanya Ven AI
+            </button>
+          {% endif %}
+          <a class="text-xs uppercase tracking-wider font-semibold text-rose-400 hover:text-rose-300 px-3 py-2 transition-colors" href="/logout">
+            Keluar
+          </a>
+        {% else %}
+          <button type="button" onclick="openAuthModal('login')" class="auth-link text-xs uppercase tracking-wider font-semibold text-white/85 hover:text-white px-4 py-2 rounded-full transition-colors cursor-pointer bg-transparent border-0">
+            Masuk
+          </button>
+          <button type="button" onclick="openAuthModal('register')" class="auth-btn text-xs uppercase tracking-wider font-semibold text-slateforest-950 bg-white hover:bg-white/90 px-6 py-2.5 rounded-full shadow-md transition-all duration-200 active:scale-95 font-medium cursor-pointer border-0">
+            Daftar Akun
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <main class="flex-grow">
+    <!-- HERO SECTION: CAPTURED-STYLE FULL-VIEWPORT SKIN SCANNING EXPERIENCE -->
+    <section class="relative h-screen min-h-[700px] w-full overflow-hidden flex flex-col justify-between" id="manifesto">
+      <!-- Full-viewport character background (retains original characters from project) -->
+      <div class="absolute inset-0">
+        <img alt="SkinCheck AI Clinical Dual Subject - Woman and Man in Seamless Harmony"
+             class="w-full h-full object-cover object-[center_35%] select-none pointer-events-none brightness-[1.02] contrast-[1.05]"
+             src="/static/images/hero_characters_hd.jpg?v=20261003_acne_v2" />
+        <!-- Subtle multi-layer cinematic vignette & grading for high contrast readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-slateforest-950/40 via-transparent to-slateforest-950/75"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-slateforest-950/20 via-transparent to-slateforest-950/20"></div>
+      </div>
+
+      <!-- 4-COLUMN VERTICAL HAIRLINE GUIDES (CAPTURED TEMPLATE SIGNATURE) -->
+      <div class="absolute inset-0 grid grid-cols-2 md:grid-cols-4 pointer-events-none" style="z-index: 12;">
+        <div class="border-r border-white/[0.07] h-full"></div>
+        <div class="border-r border-white/[0.07] h-full"></div>
+        <div class="hidden md:block border-r border-white/[0.07] h-full"></div>
+        <div class="hidden md:block h-full"></div>
+      </div>
+
+      <!-- HOLOGRAPHIC SCANNING GRID OVERLAY -->
+      <div class="absolute inset-0 scan-grid-overlay pointer-events-none" style="z-index: 13;"></div>
+
+      <!-- BIOMETRIC LASER SCAN SWEEP FULL-VIEWPORT (HIGH INTENSITY) -->
+      <div class="absolute inset-x-0 h-16 hero-laser-sweep pointer-events-none flex flex-col items-center" style="z-index: 22;">
+        <div class="w-full h-[2.5px] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_1px_16px_rgba(255,255,255,0.85)]"></div>
+        <div class="w-full h-14 bg-gradient-to-b from-mint-300/25 via-sage-300/8 to-transparent"></div>
+      </div>
+
+      <!-- SCANNING PARTICLES AROUND SUBJECTS -->
+      <div class="absolute pointer-events-none" style="z-index: 15; left: 32%; top: 36%;">
+        <div class="w-1 h-1 rounded-full bg-mint-300 scan-particle shadow-[0_0_6px_rgba(94,234,209,1)]"></div>
+      </div>
+      <div class="absolute pointer-events-none" style="z-index: 15; left: 63%; top: 40%;">
+        <div class="w-1.5 h-1.5 rounded-full bg-white scan-particle shadow-[0_0_8px_rgba(255,255,255,1)]" style="animation-delay: 0.9s;"></div>
+      </div>
+      <div class="absolute pointer-events-none" style="z-index: 15; left: 47%; top: 25%;">
+        <div class="w-1 h-1 rounded-full bg-mint-200 scan-particle" style="animation-delay: 1.5s;"></div>
+      </div>
+      <div class="absolute pointer-events-none" style="z-index: 15; left: 56%; top: 50%;">
+        <div class="w-1.5 h-1.5 rounded-full bg-sage-200 scan-particle" style="animation-delay: 2.1s;"></div>
+      </div>
+      <div class="absolute pointer-events-none" style="z-index: 15; left: 39%; top: 48%;">
+        <div class="w-1 h-1 rounded-full bg-white/70 scan-particle" style="animation-delay: 0.4s;"></div>
+      </div>
+
+      <!-- 4 VIEWPORT CORNER FRAME BRACKETS (CAPTURED SIGNATURE) -->
+      <div class="absolute top-24 left-6 md:left-10 w-6 h-6 border-t-2 border-l-2 border-white/30 pointer-events-none" style="z-index: 30;"></div>
+      <div class="absolute top-24 right-6 md:right-10 w-6 h-6 border-t-2 border-r-2 border-white/30 pointer-events-none" style="z-index: 30;"></div>
+      <div class="absolute bottom-20 left-6 md:left-10 w-6 h-6 border-b-2 border-l-2 border-white/30 pointer-events-none" style="z-index: 30;"></div>
+      <div class="absolute bottom-20 right-6 md:right-10 w-6 h-6 border-b-2 border-r-2 border-white/30 pointer-events-none" style="z-index: 30;"></div>
+
+      <!-- BIOMETRIC HUD OVERLAYS ON MALE AND FEMALE CHARACTERS (PRESERVED & ENHANCED) -->
+      <div class="absolute inset-0 pointer-events-none" style="z-index: 20;">
+        <!-- Subject 1 (Man): Cheek Acne Papule Bounding Box -->
+        <div class="absolute w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 border border-white/80 hairline-ai-box pointer-events-none rounded-[2px]"
+             style="left: 33.4%; top: 40.4%; transform: translate(-50%, -50%);">
+          <span class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-white"></span>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-white"></span>
+          <span class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-white"></span>
+          <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-white"></span>
+          <span class="absolute w-2 h-2 rounded-full border border-rose-400 bg-rose-500/40 animate-ping" style="left: 24%; top: 26%;"></span>
+          <span class="absolute w-2.5 h-2.5 rounded-full border border-rose-400 bg-rose-500/40 animate-pulse" style="left: 56%; top: 52%;"></span>
+          <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slateforest-950/90 text-white backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider font-semibold shadow-md whitespace-nowrap border border-white/30 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+            <span>IDENTIFIKASI JERAWAT: AKTIF</span>
+          </div>
+          <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-slateforest-950/90 text-rose-300 backdrop-blur-md px-1.5 py-0.5 rounded text-[7px] font-mono tracking-wider whitespace-nowrap border border-rose-500/30">
+            AKNE PAPULA (GRADE 2)
+          </div>
+        </div>
+
+        <!-- Subject 1 (Man): Forehead Sebum Analysis -->
+        <div class="hidden sm:block absolute w-10 h-10 sm:w-12 sm:h-12 border border-white/70 hairline-ai-box-delayed pointer-events-none rounded-[2px]"
+             style="left: 39.5%; top: 19.5%; transform: translate(-50%, -50%);">
+          <span class="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-white"></span>
+          <span class="absolute -top-1 -right-1 w-2 h-2 border-t-2 border-r-2 border-white"></span>
+          <span class="absolute -bottom-1 -left-1 w-2 h-2 border-b-2 border-l-2 border-white"></span>
+          <span class="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-white"></span>
+          <div class="absolute -bottom-5 right-0 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider text-slateforest-950 font-bold shadow-md whitespace-nowrap">
+            SEBUM MATRIX 0.12mm
+          </div>
+        </div>
+
+        <!-- Subject 2 (Woman): Forehead Stratum Corneum -->
+        <div class="hidden sm:block absolute w-12 h-12 sm:w-14 sm:h-14 border border-white/80 hairline-ai-box pointer-events-none rounded-[2px]"
+             style="left: 61.0%; top: 24.7%; transform: translate(-50%, -50%);">
+          <span class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-white"></span>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-white"></span>
+          <span class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-white"></span>
+          <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-white"></span>
+          <div class="absolute -top-6 -right-1 bg-slateforest-950/90 text-white backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider font-semibold shadow-md whitespace-nowrap border border-white/30 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-mint-400"></span>
+            <span>STRATUM CORNEUM SCAN</span>
+          </div>
+        </div>
+
+        <!-- Subject 2 (Woman): Cheek Hydration Scan -->
+        <div class="absolute w-12 h-12 sm:w-14 sm:h-14 border border-white/70 hairline-ai-box-delayed pointer-events-none rounded-[2px]"
+             style="left: 64.7%; top: 44.3%; transform: translate(-50%, -50%);">
+          <span class="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-white"></span>
+          <span class="absolute -top-1 -right-1 w-2 h-2 border-t-2 border-r-2 border-white"></span>
+          <span class="absolute -bottom-1 -left-1 w-2 h-2 border-b-2 border-l-2 border-white"></span>
+          <span class="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-white"></span>
+          <div class="absolute -bottom-5 right-0 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider text-slateforest-950 font-bold shadow-md whitespace-nowrap">
+            HIDRASI 99.4%
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER HERO STAGE: HEADLINE & EDITORIAL FOCUS -->
+      <div class="relative z-30 flex flex-col items-center justify-center my-auto px-4 text-center select-none pt-12 md:pt-16">
+        <!-- Micro Tag (Matching "ART IN FOCUS" from Captured) -->
+        <div class="text-[10px] md:text-xs font-display font-bold tracking-[0.4em] text-white/75 uppercase mb-3 md:mb-4">
+          Dermatology in Focus
+        </div>
+
+        <!-- Massive Headline: BOLD SANS "YOUR SKIN" (Matching "YOUR STORY" in Captured) -->
+        <h1 class="font-display font-black text-white hero-captured-headline tracking-tighter uppercase drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
+          YOUR SKIN
+        </h1>
+
+        <!-- Elegant Serif Italic Subtitle: "Analyzed" (Matching "Captured" in Captured) -->
+        <div class="font-serif italic hero-captured-subtitle text-[#f2e9d2] font-normal -mt-3 md:-mt-6 drop-shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
+          Analyzed
+        </div>
+      </div>
+
+      <!-- BOTTOM METADATA BAR & REAL-TIME SCANNING TICKER (CAPTURED LAYOUT) -->
+      <div class="relative z-30 w-full px-6 md:px-12 pb-6 pt-4 bg-gradient-to-t from-slateforest-950/80 via-slateforest-950/30 to-transparent">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <!-- Left: Latency & Resolution specs -->
+          <div class="flex items-center gap-6 text-[10px] font-mono text-white/60 tracking-wider">
+            <div>LATENSI: <span class="text-white font-semibold">0.78s</span></div>
+            <div class="hidden sm:block">•</div>
+            <div class="hidden sm:block">RESOLUSI: <span class="text-white font-semibold">0.05mm²</span></div>
+            <div class="hidden sm:block">•</div>
+            <div class="hidden sm:block">SPEKTRUM: <span class="text-mint-300 font-semibold">415nm - 680nm</span></div>
+          </div>
+
+          <!-- Center: Dynamic Scanning Progress Indicator -->
+          <div class="w-full md:w-72 flex items-center gap-2.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span class="text-[9px] font-mono text-white/50 uppercase tracking-widest shrink-0">Live Scan</span>
+            <div class="flex-1 h-[2px] bg-white/15 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-mint-400 to-emerald-300 scan-progress-bar rounded-full"></div>
+            </div>
+            <span class="text-[9px] font-mono text-mint-300 tracking-wider">98.4%</span>
+          </div>
+
+          <!-- Right: Status Badge -->
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span class="text-[10px] font-mono text-white/80 tracking-widest uppercase font-semibold">Multi-Spektrum Aktif</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHENTIC CAPTURED-STYLE RULER TRANSITION DIVIDER (01 - 08 NUMBERED SCALE) -->
+    <div class="w-full bg-[#f8faf9] border-y border-sage-300/40 py-5 select-none overflow-hidden relative" style="z-index: 10;">
+      <div class="w-full flex items-center justify-between px-4 sm:px-8 md:px-16 text-slateforest-900/40 font-mono text-[10px] tracking-widest">
+        <div class="flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">01</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">02</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">03</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="hidden sm:flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">04</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">05</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="hidden lg:flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">06</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="hidden xl:flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">07</span>
+          <div class="h-5 w-24 sm:w-36 md:w-48 ruler-strip border-t border-slateforest-900/25"></div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="font-bold text-slateforest-900/60">08</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPTURED-STYLE MANIFESTO QUOTE SECTION (LARGE EDITORIAL TYPOGRAPHY) -->
+    <section class="py-20 md:py-28 bg-[#f8faf9] border-b border-sage-200/50 reveal-on-scroll" id="profil-manifesto">
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <!-- Left Column: Brand & Role (Matching Samuel Spenser / Professional Photographer) -->
+          <div class="lg:col-span-3 space-y-2">
+            <div class="font-display font-bold text-slateforest-950 text-base tracking-[0.15em] uppercase">SkinCheck AI</div>
+            <div class="text-xs text-sage-700 font-medium tracking-wider uppercase">Cyber-Dermatology Platform</div>
+            <div class="text-[11px] text-slateforest-800/60 font-light pt-2 leading-relaxed">
+              Platform dermatologi digital cerdas untuk analisis kesehatan kulit dan rekomendasi perawatan personal secara akurat dan komprehensif.
+            </div>
+          </div>
+
+          <!-- Right Column: Massive Quote (Matching Captured Manifesto) -->
+          <div class="lg:col-span-9">
+            <div class="text-sage-400 font-serif text-6xl md:text-7xl leading-none select-none -mb-6">“</div>
+            <p class="font-sans text-2xl sm:text-3xl md:text-4xl lg:text-[2.85rem] text-slateforest-950 font-normal leading-[1.2] tracking-tight">
+              Kami tidak sekadar membaca permukaan kulit. Kami <span class="font-serif italic text-sage-700 font-medium">memetakan integritas seluler</span>, mendeteksi anomali mikroskopis tersembunyi, dan menghadirkan kejelasan klinis tanpa menggurui.
+            </p>
+
+            <!-- Metric Highlights Matrix Row -->
+            <div class="grid grid-cols-3 gap-6 sm:gap-10 mt-12 pt-8 border-t border-sage-200/70">
+              <div>
+                <div class="font-display text-3xl sm:text-4xl font-bold text-slateforest-950">12</div>
+                <div class="text-[11px] uppercase tracking-wider text-slateforest-800/60 font-semibold mt-1">Stratum Layer Matrix</div>
+              </div>
+              <div>
+                <div class="font-display text-3xl sm:text-4xl font-bold text-slateforest-950">0.78s</div>
+                <div class="text-[11px] uppercase tracking-wider text-slateforest-800/60 font-semibold mt-1">Latensi Spektral AI</div>
+              </div>
+              <div>
+                <div class="font-display text-3xl sm:text-4xl font-bold text-slateforest-950">98.4%</div>
+                <div class="text-[11px] uppercase tracking-wider text-slateforest-800/60 font-semibold mt-1">Indeks Korelasi Klinis</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs tracking-wide text-slateforest-800/70 mt-8 pt-4 border-t border-sage-200/40">
+              <span class="material-symbols-outlined text-sage-600 text-[18px]" data-icon="verified">verified</span>
+              <span>Tervalidasi di bawah konsensus optik dermatologis &amp; protokol proteksi biokompatibel netral-gender.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===================================================================== -->
+    <!-- CARD KE-2: LUMERA-STYLE WARM ALABASTER — INTERACTIVE AI ANALYSIS VIEWER -->
+    <!-- Menampilkan 2 Karakter Proyek dengan Efek Analisis AI (Titah Paduka Raja) -->
+    <!-- ===================================================================== -->
+    <style>
+      /* === CARD #01 LUMERA ALABASTER STYLE === */
+      .lumera-card-01 {
+        background: #F9F7F2;
+        border-radius: 32px;
+      }
+
+      /* Character Switcher Transition */
+      .char-slide {
+        transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .char-slide.is-hidden {
+        opacity: 0;
+        transform: translateX(24px);
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+      }
+      .char-slide.is-visible {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+        position: relative;
+      }
+
+      /* Floating Diagnostic Chip */
+      @keyframes chipFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+      }
+      .diagnostic-chip {
+        animation: chipFloat 4s ease-in-out infinite;
+      }
+
+      /* HUD Accent Colors */
+      .hud-rose   { border-color: rgba(251, 113, 133, 0.85); }
+      .hud-mint   { border-color: rgba(94, 234, 209, 0.85); }
+      .hud-amber  { border-color: rgba(251, 191, 36, 0.85); }
+      .hud-sage   { border-color: rgba(127, 167, 142, 0.85); }
+
+      /* Switcher Nav Buttons */
+      .char-nav-btn {
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        border: 1px solid rgba(47, 79, 62, 0.2);
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(8px);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #304738;
+        font-size: 18px;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+      .char-nav-btn:hover {
+        background: #304738;
+        color: #ffffff;
+        border-color: #304738;
+        box-shadow: 0 4px 16px rgba(47,79,62,0.25);
+      }
+      .char-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: rgba(47, 79, 62, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .char-dot.active {
+        background: #304738;
+        width: 22px;
+        border-radius: 4px;
+      }
+
+      /* Metric bar fill animation */
+      @keyframes metricFill {
+        from { width: 0%; }
+        to { width: var(--target-width); }
+      }
+      .metric-bar-fill {
+        animation: metricFill 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: 0.3s;
+        width: 0%;
+      }
+    </style>
+
+    <section class="py-16 md:py-24 bg-[#f8faf9] border-b border-sage-200/50 reveal-on-scroll" id="cara-kerja">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+
+        <!-- LUMERA CARD #01 — ALABASTER CANVAS -->
+        <div class="lumera-card-01 p-6 md:p-10 lg:p-14 shadow-[0_24px_80px_-16px_rgba(47,79,62,0.12),0_0_0_1px_rgba(231,224,212,0.8)]">
+
+          <!-- Card Header: #01 Milestone Marker + Title -->
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-10 md:mb-14">
+            <div class="space-y-2">
+              <!-- Numbered marker ala Lumera -->
+              <div class="flex items-center gap-4">
+                <span class="font-serif text-5xl md:text-7xl font-medium text-slateforest-900/15 leading-none select-none">#01</span>
+                <div>
+                  <div class="text-[10px] uppercase tracking-[0.3em] font-semibold text-sage-600 mb-1">Lumera AI Analysis Engine</div>
+                  <h2 class="font-display font-bold text-slateforest-950 text-2xl md:text-3xl tracking-tight leading-tight">
+                    Pindai. Analisis. Diagnosa.
+                  </h2>
+                </div>
+              </div>
+              <p class="text-slateforest-900/60 font-light text-sm md:text-base max-w-lg leading-relaxed mt-2">
+                Mesin analisis biometrik multi-subjek berbasis VGG16 yang mendeteksi 5 kondisi kulit secara bersamaan dalam hitungan milidetik.
+              </p>
+            </div>
+            <!-- Confidence badge -->
+            <div class="flex-shrink-0">
+              <div class="inline-flex flex-col items-center gap-1 bg-slateforest-950 text-white px-5 py-3 rounded-2xl text-center">
+                <span class="font-display font-black text-2xl text-mint-300">98%</span>
+                <span class="text-[9px] uppercase tracking-[0.2em] text-white/60">Confidence Index</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Layout: [Viewer] [Metrics] -->
+          <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8 lg:gap-12 items-start">
+
+            <!-- LEFT: Interactive Character Viewer -->
+            <div class="space-y-6">
+
+              <!-- Character Viewer Frame -->
+              <div class="relative rounded-2xl overflow-hidden bg-slateforest-950 shadow-xl border border-slateforest-900/20" style="height: clamp(340px, 55vw, 560px);">
+
+                <!-- === KARAKTER 1: WANITA === -->
+                <div id="char-woman-slide" class="char-slide is-visible h-full w-full">
+                  <img
+                    alt="Karakter Wanita — Analisis Hidrasi & Tekstur Kulit"
+                    class="w-full h-full object-cover object-[center_12%] brightness-[1.04] contrast-[1.04]"
+                    src="/static/images/character_woman.jpg"
+                    onerror="this.src='/static/images/hero_characters_hd.jpg'; this.style.objectPosition='75% 12%';"
+                  />
+
+                  <!-- Laser scan sweep — Woman -->
+                  <div class="absolute inset-x-0 h-12 biometric-laser-line pointer-events-none z-20 flex flex-col">
+                    <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-[#5EEAD1] to-transparent shadow-[0_0_18px_rgba(94,234,209,0.9),0_0_40px_rgba(94,234,209,0.4)]"></div>
+                    <div class="w-full h-10 bg-gradient-to-b from-[rgba(94,234,209,0.15)] to-transparent"></div>
+                  </div>
+
+                  <!-- HUD Box: Hydration Zone -->
+                  <div class="absolute hud-mint border hairline-ai-box pointer-events-none z-20 rounded-[3px]"
+                       style="left: 38%; top: 36%; width: 80px; height: 80px; transform: translate(-50%,-50%);">
+                    <span class="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-[#5EEAD1]"></span>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-[#5EEAD1]"></span>
+                    <span class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-[#5EEAD1]"></span>
+                    <span class="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-[#5EEAD1]"></span>
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#0a1a12]/90 text-[#5EEAD1] backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider font-bold shadow-md whitespace-nowrap border border-[#5EEAD1]/30 flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[#5EEAD1]"></span>
+                      <span>Hydration Zone: 92%</span>
+                    </div>
+                  </div>
+
+                  <!-- HUD Box: Micro-Texture -->
+                  <div class="absolute hud-sage border hairline-ai-box-delayed pointer-events-none z-20 rounded-[3px]"
+                       style="left: 62%; top: 45%; width: 60px; height: 60px; transform: translate(-50%,-50%);">
+                    <span class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-[#7fa78e]"></span>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-[#7fa78e]"></span>
+                    <span class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-[#7fa78e]"></span>
+                    <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-[#7fa78e]"></span>
+                    <div class="absolute -bottom-5 right-0 bg-white/95 backdrop-blur-md px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider text-slateforest-950 font-bold shadow-sm whitespace-nowrap">
+                      Micro-Texture: Smooth
+                    </div>
+                  </div>
+
+                  <!-- HUD Box: Pigmentation -->
+                  <div class="absolute hud-amber border hairline-ai-box pointer-events-none z-20 rounded-[3px]"
+                       style="left: 52%; top: 22%; width: 50px; height: 40px; transform: translate(-50%,-50%);">
+                    <span class="absolute -top-1 -left-1 w-2 h-2 border-t-2 border-l-2 border-amber-400"></span>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 border-t-2 border-r-2 border-amber-400"></span>
+                    <span class="absolute -bottom-1 -left-1 w-2 h-2 border-b-2 border-l-2 border-amber-400"></span>
+                    <span class="absolute -bottom-1 -right-1 w-2 h-2 border-b-2 border-r-2 border-amber-400"></span>
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#0a1a12]/90 text-amber-300 backdrop-blur-md px-1.5 py-0.5 rounded text-[7px] font-mono tracking-wider whitespace-nowrap border border-amber-500/30">
+                      Pigmentation: Clean
+                    </div>
+                  </div>
+
+                  <!-- Floating Diagnostic Chip — Woman -->
+                  <div class="diagnostic-chip absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-52 z-30">
+                    <div class="bg-[#0a1a12]/85 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 shadow-2xl">
+                      <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-[9px] uppercase tracking-[0.25em] text-[#5EEAD1] font-mono font-bold">Bio-Diagnostic</span>
+                        <span class="flex items-center gap-1 text-[8px] text-white/50 font-mono">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                          LIVE
+                        </span>
+                      </div>
+                      <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Normal</span>
+                          <span class="text-[#5EEAD1] font-mono font-bold">72%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Kering / Dry</span>
+                          <span class="text-amber-300 font-mono font-bold">15%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Berminyak</span>
+                          <span class="text-white/50 font-mono font-bold">08%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Jerawat</span>
+                          <span class="text-white/50 font-mono font-bold">03%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Dark Spots</span>
+                          <span class="text-white/50 font-mono font-bold">02%</span>
+                        </div>
+                      </div>
+                      <div class="mt-2.5 pt-2 border-t border-white/10 text-center">
+                        <span class="text-[8px] text-white/40 font-mono tracking-wider">Subject A — Female</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Telemetry Bar — Woman -->
+                  <div class="absolute bottom-4 left-4 right-[220px] hidden sm:flex items-center gap-2.5 bg-slateforest-950/80 backdrop-blur-md border border-white/15 rounded-xl px-3.5 py-2 z-20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#5EEAD1] flex-shrink-0"></span>
+                    <span class="font-medium text-[10px] text-white">Analisis Hidrasi & Tekstur</span>
+                    <span class="ml-auto font-mono text-[9px] text-[#5EEAD1] font-semibold tracking-wider whitespace-nowrap">HYD 92% • TEX 0.08mm</span>
+                  </div>
+                </div>
+
+                <!-- === KARAKTER 2: PRIA === -->
+                <div id="char-man-slide" class="char-slide is-hidden h-full w-full">
+                  <img
+                    alt="Karakter Pria — Analisis Acne & Sebum"
+                    class="w-full h-full object-cover object-[center_12%] brightness-[1.01] contrast-[1.05]"
+                    src="/static/images/character_man.jpg"
+                    onerror="this.src='/static/images/hero_characters_hd.jpg'; this.style.objectPosition='25% 12%';"
+                  />
+
+                  <!-- Laser scan sweep — Man (faster) -->
+                  <div class="absolute inset-x-0 h-12 biometric-laser-line-fast pointer-events-none z-20 flex flex-col">
+                    <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-rose-400 to-transparent shadow-[0_0_18px_rgba(251,113,133,0.9),0_0_40px_rgba(251,113,133,0.3)]"></div>
+                    <div class="w-full h-10 bg-gradient-to-b from-[rgba(251,113,133,0.12)] to-transparent"></div>
+                  </div>
+
+                  <!-- HUD Box: Acne Papule -->
+                  <div class="absolute hud-rose border hairline-ai-box pointer-events-none z-20 rounded-[3px]"
+                       style="left: 40%; top: 50%; width: 72px; height: 72px; transform: translate(-50%,-50%);">
+                    <span class="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-rose-400"></span>
+                    <span class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-rose-400"></span>
+                    <span class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-rose-400"></span>
+                    <span class="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-rose-400"></span>
+                    <span class="absolute top-[28%] left-[25%] w-2 h-2 rounded-full bg-rose-500/50 border border-rose-400 animate-ping"></span>
+                    <span class="absolute top-[52%] left-[56%] w-2.5 h-2.5 rounded-full bg-rose-500/40 border border-rose-400 animate-pulse"></span>
+                    <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#0a1a12]/90 text-white backdrop-blur-md px-2 py-0.5 rounded text-[8px] font-mono tracking-wider font-bold shadow-md whitespace-nowrap border border-white/20 flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                      <span>Acne: Papule 87%</span>
+                    </div>
+                    <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-[#0a1a12]/90 text-rose-300 backdrop-blur-md px-1.5 py-0.5 rounded text-[7px] font-mono tracking-wider whitespace-nowrap border border-rose-500/30">
+                      PAPULA INFLAMASI GR.2
+                    </div>
+                  </div>
+
+                  <!-- HUD Box: Sebum Specular -->
+                  <div class="absolute hud-amber border hairline-ai-box-delayed pointer-events-none z-20 rounded-[3px]"
+                       style="left: 56%; top: 24%; width: 56px; height: 48px; transform: translate(-50%,-50%);">
+                    <span class="absolute -top-1 -left-1 w-2.5 h-2.5 border-t-2 border-l-2 border-amber-400"></span>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 border-t-2 border-r-2 border-amber-400"></span>
+                    <span class="absolute -bottom-1 -left-1 w-2.5 h-2.5 border-b-2 border-l-2 border-amber-400"></span>
+                    <span class="absolute -bottom-1 -right-1 w-2.5 h-2.5 border-b-2 border-r-2 border-amber-400"></span>
+                    <div class="absolute -bottom-5 right-0 bg-white/95 backdrop-blur-md px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider text-slateforest-950 font-bold shadow-sm whitespace-nowrap">
+                      Sebum Specular: 24%
+                    </div>
+                  </div>
+
+                  <!-- Floating Diagnostic Chip — Man -->
+                  <div class="diagnostic-chip absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-52 z-30">
+                    <div class="bg-[#0a1a12]/85 backdrop-blur-xl border border-white/15 rounded-2xl p-3.5 shadow-2xl">
+                      <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-[9px] uppercase tracking-[0.25em] text-rose-400 font-mono font-bold">Bio-Diagnostic</span>
+                        <span class="flex items-center gap-1 text-[8px] text-white/50 font-mono">
+                          <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                          SCAN
+                        </span>
+                      </div>
+                      <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Jerawat / Acne</span>
+                          <span class="text-rose-400 font-mono font-bold">87%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Berminyak</span>
+                          <span class="text-amber-300 font-mono font-bold">24%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Normal</span>
+                          <span class="text-white/50 font-mono font-bold">38%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Kering / Dry</span>
+                          <span class="text-white/50 font-mono font-bold">09%</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[9px]">
+                          <span class="text-white/70 font-mono">Dark Spots</span>
+                          <span class="text-white/50 font-mono font-bold">05%</span>
+                        </div>
+                      </div>
+                      <div class="mt-2.5 pt-2 border-t border-white/10 text-center">
+                        <span class="text-[8px] text-white/40 font-mono tracking-wider">Subject B — Male</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bottom Telemetry Bar — Man -->
+                  <div class="absolute bottom-4 left-4 right-[220px] hidden sm:flex items-center gap-2.5 bg-slateforest-950/80 backdrop-blur-md border border-white/15 rounded-xl px-3.5 py-2 z-20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-400 flex-shrink-0"></span>
+                    <span class="font-medium text-[10px] text-white">Analisis Jerawat & Sebum</span>
+                    <span class="ml-auto font-mono text-[9px] text-rose-400 font-semibold tracking-wider whitespace-nowrap">ACN 87% • SEB 24%</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Character Switcher Navigation -->
+              <div class="flex items-center justify-center gap-5 pt-2">
+                <button
+                  id="btn-prev-char"
+                  class="char-nav-btn"
+                  aria-label="Karakter sebelumnya"
+                  onclick="switchCharacter(-1)"
+                >‹</button>
+
+                <div class="flex flex-col items-center gap-3">
+                  <!-- Dots -->
+                  <div class="flex items-center gap-2">
+                    <div id="dot-woman" class="char-dot active" onclick="switchCharacter(0, 'woman')"></div>
+                    <div id="dot-man" class="char-dot" onclick="switchCharacter(0, 'man')"></div>
+                  </div>
+                  <!-- Label -->
+                  <div class="text-center">
+                    <div id="char-label-name" class="font-display font-semibold text-slateforest-950 text-sm tracking-wide">Karakter Wanita</div>
+                    <div id="char-label-sub" class="text-[10px] text-sage-600 font-mono tracking-wider uppercase mt-0.5">Hydration · Texture · Pigmentation</div>
+                  </div>
+                </div>
+
+                <button
+                  id="btn-next-char"
+                  class="char-nav-btn"
+                  aria-label="Karakter berikutnya"
+                  onclick="switchCharacter(1)"
+                >›</button>
+              </div>
+            </div>
+
+            <!-- RIGHT: Skin Analysis Metrics Panel -->
+            <div class="space-y-6">
+              <!-- Panel Header -->
+              <div>
+                <div class="text-[9px] uppercase tracking-[0.35em] text-sage-600 font-semibold mb-2">Results-Driven Dermatology</div>
+                <h3 class="font-display font-bold text-slateforest-950 text-xl leading-tight">5-Kondisi Analisis Kulit</h3>
+                <p class="text-slateforest-900/60 text-xs font-light mt-2 leading-relaxed">
+                  Mesin VGG16 terlatih mengevaluasi 5 kategori kondisi kulit secara objektif dari satu foto beresolusi standar.
+                </p>
+              </div>
+
+              <!-- Metric Bars — Dynamic per Character -->
+              <div id="metrics-woman" class="space-y-4">
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Hidrasi Optimal</span>
+                    <span class="font-mono font-bold text-[#5EEAD1]">92%</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-[#5EEAD1] to-[#14b89d] rounded-full metric-bar-fill" style="--target-width: 92%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Tekstur Halus</span>
+                    <span class="font-mono font-bold text-sage-600">88%</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-sage-400 to-sage-600 rounded-full metric-bar-fill" style="--target-width: 88%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Noda / Pigmentasi</span>
+                    <span class="font-mono font-bold text-slateforest-900/60">Low Risk</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-emerald-300 to-emerald-500 rounded-full metric-bar-fill" style="--target-width: 12%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Kadar Sebum</span>
+                    <span class="font-mono font-bold text-slateforest-900/60">Normal</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-sage-200 to-sage-400 rounded-full metric-bar-fill" style="--target-width: 22%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Deteksi Jerawat</span>
+                    <span class="font-mono font-bold text-emerald-600">Clear</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-emerald-200 to-emerald-400 rounded-full metric-bar-fill" style="--target-width: 5%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="metrics-man" class="space-y-4 hidden">
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Deteksi Jerawat</span>
+                    <span class="font-mono font-bold text-rose-500">87%</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-rose-400 to-rose-600 rounded-full metric-bar-fill" style="--target-width: 87%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Kadar Sebum</span>
+                    <span class="font-mono font-bold text-amber-500">24%</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-amber-300 to-amber-500 rounded-full metric-bar-fill" style="--target-width: 24%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Tekstur Pori</span>
+                    <span class="font-mono font-bold text-slateforest-900/70">Kasar</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-amber-200 to-amber-400 rounded-full metric-bar-fill" style="--target-width: 68%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Hidrasi</span>
+                    <span class="font-mono font-bold text-slateforest-900/60">62%</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-sage-300 to-sage-500 rounded-full metric-bar-fill" style="--target-width: 62%;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-xs mb-1.5">
+                    <span class="text-slateforest-900/80 font-medium">Noda / Pigmentasi</span>
+                    <span class="font-mono font-bold text-slateforest-900/60">Ringan</span>
+                  </div>
+                  <div class="h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-sage-200 to-sage-400 rounded-full metric-bar-fill" style="--target-width: 18%;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="border-t border-sage-200/70 pt-5 space-y-3">
+                <div class="text-[9px] uppercase tracking-[0.3em] text-sage-500 font-semibold">Catatan Klinis</div>
+                <p id="clinical-note-woman" class="text-xs text-slateforest-900/65 font-light leading-relaxed">
+                  Kulit Subjek A menunjukkan profil hidrasi optimal dengan tekstur halus merata. Tidak terdeteksi lesi aktif. Rekomendasi: maintenance rutinitas hidrasi harian dan proteksi UV.
+                </p>
+                <p id="clinical-note-man" class="text-xs text-slateforest-900/65 font-light leading-relaxed hidden">
+                  Subjek B menampilkan lesi papula aktif dengan indeks sebum tinggi pada zona T. Direkomendasikan molekul Niacinamide 10%, Zinc PCA, dan Centella Asiatica untuk regulasi sebum dan penyembuhan inflamasi.
+                </p>
+
+                <!-- CTA Button -->
+                <a href="/dashboard" class="mt-4 w-full flex items-center justify-center gap-2 bg-slateforest-950 hover:bg-slateforest-800 text-white text-xs font-display font-semibold uppercase tracking-[0.2em] py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-lg hover:shadow-slateforest-950/30">
+                  <span class="material-symbols-outlined text-[16px]">face_retouching_natural</span>
+                  Analisis Kulit Saya
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer Tags -->
+          <div class="mt-10 pt-6 border-t border-[#E2DAC7]/60 flex flex-wrap items-center gap-3">
+            <span class="text-[9px] uppercase tracking-[0.3em] text-sage-500 font-semibold mr-2">Powered by</span>
+            <span class="px-3 py-1 rounded-full border border-sage-300/50 text-[10px] font-mono text-sage-700 bg-white/60">VGG16 Deep Neural Net</span>
+            <span class="px-3 py-1 rounded-full border border-sage-300/50 text-[10px] font-mono text-sage-700 bg-white/60">5-Class Skin Classifier</span>
+            <span class="px-3 py-1 rounded-full border border-sage-300/50 text-[10px] font-mono text-sage-700 bg-white/60">100% Privacy-Preserved</span>
+            <span class="px-3 py-1 rounded-full border border-sage-300/50 text-[10px] font-mono text-sage-700 bg-white/60">Zero-Server Processing</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Character Switcher JavaScript -->
+    <script>
+      (function() {
+        let currentChar = 'woman'; // 'woman' | 'man'
+        const chars = ['woman', 'man'];
+
+        const charData = {
+          woman: {
+            label: 'Karakter Wanita',
+            sub: 'Hydration · Texture · Pigmentation'
+          },
+          man: {
+            label: 'Karakter Pria',
+            sub: 'Acne · Sebum · Pori-pori'
+          }
+        };
+
+        function goToChar(target) {
+          if (target === currentChar) return;
+
+          const fromSlide = document.getElementById('char-' + currentChar + '-slide');
+          const toSlide   = document.getElementById('char-' + target + '-slide');
+          const metricsFrom = document.getElementById('metrics-' + currentChar);
+          const metricsTo   = document.getElementById('metrics-' + target);
+          const noteFrom  = document.getElementById('clinical-note-' + currentChar);
+          const noteTo    = document.getElementById('clinical-note-' + target);
+
+          // Hide current
+          fromSlide.classList.remove('is-visible');
+          fromSlide.classList.add('is-hidden');
+
+          // Show next (after tiny delay so transition fires)
+          setTimeout(() => {
+            toSlide.classList.remove('is-hidden');
+            toSlide.classList.add('is-visible');
+          }, 30);
+
+          // Metrics
+          metricsFrom.classList.add('hidden');
+          metricsTo.classList.remove('hidden');
+
+          // Restart metric bar animations
+          metricsTo.querySelectorAll('.metric-bar-fill').forEach(bar => {
+            bar.style.animation = 'none';
+            bar.offsetHeight; // reflow
+            bar.style.animation = '';
+          });
+
+          // Notes
+          noteFrom.classList.add('hidden');
+          noteTo.classList.remove('hidden');
+
+          // Dots
+          document.getElementById('dot-' + currentChar).classList.remove('active');
+          document.getElementById('dot-' + target).classList.add('active');
+
+          // Label
+          document.getElementById('char-label-name').textContent = charData[target].label;
+          document.getElementById('char-label-sub').textContent  = charData[target].sub;
+
+          currentChar = target;
+        }
+
+        window.switchCharacter = function(direction, forceTarget) {
+          if (forceTarget) {
+            goToChar(forceTarget);
+          } else {
+            const idx = chars.indexOf(currentChar);
+            const newIdx = (idx + direction + chars.length) % chars.length;
+            goToChar(chars[newIdx]);
+          }
+        };
+      })();
+    </script>
+    <!-- PILAR TEKNOLOGI (REVEAL ON SCROLL) -->
+    <section class="py-20 md:py-28 reveal-on-scroll is-revealed" id="pilar-teknologi">
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="max-w-2xl mb-16">
+          <h2 class="font-serif text-3xl md:text-5xl text-slateforest-900 font-normal leading-tight">
+            Presisi Tanpa Kompromi dalam Tiga Pilar
+          </h2>
+          <p class="text-slateforest-900/70 font-light text-base md:text-lg mt-4 leading-relaxed">
+            Arsitektur terintegrasi yang menerjemahkan dinamika biokimia kulit menjadi visualisasi komprehensif dalam hitungan milidetik.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Pillar 01 -->
+          <div
+            class="glass-panel-sage rounded-2xl p-8 border border-sage-200/70 hover:border-sage-400 transition-all duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-8">
+                <span
+                  class="font-serif text-4xl text-sage-300 group-hover:text-sage-600 transition-colors font-medium">01</span>
+                <div class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600">
+                  <span class="material-symbols-outlined text-[20px]" data-icon="lens_blur">lens_blur</span>
+                </div>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-slateforest-900 mb-3">Analisis Multi-Spektrum Seluler
+              </h3>
+              <p class="text-slateforest-900/75 text-sm leading-relaxed font-light mb-6">
+                Kamera fotometrik AI merekonstruksi dan memetakan 12 lapisan stratum korneum secara non-invasif.
+                Mengidentifikasi mikro-inflamasi, kepadatan elastin, dan mikro-relief pori sebelum terlihat secara kasat
+                mata.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-sage-200/60 space-y-2 text-xs text-slateforest-900/70">
+              <div class="flex justify-between py-1">
+                <span class="">Resolusi Pengukuran</span>
+                <span class="font-mono font-semibold text-sage-600">0.05 mm² Matrix</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="">Deteksi Vaskular Mikro</span>
+                <span class="font-mono font-semibold text-sage-600">Spectral Deep Layer</span>
+              </div>
+            </div>
+          </div>
+          <!-- Pillar 02 -->
+          <div
+            class="glass-panel-sage rounded-2xl p-8 border border-sage-200/70 hover:border-sage-400 transition-all duration-300 flex flex-col justify-between group"
+            id="spektrum-uv">
+            <div>
+              <div class="flex items-center justify-between mb-8">
+                <span
+                  class="font-serif text-4xl text-sage-300 group-hover:text-sage-600 transition-colors font-medium">02</span>
+                <div class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600">
+                  <span class="material-symbols-outlined text-[20px]" data-icon="wb_iridescent">wb_iridescent</span>
+                </div>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-slateforest-900 mb-3">Pemetaan Real-Time Lapisan UV
+                Sunscreen</h3>
+              <p class="text-slateforest-900/75 text-sm leading-relaxed font-light mb-6">
+                Visualisasi fotonik mikroskopis yang memperlihatkan homogenitas lapisan tabir surya di seluruh kontur
+                wajah. Melacak degradasi molekuler filter ultraviolet dan memitigasi area paparan terlewat.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-sage-200/60 space-y-2 text-xs text-slateforest-900/70">
+              <div class="flex justify-between py-1">
+                <span class="">Cakupan UV Transparansi</span>
+                <span class="font-mono font-semibold text-sage-600">Simulasi Ultraviolet</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="">Deteksi Kerentanan Celah</span>
+                <span class="font-mono font-semibold text-sage-600">&lt; 0.1% Toleransi</span>
+              </div>
+            </div>
+          </div>
+          <!-- Pillar 03 -->
+          <div
+            class="glass-panel-sage rounded-2xl p-8 border border-sage-200/70 hover:border-sage-400 transition-all duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="flex items-center justify-between mb-8">
+                <span
+                  class="font-serif text-4xl text-sage-300 group-hover:text-sage-600 transition-colors font-medium">03</span>
+                <div class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600">
+                  <span class="material-symbols-outlined text-[20px]" data-icon="science">science</span>
+                </div>
+              </div>
+              <h3 class="font-display text-xl font-semibold text-slateforest-900 mb-3">Preskripsi Biomarker
+                Personalisasi</h3>
+              <p class="text-slateforest-900/75 text-sm leading-relaxed font-light mb-6">
+                Rekomendasi molekul aktif biokompatibel (Ceramide NP, Niacinamide murni, Peptide botani) yang
+                diselaraskan dengan indeks regenerasi sirkadian kulit individu, bebas keterikatan sponsor komersial.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-sage-200/60 space-y-2 text-xs text-slateforest-900/70">
+              <div class="flex justify-between py-1">
+                <span class="">Basis Standarisasi</span>
+                <span class="font-mono font-semibold text-sage-600">Farmakope &amp; BPOM</span>
+              </div>
+              <div class="flex justify-between py-1">
+                <span class="">Kesesuaian Sirkadian</span>
+                <span class="font-mono font-semibold text-sage-600">Ritme Dermal 24 Jam</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- SHOWCASE ARSITEKTUR & AKREDITASI MEDIS (REVEAL ON SCROLL) -->
+    <section class="py-20 md:py-28 bg-white/70 border-t border-sage-200/50 reveal-on-scroll is-revealed"
+      id="arsitektur">
+      <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-5 space-y-6">
+            <h2 class="font-serif text-3xl md:text-5xl text-slateforest-900 font-normal leading-tight">
+              Protokol Klinis Berstandar Internasional
+            </h2>
+            <p class="text-slateforest-900/75 font-light leading-relaxed text-base md:text-lg">
+              Integritas data biometrik wajah Anda diproteksi dengan arsitektur enkripsi tingkat medis paling mutakhir. Pemrosesan citra dilakukan secara real-time di sisi peramban tanpa pernah disimpan secara permanen pada peladen pihak ketiga.
+            </p>
+            <div class="space-y-4 pt-2">
+              <div class="flex items-start gap-3.5">
+                <div class="w-6 h-6 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 mt-0.5 shrink-0">
+                  <span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+                </div>
+                <div class="text-sm text-slateforest-900/85">
+                  <strong class="font-semibold text-slateforest-950">Enkripsi AES-256 Bit</strong>: Seluruh transmisi visual diamankan dalam kanal terowongan kriptografi asimetris.
+                </div>
+              </div>
+              <div class="flex items-start gap-3.5">
+                <div class="w-6 h-6 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 mt-0.5 shrink-0">
+                  <span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+                </div>
+                <div class="text-sm text-slateforest-900/85">
+                  <strong class="font-semibold text-slateforest-950">Privasi Nol Retensi Citra</strong>: Foto diagnostik dihapus dari cache memori seketika setelah laporan telemetri tersusun.
+                </div>
+              </div>
+              <div class="flex items-start gap-3.5">
+                <div class="w-6 h-6 rounded-full bg-sage-100 flex items-center justify-center text-sage-700 mt-0.5 shrink-0">
+                  <span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+                </div>
+                <div class="text-sm text-slateforest-900/85">
+                  <strong class="font-semibold text-slateforest-950">Kalibrasi Komparatif Dermatologis</strong>: Divalidasi silang terhadap 15,000+ catatan biopsi optik klinis berskala global.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Accreditations & Compliance Visual Cards Grid (Proper h3 Heading Level) -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="glass-panel-sage p-6 rounded-2xl border border-sage-200/70 space-y-3">
+              <span class="material-symbols-outlined text-3xl text-sage-700" data-icon="shield">shield</span>
+              <h3 class="font-display font-bold text-slateforest-950 text-lg tracking-tight">ISO / IEC 27001</h3>
+              <p class="text-xs text-slateforest-900/75 font-light leading-relaxed">
+                Sertifikasi Sistem Manajemen Keamanan Informasi global untuk pengelolaan data kesehatan biometrik sensitif.
+              </p>
+            </div>
+            <div class="glass-panel-sage p-6 rounded-2xl border border-sage-200/70 space-y-3">
+              <span class="material-symbols-outlined text-3xl text-sage-700" data-icon="biotech">biotech</span>
+              <h3 class="font-display font-bold text-slateforest-950 text-lg tracking-tight">Validasi Uji Klinis</h3>
+              <p class="text-xs text-slateforest-900/75 font-light leading-relaxed">
+                Kesesuaian parameter diagnostik dievaluasi berkala bersama dewan dermatolog bersertifikat independen.
+              </p>
+            </div>
+            <div class="glass-panel-sage p-6 rounded-2xl border border-sage-200/70 space-y-3">
+              <span class="material-symbols-outlined text-3xl text-sage-700" data-icon="lock">lock</span>
+              <h3 class="font-display font-bold text-slateforest-950 text-lg tracking-tight">Kepatuhan UU PDP No. 27</h3>
+              <p class="text-xs text-slateforest-900/75 font-light leading-relaxed">
+                Kepatuhan menyeluruh terhadap regulasi Perlindungan Data Pribadi Republik Indonesia dalam ekosistem digital.
+              </p>
+            </div>
+            <div class="glass-panel-sage p-6 rounded-2xl border border-sage-200/70 space-y-3">
+              <span class="material-symbols-outlined text-3xl text-sage-700" data-icon="neurology">neurology</span>
+              <h3 class="font-display font-bold text-slateforest-950 text-lg tracking-tight">Gemini 1.5 Multimodal Vision</h3>
+              <p class="text-xs text-slateforest-900/75 font-light leading-relaxed">
+                Ditenagai infrastruktur kecerdasan buatan terdepan dengan toleransi latensi sub-detik untuk rendering real-time.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- EDITORIAL MANIFESTO QUOTE SECTION (LARGE TYPOGRAPHY EXHIBITION) -->
+    <section
+      class="py-24 md:py-32 relative overflow-hidden bg-slateforest-900 text-sage-50 reveal-on-scroll is-revealed">
+      <!-- Subtle Soft Emerald / Sage Glow in Dark Luxury Frame -->
+      <div
+        class="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-sage-500/20 rounded-full blur-[120px] pointer-events-none">
+      </div>
+      <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10 space-y-8">
+        <div
+          class="inline-flex items-center justify-center w-12 h-12 rounded-full border border-sage-400/30 text-mint-300 mx-auto">
+          <span class="material-symbols-outlined text-2xl" data-icon="spa">spa</span>
+        </div>
+        <p class="font-serif text-3xl sm:text-4xl md:text-5xl font-light italic leading-snug text-sage-100">
+          "Teknologi tercanggih adalah teknologi yang menghormati biologi alami manusia—menghadirkan kejelasan tanpa
+          menggurui, melindungi tanpa mengubah jati diri."
+        </p>
+        <div class="w-12 h-px bg-sage-400/40 mx-auto"></div>
+        <div class="text-xs tracking-widest uppercase text-mint-300 font-display">
+          SkinCheck AI Research &amp; Clinical Dermatology
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- MINIMALIST LUXURY FOOTER (NO ACTION CTAS, PURE INFORMATION & COMPLIANCE) -->
+  <footer class="bg-pearl border-t border-sage-200/60 py-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="flex flex-col items-center md:items-start space-y-2 text-center md:text-left">
+        <div class="flex items-center gap-2.5">
+          <div class="w-6 h-6 rounded-full bg-sage-600 flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+          </div>
+          <span class="font-display font-semibold tracking-wider text-slateforest-900 text-sm uppercase">SkinCheck
+            AI</span>
+        </div>
+        <p class="text-xs text-slateforest-900/60 max-w-md font-light leading-relaxed">
+          Platform profil &amp; penelitian dermatologi berbasis kecerdasan buatan. Informasi disajikan untuk tujuan
+          edukasi dan kajian ilmiah, bukan sebagai pengganti instruksi medis profesional resmi.
+        </p>
+      </div>
+      <!-- Compliance & Institutional Navigation -->
+      <nav
+        class="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-2 text-xs tracking-wider uppercase font-medium text-slateforest-900/70">
+        <a class="hover:text-sage-600 transition-colors" href="#kebijakan">Kebijakan Privasi</a>
+        <a class="hover:text-sage-600 transition-colors" href="#etik-ai">Etika Model AI</a>
+        <a class="hover:text-sage-600 transition-colors" href="#validasi">Kajian Klinis</a>
+        <a class="hover:text-sage-600 transition-colors" href="/uml_skincheck_lengkap.html" target="_blank">Diagram
+          Sistem UML</a>
+      </nav>
+    </div>
+    <div
+      class="max-w-7xl mx-auto px-6 md:px-12 mt-8 pt-6 border-t border-sage-200/40 text-center md:text-left text-[11px] text-slateforest-900/40 font-light flex flex-col md:flex-row justify-between">
+      <span class="">© 2025 SkinCheck AI. Hak Cipta Dilindungi Undang-Undang.</span>
+      <span class="mt-2 md:mt-0 font-mono">Modern Intelligent Dermatology Architecture</span>
+    </div>
+  </footer>
+  <!-- SCROLL-TRIGGERED ANIMATIONS & DYNAMIC HEADER SCROLL -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dynamic header appearance on scroll
+      const header = document.getElementById('main-nav-header');
+      const manifesto = document.getElementById('manifesto');
+
+      const updateHeader = () => {
+        const heroHeight = manifesto ? manifesto.offsetHeight : 600;
+        if (window.scrollY > (heroHeight - 90)) {
+          header.classList.add('is-scrolled');
+          header.classList.remove('bg-gradient-to-b', 'from-black/75', 'via-black/35', 'to-transparent');
+        } else {
+          header.classList.remove('is-scrolled');
+          header.classList.add('bg-gradient-to-b', 'from-black/75', 'via-black/35', 'to-transparent');
+        }
+      };
+
+      window.addEventListener('scroll', updateHeader, { passive: true });
+      updateHeader();
+
+      // Scroll-triggered reveal animations
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.12
+      };
+
+      const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.reveal-on-scroll').forEach(section => {
+        scrollObserver.observe(section);
+      });
+    });
+    // =========================================================================
+    // FROSTED GLASS AUTH POPUP MODAL CONTROLLER
+    // =========================================================================
+    let currentAuthTab = 'login';      // 'login' | 'register'
+
+    function openAuthModal(tab = 'login') {
+      const backdrop = document.getElementById('auth-modal-backdrop');
+      const card = document.getElementById('auth-modal-card');
+      if (!backdrop || !card) return;
+
+      switchAuthTab(tab);
+
+      // Show backdrop & scale in card
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+      backdrop.classList.add('opacity-100', 'pointer-events-auto');
+      card.classList.remove('scale-95');
+      card.classList.add('scale-100');
+
+      document.body.style.overflow = 'hidden';
+
+      // Focus email input
+      setTimeout(() => {
+        const emailInput = document.getElementById('modal-input-email');
+        if (emailInput) emailInput.focus();
+      }, 150);
+    }
+
+    function closeAuthModal() {
+      const backdrop = document.getElementById('auth-modal-backdrop');
+      const card = document.getElementById('auth-modal-card');
+      if (!backdrop || !card) return;
+
+      backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      backdrop.classList.add('opacity-0', 'pointer-events-none');
+      card.classList.remove('scale-100');
+      card.classList.add('scale-95');
+
+      document.body.style.overflow = '';
+      hideModalAlert();
+    }
+
+    function handleBackdropClick(event) {
+      if (event.target && event.target.id === 'auth-modal-backdrop') {
+        closeAuthModal();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAuthModal();
+      }
+    });
+
+    function switchAuthTab(tab) {
+      currentAuthTab = tab;
+      const tabLogin = document.getElementById('tab-btn-login');
+      const tabRegister = document.getElementById('tab-btn-register');
+      const nameContainer = document.getElementById('field-name-container');
+      const consentContainer = document.getElementById('field-consent-container');
+      const loginOptions = document.getElementById('login-options-row');
+      const submitBtn = document.getElementById('modal-submit-btn');
+      const form = document.getElementById('auth-modal-form');
+      const footerPrompt = document.getElementById('modal-footer-prompt');
+      const footerBtn = document.getElementById('modal-footer-btn');
+      const nameInput = document.getElementById('modal-input-name');
+
+      hideModalAlert();
+
+      if (tab === 'login') {
+        // Tab Styles
+        tabLogin.className = 'text-white border-b-2 border-mint-300 pb-1.5 transition-all cursor-pointer';
+        tabRegister.className = 'text-white/50 hover:text-white border-b-2 border-transparent pb-1.5 transition-all cursor-pointer';
+
+        // Visibility
+        nameContainer.classList.add('hidden');
+        consentContainer.classList.add('hidden');
+        loginOptions.classList.remove('hidden');
+
+        if (nameInput) nameInput.removeAttribute('required');
+
+        // Form Action & Submit Label
+        submitBtn.textContent = 'LOGIN';
+        form.action = '/login';
+
+        footerPrompt.textContent = 'Belum memiliki akun?';
+        footerBtn.textContent = 'Daftar Sekarang';
+      } else {
+        // Register Tab Styles
+        tabLogin.className = 'text-white/50 hover:text-white border-b-2 border-transparent pb-1.5 transition-all cursor-pointer';
+        tabRegister.className = 'text-white border-b-2 border-mint-300 pb-1.5 transition-all cursor-pointer';
+
+        // Visibility
+        nameContainer.classList.remove('hidden');
+        consentContainer.classList.remove('hidden');
+        loginOptions.classList.add('hidden');
+
+        if (nameInput) nameInput.setAttribute('required', 'required');
+
+        // Form Action & Submit Label
+        submitBtn.textContent = 'DAFTAR SEKARANG';
+        form.action = '/register';
+
+        footerPrompt.textContent = 'Sudah memiliki akun?';
+        footerBtn.textContent = 'Masuk ke Akun';
+      }
+    }
+
+    function toggleAuthMode() {
+      if (currentAuthTab === 'login') {
+        switchAuthTab('register');
+      } else {
+        switchAuthTab('login');
+      }
+    }
+
+    function showModalAlert(msg) {
+      const box = document.getElementById('modal-alert-box');
+      if (box) {
+        box.textContent = msg;
+        box.classList.remove('hidden');
+      }
+    }
+
+    function hideModalAlert() {
+      const box = document.getElementById('modal-alert-box');
+      if (box) {
+        box.textContent = '';
+        box.classList.add('hidden');
+      }
+    }
+
+  </script>
+  <!-- =================================================================== -->
+  <!-- FROSTED GLASS AUTH POPUP MODAL (REPRODUCING USER SPECIFICATION)        -->
+  <!-- =================================================================== -->
+  <div id="auth-modal-backdrop"
+       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slateforest-950/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300 ease-out"
+       onclick="handleBackdropClick(event)"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="modal-headline">
+    
+    <!-- Glassmorphic Card Container -->
+    <div id="auth-modal-card"
+         class="relative w-full max-w-[400px] sm:max-w-[420px] rounded-[32px] p-7 pt-14 sm:p-9 sm:pt-16 border border-white/30 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.65),0_0_0_1px_rgba(255,255,255,0.18)] scale-95 transition-all duration-300 ease-out"
+         style="background: linear-gradient(145deg, rgba(34, 59, 46, 0.58) 0%, rgba(13, 20, 16, 0.78) 100%); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);">
+      
+      <!-- Diagonal Specular Glass Reflection (Signature from Reference Screenshot) -->
+      <div class="absolute inset-0 pointer-events-none rounded-[32px] overflow-hidden">
+        <div class="absolute -top-32 -right-32 w-80 h-80 bg-gradient-to-bl from-white/20 via-white/5 to-transparent transform rotate-12 blur-[1px]"></div>
+      </div>
+
+      <!-- Floating Dark Circular Avatar Badge Perched on Top Edge -->
+      <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full bg-[#15231a] border-2 border-white/30 flex items-center justify-center shadow-2xl z-20">
+        <svg class="w-9 h-9 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="7" r="4.5"></circle>
+          <path d="M4 20c0-4 4-6.5 8-6.5s8 2.5 8 6.5"></path>
+        </svg>
+      </div>
+
+      <!-- Close Button (Top Right) -->
+      <button type="button"
+              onclick="closeAuthModal()"
+              class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/25 text-white/70 hover:text-white flex items-center justify-center transition-colors border border-white/20 cursor-pointer z-20"
+              aria-label="Tutup Popup">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+
+      <!-- Modal Content Wrapper -->
+      <div class="relative z-10 space-y-5">
+        <!-- Auth Mode Segmented Tabs: MASUK vs DAFTAR AKUN -->
+        <div class="flex items-center justify-center gap-6 pb-2 border-b border-white/15 text-xs font-display tracking-[0.2em] uppercase font-semibold">
+          <button type="button"
+                  id="tab-btn-login"
+                  onclick="switchAuthTab('login')"
+                  class="text-white border-b-2 border-mint-300 pb-1.5 transition-all cursor-pointer">
+            MASUK
+          </button>
+          <button type="button"
+                  id="tab-btn-register"
+                  onclick="switchAuthTab('register')"
+                  class="text-white/50 hover:text-white border-b-2 border-transparent pb-1.5 transition-all cursor-pointer">
+            DAFTAR AKUN
+          </button>
+        </div>
+
+        <!-- Dynamic Feedback Alert (if error) -->
+        <div id="modal-alert-box" class="hidden px-3.5 py-2.5 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-200 text-xs font-medium text-center"></div>
+
+        <!-- AUTH FORM -->
+        <form id="auth-modal-form" method="POST" action="/login" class="space-y-4">
+          <!-- Hidden inputs -->
+          <input type="hidden" name="channel" value="email" />
+
+          <!-- Extra Field: Full Name (Visible only on Register) -->
+          <div id="field-name-container" class="hidden">
+            <div class="relative flex items-center bg-[#e5ebe7] rounded-lg overflow-hidden border border-white/40 shadow-sm focus-within:ring-2 focus-within:ring-mint-300">
+              <div class="w-12 h-12 flex items-center justify-center bg-[#d8e0db] text-slateforest-900 border-r border-slate-300/80 shrink-0">
+                <svg class="w-5 h-5 text-slateforest-800" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+              <input type="text"
+                     name="name"
+                     id="modal-input-name"
+                     placeholder="Nama Lengkap"
+                     class="w-full bg-transparent px-4 py-3 text-sm text-slateforest-950 placeholder:text-slateforest-700/60 font-sans font-medium focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Field 1: Email ID / Username -->
+          <div>
+            <div class="relative flex items-center bg-[#e5ebe7] rounded-lg overflow-hidden border border-white/40 shadow-sm focus-within:ring-2 focus-within:ring-mint-300">
+              <div class="w-12 h-12 flex items-center justify-center bg-[#d8e0db] text-slateforest-900 border-r border-slate-300/80 shrink-0">
+                <svg class="w-5 h-5 text-slateforest-800" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+              <input type="email"
+                     name="email"
+                     id="modal-input-email"
+                     required
+                     placeholder="Email ID"
+                     class="w-full bg-transparent px-4 py-3 text-sm text-slateforest-950 placeholder:text-slateforest-700/60 font-sans font-medium focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Field 2: Password -->
+          <div>
+            <div class="relative flex items-center bg-[#e5ebe7] rounded-lg overflow-hidden border border-white/40 shadow-sm focus-within:ring-2 focus-within:ring-mint-300">
+              <div class="w-12 h-12 flex items-center justify-center bg-[#d8e0db] text-slateforest-900 border-r border-slate-300/80 shrink-0">
+                <svg class="w-5 h-5 text-slateforest-800" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+              </div>
+              <input type="password"
+                     name="password"
+                     id="modal-input-password"
+                     required
+                     placeholder="Password"
+                     class="w-full bg-transparent px-4 py-3 text-sm text-slateforest-950 placeholder:text-slateforest-700/60 font-sans font-medium focus:outline-none" />
+            </div>
+          </div>
+
+          <!-- Extra Field: Privacy Consent (Visible only on Register) -->
+          <div id="field-consent-container" class="hidden">
+            <label class="flex items-start gap-2.5 text-[11px] text-white/80 select-none cursor-pointer">
+              <input type="checkbox"
+                     name="consent_privacy"
+                     id="modal-consent-privacy"
+                     value="true"
+                     class="mt-0.5 w-3.5 h-3.5 rounded bg-black/40 border-white/30 text-sage-600 focus:ring-0 cursor-pointer" />
+              <span>Saya menyetujui Kebijakan Privasi &amp; Protokol Diagnostik Non-Medis.</span>
+            </label>
+          </div>
+
+          <!-- Options Row: Remember Me & Forgot Password (Visible on Login) -->
+          <div id="login-options-row" class="flex items-center justify-between text-xs text-white/80 select-none pt-0.5">
+            <label class="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+              <input type="checkbox"
+                     name="remember"
+                     id="modal-remember"
+                     class="w-3.5 h-3.5 rounded bg-black/40 border-white/30 text-sage-600 focus:ring-0 cursor-pointer" />
+              <span class="text-xs">Remember me</span>
+            </label>
+            <a href="/login" class="text-white/70 hover:text-white transition-colors text-xs font-light">
+              Forgot Password?
+            </a>
+          </div>
+
+          <!-- Submit Button (Matching Exact Dark Green Style) -->
+          <button type="submit"
+                  id="modal-submit-btn"
+                  class="w-full bg-[#182a1e] hover:bg-[#122017] border border-white/20 text-white font-display font-bold text-xs sm:text-sm tracking-[0.25em] uppercase py-3.5 rounded-lg shadow-lg hover:shadow-black/50 transition-all duration-200 active:scale-[0.99] cursor-pointer mt-2">
+            LOGIN
+          </button>
+        </form>
+
+        <!-- Bottom Switcher Prompt -->
+        <div class="text-center text-xs text-white/60 pt-1">
+          <span id="modal-footer-prompt">Belum memiliki akun?</span>
+          <button type="button"
+                  id="modal-footer-btn"
+                  onclick="toggleAuthMode()"
+                  class="text-mint-300 hover:text-white font-semibold underline underline-offset-4 ml-1 transition-colors cursor-pointer bg-transparent border-0">
+            Daftar Sekarang
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ven (Luvenna) AI Floating Assistant Widget (Hanya tampil saat user sudah login) -->
+  {% if request.session.get('user') %}
+    {% include "layouts/ven_assistant_widget.html" %}
+  {% endif %}
+
+</body>
+
+</html>

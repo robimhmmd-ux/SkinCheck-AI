@@ -1,0 +1,146 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}{% if product %}Edit Product{% else %}Add New Product{% endif %}{% endblock %}
+{% block topbar_title %}Product Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="max-width: 900px; padding: 0;">
+    
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-4">
+        <a href="/admin/products" class="btn btn-sm btn-light rounded-circle me-3 shadow-sm" style="width:38px;height:38px;">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <div>
+            <h4 class="fw-bold mb-1">{% if product %}Edit Produk{% else %}Tambah Produk Baru{% endif %}</h4>
+            <p class="text-muted small mb-0">{% if product %}Perbarui informasi produk dalam katalog.{% else %}Masukkan detail produk baru ke dalam katalog AI.{% endif %}</p>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <form action="{% if product %}/admin/products/{{ product.id }}/edit{% else %}/admin/products{% endif %}" method="POST">
+                
+                <div class="row g-4">
+                    <!-- Brand -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">Brand <span class="text-danger">*</span></label>
+                        <input type="text" name="brand" class="form-control" required value="{{ product.brand if product else '' }}" placeholder="Contoh: Wardah, Skintific, Azarine">
+                    </div>
+                    
+                    <!-- Product Name -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">Nama Produk <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" required value="{{ product.name if product else '' }}" placeholder="Contoh: Perfect Bright Serum">
+                    </div>
+                    
+                    <!-- Category -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">Kategori <span class="text-danger">*</span></label>
+                        <select name="category" class="form-select" required>
+                            <option value="cleanser" {% if product and product.category == 'cleanser' %}selected{% endif %}>Cleanser</option>
+                            <option value="toner" {% if product and product.category == 'toner' %}selected{% endif %}>Toner</option>
+                            <option value="serum" {% if product and product.category == 'serum' %}selected{% endif %}>Serum</option>
+                            <option value="moisturizer" {% if product and product.category == 'moisturizer' %}selected{% endif %}>Moisturizer</option>
+                            <option value="treatment" {% if product and product.category == 'treatment' %}selected{% endif %}>Treatment / Spot Cream</option>
+                            <option value="mask" {% if product and product.category == 'mask' %}selected{% endif %}>Masker</option>
+                            <option value="eye_cream" {% if product and product.category == 'eye_cream' %}selected{% endif %}>Eye Cream</option>
+                            <option value="sunscreen" {% if product and product.category == 'sunscreen' %}selected{% endif %}>Sunscreen</option>
+                        </select>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="active" {% if product and product.status == 'active' %}selected{% endif %}>Aktif</option>
+                            <option value="inactive" {% if product and product.status == 'inactive' %}selected{% endif %}>Nonaktif</option>
+                        </select>
+                    </div>
+
+                    <!-- Separator -->
+                    <div class="col-12"><hr class="my-2 border-light"></div>
+
+                    <!-- Skin Concern -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small text-dark mb-1">Target Masalah Kulit (Skin Concern)</label>
+                        <p class="text-muted mb-2" style="font-size:0.8rem;">Pisahkan dengan koma. AI akan menggunakan ini untuk mencocokkan produk dengan kondisi pengguna.</p>
+                        <input type="text" name="skin_concern" class="form-control" value="{{ concerns_str if concerns_str else '' }}" placeholder="Contoh: jerawat, kulit kering, flek hitam, kerutan">
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small text-dark mb-1">Key Ingredients</label>
+                        <p class="text-muted mb-2" style="font-size:0.8rem;">Pisahkan dengan koma. AI akan menjelaskan alasan rekomendasi berdasarkan bahan ini.</p>
+                        <input type="text" name="ingredients" class="form-control" value="{{ ingredients_str if ingredients_str else '' }}" placeholder="Contoh: Niacinamide 10%, Salicylic Acid 2%, Glycerin, Centella Asiatica">
+                    </div>
+
+                    <!-- Separator -->
+                    <div class="col-12"><hr class="my-2 border-light"></div>
+
+                    <!-- Description -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small text-dark">Deskripsi Produk</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Jelaskan manfaat utama produk ini...">{{ product.description if product else '' }}</textarea>
+                    </div>
+
+                    <!-- Usage Guidance -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small text-dark">Panduan Penggunaan (Usage Guidance)</label>
+                        <textarea name="usage_guidance" class="form-control" rows="2" placeholder="Contoh: Gunakan setiap pagi dan malam setelah toner.">{{ product.usage_guidance if product else '' }}</textarea>
+                    </div>
+
+                    <!-- Separator: Marketplace Links -->
+                    <div class="col-12">
+                        <hr class="my-2 border-light">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-bag-heart-fill text-danger"></i>
+                            <span class="fw-semibold text-dark small">Link Marketplace (Opsional)</span>
+                        </div>
+                        <p class="text-muted small mb-0">AI Assistant akan menyertakan link ini saat merekomendasikan produk kepada pengguna.</p>
+                    </div>
+
+                    <!-- Shopee Link -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">
+                            <span class="me-1">🛒</span> Link Shopee
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-danger bg-opacity-10 text-danger border-danger border-opacity-25">
+                                <i class="bi bi-bag-fill"></i>
+                            </span>
+                            <input type="url" name="shopee_link" class="form-control"
+                                   value="{{ product.shopee_link if product and product.shopee_link else '' }}"
+                                   placeholder="https://shopee.co.id/...">
+                        </div>
+                    </div>
+
+                    <!-- Tokopedia Link -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small text-dark">
+                            <span class="me-1">🛍️</span> Link Tokopedia
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success bg-opacity-10 text-success border-success border-opacity-25">
+                                <i class="bi bi-bag-fill"></i>
+                            </span>
+                            <input type="url" name="tokopedia_link" class="form-control"
+                                   value="{{ product.tokopedia_link if product and product.tokopedia_link else '' }}"
+                                   placeholder="https://tokopedia.com/...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="mt-5 pt-4 border-top d-flex justify-content-end gap-3">
+                    <a href="/admin/products" class="btn btn-light px-4 fw-semibold">Batal</a>
+                    <button type="submit" class="btn btn-primary px-5 fw-semibold shadow-sm">
+                        <i class="bi bi-save me-1"></i>Simpan Produk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

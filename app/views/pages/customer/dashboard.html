@@ -1,0 +1,2150 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block head %}
+<style>
+/* ==========================================================================
+   CIRCLE-STYLE DASHBOARD THEME (SLATE & PASTEL CANVAS)
+   ========================================================================== */
+:root {
+  --circle-slate-bg: #4c6878;
+  --circle-slate-dark: #3e5664;
+  --circle-slate-light: #5b798b;
+  --circle-card-bg: #ffffff;
+  --circle-text-main: #1e293b;
+  --circle-text-muted: #64748b;
+  --circle-teal: #337b8d;
+  --circle-peach: #fce7d8;
+  --circle-peach-dark: #e88248;
+  --circle-border: #e2e8f0;
+  --circle-radius-outer: 32px;
+  --circle-radius-card: 22px;
+  --circle-radius-pill: 9999px;
+}
+
+/* Hide default public website navigation & footer on customer dashboard */
+.navbar-custom,
+footer {
+  display: none !important;
+}
+
+/* Base Body Override for Full-Screen Immersive Canvas */
+body {
+  background: var(--circle-slate-bg) !important;
+  background: linear-gradient(135deg, #445e6f 0%, #4f6d7e 50%, #5d7e90 100%) !important;
+  color: var(--circle-text-main);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Dashboard Shell Layout */
+.circle-dashboard-wrapper {
+  display: flex;
+  min-height: 100vh;
+  padding: 16px 20px;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+/* ────────────────────────────────────────────────────────────
+   1. LEFT SIDEBAR (RAIL DOCK)
+   ──────────────────────────────────────────────────────────── */
+.circle-sidebar {
+  width: 84px;
+  min-width: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  z-index: 100;
+}
+
+/* Top "Circle" Setting Button */
+.circle-setting-brand-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
+.circle-setting-brand-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+.circle-rosette-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 4px;
+}
+.circle-brand-word {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  opacity: 0.95;
+}
+
+/* Center Feature Navigation Dock */
+.circle-nav-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+.circle-dock-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  text-decoration: none;
+}
+.circle-dock-btn i {
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
+}
+.circle-dock-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.08);
+}
+/* Active Pill State matching the reference screenshot */
+.circle-dock-btn.active {
+  width: 54px;
+  height: 68px;
+  border-radius: 28px;
+  background: #ffffff;
+  color: var(--circle-slate-dark);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+  transform: scale(1.02);
+}
+.circle-dock-btn.active i {
+  color: var(--circle-teal);
+  font-size: 1.35rem;
+  transform: scale(1.1);
+}
+.circle-dock-btn .dock-label {
+  display: none;
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 3px;
+  color: var(--circle-slate-dark);
+}
+.circle-dock-btn.active .dock-label {
+  display: block;
+}
+
+/* Bottom Profile Section (Pojok Kiri Bawah) */
+.circle-sidebar-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  gap: 6px;
+  transition: transform 0.2s ease;
+}
+.circle-sidebar-profile:hover {
+  transform: scale(1.05);
+}
+.circle-profile-avatar-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+}
+.circle-profile-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #337b8d;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.circle-profile-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #10b981;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+.circle-profile-name {
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  max-width: 76px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.95;
+}
+
+/* ────────────────────────────────────────────────────────────
+   2. MAIN CONTENT AREA & TOP BAR
+   ──────────────────────────────────────────────────────────── */
+.circle-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Header Top Bar */
+.circle-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px 14px 12px;
+}
+.circle-app-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+/* Title with Large First Letter & Unique Aesthetic Typography */
+.brand-title-unique {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+.brand-char-first {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.9rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #bce7ee;
+  margin-right: -1px;
+}
+.brand-subtitle-tag {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: none;
+}
+@media (min-width: 992px) {
+  .brand-subtitle-tag { display: inline-block; }
+}
+
+/* Top Center Navigation Segmented Tabs */
+.circle-top-tabs {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.14);
+  padding: 5px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.circle-top-tab {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+.circle-top-tab:hover {
+  color: #ffffff;
+}
+.circle-top-tab.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+@media (max-width: 900px) {
+  .circle-top-tabs { display: none; }
+}
+
+/* Top Right Logout Button (Pojok Kanan Atas) */
+.circle-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.circle-logout-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+}
+.circle-logout-pill:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ffffff;
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+.circle-logout-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--circle-slate-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+/* ────────────────────────────────────────────────────────────
+   3. MAIN WHITE CANVAS CARD
+   ──────────────────────────────────────────────────────────── */
+.circle-main-card {
+  background: var(--circle-card-bg);
+  border-radius: var(--circle-radius-outer);
+  padding: 28px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Tab Panels */
+.tab-content-panel {
+  display: none;
+  animation: fadeInFast 0.3s ease;
+}
+.tab-content-panel.active {
+  display: block;
+}
+@keyframes fadeInFast {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ────────────────────────────────────────────────────────────
+   4. TAB 1: SCANNER & LATEST RESULTS
+   ──────────────────────────────────────────────────────────── */
+/* Upper Deck (Row 1) */
+.circle-upper-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+@media (max-width: 991px) {
+  .circle-upper-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Hero Visits Card (Left Upper Deck) */
+.circle-hero-card {
+  background: linear-gradient(135deg, #2d7486 0%, #689faa 38%, #dce8eb 72%, #fcf7ee 100%);
+  border-radius: var(--circle-radius-card);
+  padding: 28px;
+  position: relative;
+  overflow: visible;
+  color: #1e293b;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.circle-hero-meta-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 4px;
+}
+.circle-hero-big-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  text-shadow: 0 4px 12px rgba(45, 116, 134, 0.3);
+  margin-bottom: 12px;
+}
+.circle-hero-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 220px;
+}
+.circle-hero-chip-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+.circle-hero-illustration {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 240px;
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .circle-hero-illustration { display: none; }
+}
+/* Offset Floating Action Button matching reference */
+.circle-hero-offset-cta {
+  position: absolute;
+  right: 28px;
+  bottom: -18px;
+  background: #256b7c;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 10px 22px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(37, 107, 124, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+.circle-hero-offset-cta:hover {
+  background: #1b5260;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(37, 107, 124, 0.45);
+}
+
+/* Popularity Rate Card (Right Upper Deck) */
+.circle-rate-card {
+  background: var(--circle-peach);
+  border-radius: var(--circle-radius-card);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.circle-rate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.circle-rate-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #5d4334;
+  margin-bottom: 6px;
+}
+.circle-rate-value-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.circle-rate-big-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #2b1f18;
+  letter-spacing: -0.03em;
+}
+.circle-rate-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e88248;
+  background: rgba(232, 130, 72, 0.15);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.circle-rate-gauge-wrap {
+  width: 90px;
+  height: 60px;
+}
+.circle-rate-narrative {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #6d5547;
+  margin: 12px 0;
+}
+.circle-rate-action-bar {
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(109, 85, 71, 0.08);
+  transition: transform 0.2s ease;
+}
+.circle-rate-action-bar:hover {
+  transform: translateY(-1px);
+}
+.circle-rate-action-text {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4a382e;
+  line-height: 1.3;
+}
+.circle-rate-play-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e88248;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+/* Lower Deck (Row 2 in Tab 1) - Enlarged Parameter Master Card */
+.circle-lower-full {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.circle-params-master-card {
+  background: #f8fafc;
+  border: 1px solid var(--circle-border);
+  border-radius: var(--circle-radius-card);
+  padding: 26px 30px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+}
+
+.circle-params-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.circle-params-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.circle-params-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(51, 123, 141, 0.12);
+  color: var(--circle-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+}
+
+/* Prominent Camera Launch Button (Full Screen) */
+.circle-btn-camera-launch {
+  background: linear-gradient(135deg, #2d7486 0%, #1d5563 100%);
+  color: #ffffff !important;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 20px rgba(45, 116, 134, 0.32);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.circle-btn-camera-launch:hover {
+  background: linear-gradient(135deg, #245e6d 0%, #16434f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(45, 116, 134, 0.42);
+}
+.circle-btn-camera-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: cameraPulseGlow 2s infinite;
+}
+@keyframes cameraPulseGlow {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* 5 Parameter Enlarged Tiles Grid */
+.circle-params-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .circle-params-tiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.circle-param-tile {
+  background: #ffffff;
+  border: 1px solid var(--circle-border);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+.circle-param-tile:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+  transform: translateY(-2px);
+}
+.param-tile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.param-tile-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--circle-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.param-tile-score-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.param-tile-big-score {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.param-tile-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.tag-optimal { background: #dcfce7; color: #15803d; }
+.tag-moderate { background: #fef3c7; color: #b45309; }
+.tag-alert { background: #fee2e2; color: #b91c1c; }
+
+.param-tile-track {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.param-tile-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fill-acne { background: linear-gradient(90deg, #f87171, #ef4444); }
+.fill-oil { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.fill-dry { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
+.fill-spots { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+.fill-wrinkles { background: linear-gradient(90deg, #f472b6, #ec4899); }
+
+.param-tile-desc {
+  font-size: 0.75rem;
+  color: var(--circle-text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Quick Action 6th Tile */
+.param-action-tile {
+  background: linear-gradient(135deg, #f0fdfa 0%, #e6f7f5 100%);
+  border: 1px dashed #99f6e4;
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   5. TAB 2: OVERALL ANALYTICS & TENDENCY
+   ──────────────────────────────────────────────────────────── */
+.analytics-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 991px) {
+  .analytics-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+  .analytics-metrics-grid { grid-template-columns: 1fr; }
+}
+.metric-box-card {
+  background: #f8fafc;
+  border: 1px solid var(--circle-border);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.metric-box-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--circle-text-muted);
+}
+.metric-box-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--circle-text-main);
+  line-height: 1.1;
+  margin: 6px 0;
+}
+.metric-box-sub {
+  font-size: 0.72rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+/* Skin Condition Tendency Banner */
+.skin-tendency-card {
+  background: linear-gradient(135deg, #f0fdfa 0%, #e6f7f5 100%);
+  border: 1px solid #ccfbf1;
+  border-radius: var(--circle-radius-card);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.tendency-badge {
+  background: var(--circle-teal);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.actives-chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.active-chip {
+  background: #ffffff;
+  color: var(--circle-teal);
+  border: 1px solid rgba(51, 123, 141, 0.25);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* Historical Chart Card */
+.chart-container-card {
+  background: #f8fafc;
+  border: 1px solid var(--circle-border);
+  border-radius: var(--circle-radius-card);
+  padding: 22px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   6. TAB 3: MARKETPLACE & CATALOG
+   ──────────────────────────────────────────────────────────── */
+.marketplace-filter-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+.search-input-wrap i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+.marketplace-search-input {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  border-radius: 999px;
+  border: 1px solid var(--circle-border);
+  font-size: 0.85rem;
+  outline: none;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+}
+.marketplace-search-input:focus {
+  border-color: var(--circle-teal);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(51, 123, 141, 0.12);
+}
+.category-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cat-pill-btn {
+  background: #f1f5f9;
+  border: 1px solid var(--circle-border);
+  color: var(--circle-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.cat-pill-btn:hover {
+  background: #e2e8f0;
+  color: var(--circle-text-main);
+}
+.cat-pill-btn.active {
+  background: var(--circle-teal);
+  color: #ffffff;
+  border-color: var(--circle-teal);
+}
+
+/* Product Cards Grid */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.product-card {
+  background: #ffffff;
+  border: 1px solid var(--circle-border);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+}
+.product-brand {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--circle-teal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.product-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--circle-text-main);
+  margin: 4px 0 8px 0;
+  line-height: 1.3;
+}
+.product-btn-shopee {
+  background: #ee4d2d;
+  color: #ffffff;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
+}
+.product-btn-shopee:hover {
+  opacity: 0.9;
+  color: #ffffff;
+}
+.product-btn-tokopedia {
+  background: #03ac0e;
+  color: #ffffff;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.2s ease;
+}
+.product-btn-tokopedia:hover {
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+/* ────────────────────────────────────────────────────────────
+   7. TAB 4: GUIDE & FEEDBACK
+   ──────────────────────────────────────────────────────────── */
+.guide-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 991px) {
+  .guide-steps-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+  .guide-steps-grid { grid-template-columns: 1fr; }
+}
+.guide-step-card {
+  background: #f8fafc;
+  border: 1px solid var(--circle-border);
+  border-radius: 18px;
+  padding: 20px;
+}
+.guide-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--circle-teal);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+/* Feedback Form Card */
+.feedback-box-card {
+  background: #f8fafc;
+  border: 1px solid var(--circle-border);
+  border-radius: var(--circle-radius-card);
+  padding: 24px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   8. RESPONSIVE MEDIA QUERIES
+   ──────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .circle-dashboard-wrapper {
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+  }
+  .circle-sidebar {
+    width: 100%;
+    min-width: 100%;
+    flex-direction: row;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 20px;
+  }
+  .circle-nav-dock {
+    flex-direction: row;
+  }
+  .circle-dock-btn.active {
+    width: 56px;
+    height: 48px;
+    border-radius: 16px;
+  }
+  .circle-dock-btn.active .dock-label {
+    display: none;
+  }
+  .circle-main-card {
+    padding: 18px;
+    border-radius: 24px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="circle-dashboard-wrapper">
+
+  <!-- ============================================================
+       LEFT SIDEBAR (DOCK NAVIGATION)
+       ============================================================ -->
+  <aside class="circle-sidebar">
+    
+    <!-- Top: Rosette Dot Cluster Logo (Account Settings Button) -->
+    <a href="/profile" class="circle-setting-brand-btn" title="Pengaturan Akun &amp; Profil Pengguna">
+      <div class="circle-rosette-icon">
+        <!-- SVG matching the 7-circle cluster logo in the screenshot -->
+        <svg viewBox="0 0 32 32" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="3.2" fill="#ffffff"/>
+          <circle cx="16" cy="7.5" r="2.6" fill="#ffffff"/>
+          <circle cx="23.4" cy="11.8" r="2.6" fill="#ffffff"/>
+          <circle cx="23.4" cy="20.2" r="2.6" fill="#ffffff"/>
+          <circle cx="16" cy="24.5" r="2.6" fill="#ffffff"/>
+          <circle cx="8.6" cy="20.2" r="2.6" fill="#ffffff"/>
+          <circle cx="8.6" cy="11.8" r="2.6" fill="#ffffff"/>
+        </svg>
+      </div>
+      <span class="circle-brand-word">Circle</span>
+    </a>
+
+    <!-- Center: Feature Navigation Dock -->
+    <nav class="circle-nav-dock" aria-label="Navigasi Fitur Utama">
+      <!-- 1. Camera / Scanner & Latest Scan -->
+      <button type="button" 
+              class="circle-dock-btn active" 
+              data-tab="tab-scan" 
+              title="Kamera Pemindai &amp; Hasil Terakhir"
+              aria-label="Kamera Pemindai">
+        <i class="bi bi-camera-fill"></i>
+        <span class="dock-label">SCAN</span>
+      </button>
+
+      <!-- 2. Overall Analytics & Tendency -->
+      <button type="button" 
+              class="circle-dock-btn" 
+              data-tab="tab-analytics" 
+              title="Hasil Scan Keseluruhan &amp; Kondisi Kulit"
+              aria-label="Analisis Keseluruhan">
+        <i class="bi bi-bar-chart-line-fill"></i>
+        <span class="dock-label">STATS</span>
+      </button>
+
+      <!-- 3. Skincare Marketplace Catalog -->
+      <button type="button" 
+              class="circle-dock-btn" 
+              data-tab="tab-marketplace" 
+              title="Katalog Skincare BPOM"
+              aria-label="Marketplace">
+        <i class="bi bi-bag-check-fill"></i>
+        <span class="dock-label">SHOP</span>
+      </button>
+
+      <!-- 4. Guide & Bug Report / Feedback -->
+      <button type="button" 
+              class="circle-dock-btn" 
+              data-tab="tab-info" 
+              title="Panduan Pemakaian &amp; Laporkan Masukan"
+              aria-label="Panduan dan Bantuan">
+        <i class="bi bi-info-circle-fill"></i>
+        <span class="dock-label">INFO</span>
+      </button>
+    </nav>
+
+    <!-- Bottom Left: User Name & Profile Avatar -->
+    <a href="/profile" class="circle-sidebar-profile" title="Profil {{ user.name }}">
+      <div class="circle-profile-avatar-wrap">
+        <div class="circle-profile-avatar">
+          {{ user.name[0] | upper }}
+        </div>
+        <span class="circle-profile-status" title="Status Online"></span>
+      </div>
+      <span class="circle-profile-name">{{ user.name.split(' ')[0] }}</span>
+    </a>
+
+  </aside>
+
+  <!-- ============================================================
+       MAIN CONTENT CONTAINER
+       ============================================================ -->
+  <main class="circle-main-area">
+
+    <!-- Top Header Bar (Sejajar dengan tombol setting) -->
+    <header class="circle-topbar">
+      <!-- Big Aesthetic App Name with stylized initial letter -->
+      <div class="circle-app-brand">
+        <h1 class="brand-title-unique">
+          <span class="brand-char-first">S</span>kin<span class="brand-char-first">C</span>heck
+        </h1>
+        <span class="brand-subtitle-tag">AI Visual Dermatology Lab</span>
+      </div>
+
+      <!-- Top Nav Pills matching reference header tabs -->
+      <div class="circle-top-tabs">
+        <button type="button" class="circle-top-tab active" data-tab-target="tab-scan">DASHBOARD</button>
+        <button type="button" class="circle-top-tab" data-tab-target="tab-analytics">INSIGHTS</button>
+        <button type="button" class="circle-top-tab" data-tab-target="tab-marketplace">MARKETPLACE</button>
+        <button type="button" class="circle-top-tab" data-tab-target="tab-info">PANDUAN</button>
+      </div>
+
+      <!-- Top Right: Photo & Logout Button -->
+      <div class="circle-topbar-right">
+        <a href="/logout" class="circle-logout-pill" title="Keluar dari akun">
+          <div class="circle-logout-avatar">
+            {{ user.name[0] | upper }}
+          </div>
+          <span>Keluar</span>
+          <i class="bi bi-box-arrow-right"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main White Canvas Card -->
+    <div class="circle-main-card">
+
+      <!-- ========================================================
+           TAB 1: CAMERA SCANNER & LATEST RESULTS (ACTIVE DEFAULT)
+           ======================================================== -->
+      <section id="tab-scan" class="tab-content-panel active">
+        
+        <!-- Upper Deck: Hero Banner & Popularity Rate -->
+        <div class="circle-upper-grid">
+          
+          <!-- Left Upper Deck: Hero Visits / Overall Health Metric -->
+          <div class="circle-hero-card">
+            <div>
+              <div class="circle-hero-meta-title">Skor Kesehatan Kulit Wajah Terakhir</div>
+              <div class="circle-hero-big-number">
+                {{ latest_scan.overall_score if latest_scan else 0 }}
+              </div>
+              
+              <div class="circle-hero-chips">
+                <div class="circle-hero-chip-item">
+                  <i class="bi bi-star-fill text-warning"></i>
+                  <span>Indeks Kondisi: 
+                    {% if latest_scan and latest_scan.overall_score >= 70 %}
+                      Sangat Sehat
+                    {% elif latest_scan and latest_scan.overall_score >= 50 %}
+                      Terawat Baik
+                    {% elif latest_scan %}
+                      Perlu Perawatan
+                    {% else %}
+                      Belum Scan
+                    {% endif %}
+                  </span>
+                </div>
+                <div class="circle-hero-chip-item">
+                  <i class="bi bi-activity text-info"></i>
+                  <span>Total Sesi: {{ total_scans_count }} Pemindaian</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hand-drawn 2D vector style character illustration -->
+            <svg class="circle-hero-illustration" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="140" cy="180" rx="90" ry="10" fill="rgba(0,0,0,0.06)"/>
+              <circle cx="150" cy="70" r="28" fill="#FDE2D2"/>
+              <path d="M136 68 C136 50, 164 50, 164 68 Z" fill="#4B382A"/>
+              <path d="M125 98 C125 80, 175 80, 175 98 L170 145 L130 145 Z" fill="#E8F1F2" stroke="#256B7C" stroke-width="2"/>
+              <path d="M130 145 L120 185 M165 145 L175 185" stroke="#256B7C" stroke-width="3" stroke-linecap="round"/>
+              <rect x="110" y="105" width="45" height="28" rx="4" fill="#FFFFFF" stroke="#256B7C" stroke-width="2"/>
+              <circle cx="185" cy="55" r="10" fill="#E88248" opacity="0.3"/>
+              <circle cx="185" cy="55" r="4" fill="#E88248"/>
+              <path d="M185 40 L185 70 M170 55 L200 55" stroke="#E88248" stroke-width="1.5" stroke-dasharray="2 2"/>
+            </svg>
+
+            <!-- Offset Floating Button (VIEW FULL STATISTIC >) -->
+            {% if latest_scan %}
+            <a href="/history/{{ latest_scan.scan_id }}" class="circle-hero-offset-cta">
+              LIHAT DETAIL LENGKAP <i class="bi bi-chevron-right"></i>
+            </a>
+            {% else %}
+            <a href="#cameraViewport" onclick="startCamera()" class="circle-hero-offset-cta">
+              MULAI SCAN SEKARANG <i class="bi bi-chevron-right"></i>
+            </a>
+            {% endif %}
+          </div>
+
+          <!-- Right Upper Deck: Popularity Rate & Diagnostic Gauge -->
+          <div class="circle-rate-card">
+            <div>
+              <div class="circle-rate-header">
+                <div>
+                  <div class="circle-rate-title">Tingkat Kesehatan Kulit</div>
+                  <div class="circle-rate-value-wrap">
+                    <span class="circle-rate-big-val">
+                      {{ latest_scan.overall_score if latest_scan else 85 }}
+                    </span>
+                    <span class="circle-rate-tag">+5.2</span>
+                  </div>
+                </div>
+
+                <!-- Semicircle Speedometer SVG -->
+                <div class="circle-rate-gauge-wrap">
+                  <svg viewBox="0 0 100 60" width="85" height="52">
+                    <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#E2D0C5" stroke-width="8" stroke-linecap="round"/>
+                    <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#E88248" stroke-width="8" stroke-linecap="round"
+                          stroke-dasharray="125.6" stroke-dashoffset="{{ 125.6 - (125.6 * (latest_scan.overall_score|default(85)) / 100) }}"/>
+                    <circle cx="50" cy="50" r="5" fill="#E88248"/>
+                  </svg>
+                </div>
+              </div>
+
+              <p class="circle-rate-narrative">
+                Kondisi kulit wajah Anda terpantau seimbang dengan hidrasi stabil. Pertahankan rutinitas pembersihan dan proteksi tabir surya harian.
+              </p>
+            </div>
+
+            <!-- Action Pill Bar matching reference design -->
+            <a href="javascript:void(0)" onclick="switchTab('tab-marketplace')" class="circle-rate-action-bar">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-camera-fill text-primary" style="font-size:0.95rem;"></i>
+                <span class="circle-rate-action-text">Buka kamera pemindai wajah (Full Screen)</span>
+              </div>
+              <div class="circle-rate-play-btn">
+                <i class="bi bi-arrow-right"></i>
+              </div>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Lower Deck: Enlarged Clinical Parameter Master Card -->
+        <div class="circle-lower-full">
+          <div class="circle-params-master-card">
+            
+            <!-- Card Header with Prominent Camera Button -->
+            <div class="circle-params-header">
+              <div class="circle-params-title-wrap">
+                <div class="circle-params-icon-box">
+                  <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <h5 class="fw-bold mb-0 text-dark" style="font-family:'Outfit',sans-serif;font-size:1.15rem;">
+                      5 Parameter Diagnosis Kondisi Kulit
+                    </h5>
+                    {% if latest_scan %}
+                    <span class="badge bg-light text-muted border rounded-pill small" style="font-size:0.72rem;">
+                      <i class="bi bi-clock-history me-1"></i>{{ latest_scan.timestamp }}
+                    </span>
+                    {% endif %}
+                  </div>
+                  <span class="text-muted small" style="font-size:0.78rem;">
+                    Indeks parameter klinis wajah terkalibrasi model deep learning VGG16 + CLAHE
+                  </span>
+                </div>
+              </div>
+
+              <!-- Tombol Kamera (Masuk Halaman Full Screen Kamera) -->
+              <a href="/scan/face" class="circle-btn-camera-launch" title="Buka Kamera Pemindai Wajah Full Screen">
+                <span class="circle-btn-camera-pulse"></span>
+                <i class="bi bi-camera-video-fill fs-5"></i>
+                <span>Buka Kamera (Full Screen)</span>
+              </a>
+            </div>
+
+            {% set p_acne = latest_scan.acne_score | default(0) if latest_scan else 0 %}
+            {% set p_oil = latest_scan.oily_skin_score | default(0) if latest_scan else 0 %}
+            {% set p_dry = latest_scan.dry_skin_score | default(0) if latest_scan else 0 %}
+            {% set p_spots = latest_scan.dark_spots_score | default(0) if latest_scan else 0 %}
+            {% set p_wrinkles = latest_scan.wrinkles_score | default(0) if latest_scan else 0 %}
+
+            <!-- Enlarged 2-Column Parameter Tiles Grid -->
+            <div class="circle-params-tiles-grid">
+              
+              <!-- 1. Acne -->
+              <div class="circle-param-tile">
+                <div class="param-tile-header">
+                  <div>
+                    <div class="param-tile-name">
+                      <i class="bi bi-exclamation-circle-fill text-danger"></i>
+                      <span>Jerawat &amp; Inflamasi Pori (Acne)</span>
+                    </div>
+                    <p class="param-tile-desc mt-1">
+                      Mengukur inflamasi pustula, papula &amp; komedo pori di area dahi dan pipi.
+                    </p>
+                  </div>
+                  <div class="text-end">
+                    <div class="param-tile-score-wrap justify-content-end">
+                      <span class="param-tile-big-score text-danger">{{ p_acne }}%</span>
+                    </div>
+                    <span class="param-tile-tag {% if p_acne > 50 %}tag-alert{% elif p_acne > 25 %}tag-moderate{% else %}tag-optimal{% endif %}">
+                      {% if p_acne > 50 %}Perlu Perhatian{% elif p_acne > 25 %}Sedang{% else %}Rendah (Optimal){% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="param-tile-track">
+                  <div class="param-tile-fill fill-acne" style="width: {{ p_acne }}%;"></div>
+                </div>
+              </div>
+
+              <!-- 2. Oil / Sebum -->
+              <div class="circle-param-tile">
+                <div class="param-tile-header">
+                  <div>
+                    <div class="param-tile-name">
+                      <i class="bi bi-droplet-fill text-warning"></i>
+                      <span>Produksi Sebum &amp; Minyak (Oily)</span>
+                    </div>
+                    <p class="param-tile-desc mt-1">
+                      Aktivitas sekresi kelenjar minyak pada area T-Zone (dahi, hidung) dan dagu.
+                    </p>
+                  </div>
+                  <div class="text-end">
+                    <div class="param-tile-score-wrap justify-content-end">
+                      <span class="param-tile-big-score text-warning">{{ p_oil }}%</span>
+                    </div>
+                    <span class="param-tile-tag {% if p_oil > 55 %}tag-alert{% elif p_oil > 30 %}tag-moderate{% else %}tag-optimal{% endif %}">
+                      {% if p_oil > 55 %}Minyak Tinggi{% elif p_oil > 30 %}Sedang{% else %}Terkontrol{% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="param-tile-track">
+                  <div class="param-tile-fill fill-oil" style="width: {{ p_oil }}%;"></div>
+                </div>
+              </div>
+
+              <!-- 3. Dryness / Moisture -->
+              <div class="circle-param-tile">
+                <div class="param-tile-header">
+                  <div>
+                    <div class="param-tile-name">
+                      <i class="bi bi-moisture text-info"></i>
+                      <span>Kekeringan / Dehidrasi Kulit (Dryness)</span>
+                    </div>
+                    <p class="param-tile-desc mt-1">
+                      Integritas hidrasi stratum korneum dan kekuatan lapisan pelindung skin barrier.
+                    </p>
+                  </div>
+                  <div class="text-end">
+                    <div class="param-tile-score-wrap justify-content-end">
+                      <span class="param-tile-big-score text-info">{{ p_dry }}%</span>
+                    </div>
+                    <span class="param-tile-tag {% if p_dry > 45 %}tag-alert{% elif p_dry > 25 %}tag-moderate{% else %}tag-optimal{% endif %}">
+                      {% if p_dry > 45 %}Dehidrasi{% elif p_dry > 25 %}Cukup Hidrasi{% else %}Hidrasi Optimal{% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="param-tile-track">
+                  <div class="param-tile-fill fill-dry" style="width: {{ p_dry }}%;"></div>
+                </div>
+              </div>
+
+              <!-- 4. Dark Spots -->
+              <div class="circle-param-tile">
+                <div class="param-tile-header">
+                  <div>
+                    <div class="param-tile-name">
+                      <i class="bi bi-sun-fill text-primary"></i>
+                      <span>Noda Hitam &amp; Flek (Dark Spots)</span>
+                    </div>
+                    <p class="param-tile-desc mt-1">
+                      Kerapatan pigmen melanin akibat bekas jerawat (PIH) atau paparan sinar UV matahari.
+                    </p>
+                  </div>
+                  <div class="text-end">
+                    <div class="param-tile-score-wrap justify-content-end">
+                      <span class="param-tile-big-score text-primary">{{ p_spots }}%</span>
+                    </div>
+                    <span class="param-tile-tag {% if p_spots > 40 %}tag-alert{% elif p_spots > 20 %}tag-moderate{% else %}tag-optimal{% endif %}">
+                      {% if p_spots > 40 %}Hiperpigmentasi{% elif p_spots > 20 %}Ringan{% else %}Bersih Merata{% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="param-tile-track">
+                  <div class="param-tile-fill fill-spots" style="width: {{ p_spots }}%;"></div>
+                </div>
+              </div>
+
+              <!-- 5. Wrinkles / Texture -->
+              <div class="circle-param-tile">
+                <div class="param-tile-header">
+                  <div>
+                    <div class="param-tile-name">
+                      <i class="bi bi-activity text-secondary"></i>
+                      <span>Garis Halus &amp; Elastisitas (Wrinkles)</span>
+                    </div>
+                    <p class="param-tile-desc mt-1">
+                      Kepadatan matriks kolagen dan elastisitas jaringan kulit di area sekitar mata dan senyum.
+                    </p>
+                  </div>
+                  <div class="text-end">
+                    <div class="param-tile-score-wrap justify-content-end">
+                      <span class="param-tile-big-score text-secondary">{{ p_wrinkles }}%</span>
+                    </div>
+                    <span class="param-tile-tag {% if p_wrinkles > 40 %}tag-alert{% elif p_wrinkles > 20 %}tag-moderate{% else %}tag-optimal{% endif %}">
+                      {% if p_wrinkles > 40 %}Garis Halus{% elif p_wrinkles > 20 %}Halus{% else %}Kenyal &amp; Elastis{% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="param-tile-track">
+                  <div class="param-tile-fill fill-wrinkles" style="width: {{ p_wrinkles }}%;"></div>
+                </div>
+              </div>
+
+              <!-- 6. Fullscreen Scanner Launcher Tile -->
+              <div class="param-action-tile">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center" style="width:40px;height:40px;">
+                    <i class="bi bi-camera-fill fs-5"></i>
+                  </div>
+                  <div class="text-start">
+                    <h6 class="fw-bold mb-0 text-dark" style="font-size:0.95rem;">Siap Memulai Scan Wajah Baru?</h6>
+                    <span class="text-muted small" style="font-size:0.75rem;">Deteksi multi-sudut Full HD otomatis</span>
+                  </div>
+                </div>
+
+                <div class="d-flex gap-2 w-100 flex-wrap justify-content-center mt-1">
+                  <a href="/scan/face" class="btn btn-primary rounded-pill px-4 py-2 fw-bold small d-inline-flex align-items-center gap-2 shadow-sm">
+                    <i class="bi bi-camera-video-fill"></i>Buka Layar Penuh Kamera
+                  </a>
+                  <label class="btn btn-outline-secondary rounded-pill px-3 py-2 small fw-semibold cursor-pointer mb-0">
+                    <i class="bi bi-upload me-1"></i>Upload Foto
+                    <input type="file" id="dashFileInput" accept="image/*" class="d-none" onchange="handleDashboardFileUpload(this)">
+                  </label>
+                </div>
+
+                <div id="scanFeedbackAlert" class="alert alert-info py-2 px-3 mt-1 small rounded-3 w-100 mb-0" style="display:none;"></div>
+              </div>
+
+            </div>
+
+            <!-- Card Bottom Navigation Links -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-4 pt-3 border-top">
+              <span class="text-muted small" style="font-size:0.75rem;">
+                <i class="bi bi-shield-check text-success me-1"></i>Pemindaian aman &amp; data citra wajah terenkripsi
+              </span>
+              {% if latest_scan %}
+              <div class="d-flex align-items-center gap-3">
+                <a href="/history/{{ latest_scan.scan_id }}" class="small text-decoration-none fw-semibold text-primary">
+                  Lihat Rapor Detail Klinis <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================
+           TAB 2: OVERALL SCAN RESULTS & SKIN CONDITION TENDENCY
+           ======================================================== -->
+      <section id="tab-analytics" class="tab-content-panel">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <div>
+            <h4 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">Analisis &amp; Rerata Scan Keseluruhan</h4>
+            <p class="text-muted small mb-0">Evolusi dan stabilitas parameter kesehatan kulit dari seluruh sesi pemindaian Anda.</p>
+          </div>
+          <span class="badge bg-primary-subtle text-primary border rounded-pill px-3 py-2 fw-semibold">
+            <i class="bi bi-clock-history me-1"></i>Data Akumulatif
+          </span>
+        </div>
+
+        <!-- Metric Summary Boxes -->
+        <div class="analytics-metrics-grid">
+          <div class="metric-box-card">
+            <span class="metric-box-label">Total Pemindaian</span>
+            <div class="metric-box-val">{{ total_scans_count }}</div>
+            <span class="metric-box-sub"><i class="bi bi-check-circle-fill me-1"></i>Sesi Selesai</span>
+          </div>
+
+          <div class="metric-box-card">
+            <span class="metric-box-label">Rata-rata Skor Kesehatan</span>
+            <div class="metric-box-val text-primary">{{ skin_averages.overall }}</div>
+            <span class="metric-box-sub text-muted font-mono">Skala 0 - 100</span>
+          </div>
+
+          <div class="metric-box-card">
+            <span class="metric-box-label">Rata-rata Tingkat Minyak</span>
+            <div class="metric-box-val text-warning">{{ skin_averages.oily }}%</div>
+            <span class="metric-box-sub text-muted">Sebum T-Zone</span>
+          </div>
+
+          <div class="metric-box-card">
+            <span class="metric-box-label">Rata-rata Jerawat</span>
+            <div class="metric-box-val text-danger">{{ skin_averages.acne }}%</div>
+            <span class="metric-box-sub text-muted">Inflamasi Pori</span>
+          </div>
+        </div>
+
+        <!-- Skin Condition Tendency Card (Deskripsi Kulit Sekarang Cenderung Apa) -->
+        <div class="skin-tendency-card">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+            <div>
+              <span class="tendency-badge mb-2 d-inline-block">Kecenderungan Kulit Saat Ini</span>
+              <h4 class="fw-bold text-dark mb-1">{{ skin_tendency.type }}</h4>
+            </div>
+            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill small">
+              <i class="bi bi-info-circle text-primary me-1"></i>Berdasarkan Pola Scan
+            </span>
+          </div>
+
+          <p class="text-secondary small mb-3" style="line-height:1.6;">
+            {{ skin_tendency.summary }}
+          </p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="small fw-bold text-muted mb-1"><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i>Isu Utama Terdeteksi:</div>
+                <div class="small text-dark fw-semibold">{{ skin_tendency.dominant_issue }}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3 bg-white rounded-3 border">
+                <div class="small fw-bold text-muted mb-1"><i class="bi bi-heart-pulse-fill text-danger me-1"></i>Rekomendasi Penanganan:</div>
+                <div class="small text-dark">{{ skin_tendency.recommendation }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="small fw-bold text-muted">Kandungan Aktif Skincare yang Dianjurkan:</div>
+            <div class="actives-chip-wrap">
+              {% for act in skin_tendency.actives %}
+                <span class="active-chip"><i class="bi bi-stars me-1 text-primary"></i>{{ act }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Historical Trend Line Chart -->
+        <div class="chart-container-card">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="fw-bold mb-0">Grafik Perjalanan Kondisi Kulit (Historical Trends)</h6>
+            <span class="small text-muted font-mono">Chart.js Multi-Parameter</span>
+          </div>
+
+          <div style="height: 280px; position: relative;">
+            <canvas id="skinTrendCanvas"></canvas>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================
+           TAB 3: MARKETPLACE & BPOM SKINCARE CATALOG
+           ======================================================== -->
+      <section id="tab-marketplace" class="tab-content-panel">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div>
+            <h4 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">Katalog &amp; Marketplace Skincare BPOM</h4>
+            <p class="text-muted small mb-0">Rekomendasi formula skincare teruji klinis yang disesuaikan dengan kondisi kulit Anda.</p>
+          </div>
+          <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold">
+            <i class="bi bi-patch-check-fill me-1"></i>Shopee &amp; Tokopedia Official
+          </span>
+        </div>
+
+        <!-- Search Bar & Category Filters -->
+        <div class="marketplace-filter-bar">
+          <div class="search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" 
+                   id="marketSearchInput" 
+                   class="marketplace-search-input" 
+                   placeholder="Cari produk, merk (Skintific, Somethinc), atau kandungan..."
+                   onkeyup="filterMarketplaceProducts()">
+          </div>
+
+          <div class="category-filter-pills">
+            <button type="button" class="cat-pill-btn active" data-cat="all" onclick="filterMarketplaceCategory('all', this)">Semua</button>
+            <button type="button" class="cat-pill-btn" data-cat="cleanser" onclick="filterMarketplaceCategory('cleanser', this)">Cleanser</button>
+            <button type="button" class="cat-pill-btn" data-cat="toner" onclick="filterMarketplaceCategory('toner', this)">Toner</button>
+            <button type="button" class="cat-pill-btn" data-cat="serum" onclick="filterMarketplaceCategory('serum', this)">Serum</button>
+            <button type="button" class="cat-pill-btn" data-cat="moisturizer" onclick="filterMarketplaceCategory('moisturizer', this)">Moisturizer</button>
+            <button type="button" class="cat-pill-btn" data-cat="sunscreen" onclick="filterMarketplaceCategory('sunscreen', this)">Sunscreen</button>
+          </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div class="products-grid" id="marketProductsGrid">
+          {% for p in products %}
+          <div class="product-card market-product-item" 
+               data-name="{{ p.name | lower }}" 
+               data-brand="{{ p.brand | lower }}" 
+               data-cat="{{ p.category | lower }}"
+               data-desc="{{ p.description | lower }}">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="product-brand">{{ p.brand }}</span>
+                <span class="badge bg-light text-muted border rounded-pill small" style="font-size:0.68rem;">{{ p.category }}</span>
+              </div>
+              <h5 class="product-title">{{ p.name }}</h5>
+              <p class="text-muted small mb-3" style="font-size:0.78rem;line-height:1.5;">
+                {{ p.description[:110] }}{% if p.description|length > 110 %}...{% endif %}
+              </p>
+
+              {% if p.skin_concern %}
+              <div class="mb-3">
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill small" style="font-size:0.7rem;">
+                  <i class="bi bi-tag-fill me-1"></i>{{ p.skin_concern[:28] }}
+                </span>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Marketplace Links (Shopee & Tokopedia) -->
+            <div class="d-flex flex-wrap gap-2 pt-2 border-top">
+              {% if p.shopee_link %}
+              <a href="{{ p.shopee_link }}" target="_blank" rel="noopener noreferrer" class="product-btn-shopee flex-grow-1 justify-content-center">
+                <i class="bi bi-bag-fill"></i> Shopee
+              </a>
+              {% endif %}
+
+              {% if p.tokopedia_link %}
+              <a href="{{ p.tokopedia_link }}" target="_blank" rel="noopener noreferrer" class="product-btn-tokopedia flex-grow-1 justify-content-center">
+                <i class="bi bi-shop"></i> Tokopedia
+              </a>
+              {% endif %}
+
+              {% if not p.shopee_link and not p.tokopedia_link %}
+              <button type="button" class="btn btn-sm btn-outline-secondary w-100 rounded-pill small" disabled>
+                Tautan Toko Segera Hadir
+              </button>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div id="marketNoResults" class="text-center py-5 text-muted" style="display:none;">
+          <i class="bi bi-search fs-1 mb-2 d-block"></i>
+          Tidak ada produk yang cocok dengan pencarian Anda.
+        </div>
+
+      </section>
+
+
+      <!-- ========================================================
+           TAB 4: USER GUIDE, INFO & REPORT FEEDBACK
+           ======================================================== -->
+      <section id="tab-info" class="tab-content-panel">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <div>
+            <h4 class="fw-bold mb-1" style="font-family:'Outfit',sans-serif;">Panduan Penggunaan &amp; Pusat Masukan</h4>
+            <p class="text-muted small mb-0">Panduan langkah diagnosis kulit, pelaporan bug, dan feedback pengembangan platform.</p>
+          </div>
+          <span class="badge bg-info-subtle text-info border rounded-pill px-3 py-2 fw-semibold">
+            <i class="bi bi-shield-check me-1"></i>Protokol Standar
+          </span>
+        </div>
+
+        <!-- 4-Step User Guide Cards -->
+        <h6 class="fw-bold text-dark mb-3">Langkah Menggunakan Layanan Analisis Kulit</h6>
+        <div class="guide-steps-grid">
+          
+          <div class="guide-step-card">
+            <div class="guide-step-num">1</div>
+            <h6 class="fw-bold mb-1" style="font-size:0.9rem;">Pencahayaan &amp; Posisi</h6>
+            <p class="text-muted small mb-0" style="font-size:0.78rem;line-height:1.5;">
+              Pastikan wajah bersih dari riasan tebal. Ambil foto di ruangan dengan cahaya alami yang merata tanpa bayangan tajam.
+            </p>
+          </div>
+
+          <div class="guide-step-card">
+            <div class="guide-step-num">2</div>
+            <h6 class="fw-bold mb-1" style="font-size:0.9rem;">Pemindaian Multi-Sudut</h6>
+            <p class="text-muted small mb-0" style="font-size:0.78rem;line-height:1.5;">
+              Posisikan wajah tepat di dalam reticle kamera. AI akan mendeteksi area dahi, pipi, hidung, dan dagu secara otomatis.
+            </p>
+          </div>
+
+          <div class="guide-step-card">
+            <div class="guide-step-num">3</div>
+            <h6 class="fw-bold mb-1" style="font-size:0.9rem;">Analisis Pembelajaran Mesin</h6>
+            <p class="text-muted small mb-0" style="font-size:0.78rem;line-height:1.5;">
+              Model VGG16 + CLAHE menghitung skor 5 parameter: jerawat, minyak, kekeringan, flek, dan elastisitas kulit.
+            </p>
+          </div>
+
+          <div class="guide-step-card">
+            <div class="guide-step-num">4</div>
+            <h6 class="fw-bold mb-1" style="font-size:0.9rem;">Rekomendasi &amp; Tracking</h6>
+            <p class="text-muted small mb-0" style="font-size:0.78rem;line-height:1.5;">
+              Gunakan panduan bahan aktif untuk memilih produk di marketplace serta konsultasikan dengan asisten AI di pojok kanan bawah.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Feedback & Bug Report Box -->
+        <div class="row g-4 mt-1">
+          <div class="col-lg-7">
+            <div class="feedback-box-card">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-2 d-flex align-items-center justify-content-center" style="width:36px;height:36px;">
+                  <i class="bi bi-chat-square-dots-fill"></i>
+                </div>
+                <div>
+                  <h6 class="fw-bold mb-0">Laporkan Bug atau Beri Masukan</h6>
+                  <span class="text-muted small" style="font-size:0.75rem;">Bantu kami menyempurnakan akurasi diagnostik</span>
+                </div>
+              </div>
+
+              <form id="feedbackForm" onsubmit="handleFeedbackSubmit(event)">
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold text-secondary">Kategori Masukan</label>
+                  <select class="form-select form-select-sm rounded-3" id="feedbackCategory" required>
+                    <option value="bug_tampilan">Bug / Kerusakan Tampilan UI</option>
+                    <option value="kamera">Kendala Kamera &amp; Upload Foto</option>
+                    <option value="akurasi_analisis">Akurasi Deteksi Kondisi Kulit</option>
+                    <option value="rekomendasi_produk">Katalog &amp; Rekomendasi Produk</option>
+                    <option value="saran_fitur">Saran Fitur Baru</option>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold text-secondary">Pesan / Detail Masukan</label>
+                  <textarea class="form-control form-control-sm rounded-3" id="feedbackMessage" rows="4" placeholder="Jelaskan kendala atau saran Anda secara rinci..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-sm btn-primary rounded-pill px-4 fw-semibold" id="btnSubmitFeedback">
+                  <i class="bi bi-send-fill me-1"></i>Kirim Masukan
+                </button>
+              </form>
+
+              <div id="feedbackAlertSuccess" class="alert alert-success mt-3 py-2 px-3 small rounded-3" style="display:none;">
+                <i class="bi bi-check-circle-fill me-1"></i>Terima kasih! Masukan Anda telah kami terima dan akan segera ditinjau oleh tim pengembang.
+              </div>
+            </div>
+          </div>
+
+          <!-- Medical Disclaimer Card -->
+          <div class="col-lg-5">
+            <div class="p-4 bg-light rounded-4 border h-100 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-2 text-warning">
+                  <i class="bi bi-shield-exclamation fs-5"></i>
+                  <h6 class="fw-bold mb-0 text-dark">Protokol Non-Medis</h6>
+                </div>
+                <p class="text-muted small" style="font-size:0.78rem;line-height:1.6;">
+                  Layanan AI SkinCheck ditujukan untuk tujuan edukasi mandiri, pelacakan estetika, dan kurasi bahan aktif skincare. Hasil pemindaian bukan merupakan resep atau diagnosis medis formal. Apabila Anda mengalami dermatitis kronis, ruam meradang, atau lesi abnormal, segera konsultasikan dengan dokter spesialis dermatologi (Sp.DVE).
+                </p>
+              </div>
+
+              <div class="pt-3 border-top text-muted small" style="font-size:0.72rem;">
+                <i class="bi bi-lock-fill me-1 text-success"></i>Seluruh foto diproses secara terenkripsi dan hak privasi pengguna dilindungi penuh.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js CDN for Skin Trend Visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+<script>
+// ────────────────────────────────────────────────────────────
+// 1. Tab Switching Controller (Sidebar & Topbar Sync)
+// ────────────────────────────────────────────────────────────
+function switchTab(tabId) {
+  // Update Dock Buttons
+  document.querySelectorAll('.circle-dock-btn').forEach(btn => {
+    if (btn.dataset.tab === tabId) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  // Update Topbar Tabs
+  document.querySelectorAll('.circle-top-tab').forEach(btn => {
+    if (btn.dataset.tabTarget === tabId) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  // Switch Active Panels
+  document.querySelectorAll('.tab-content-panel').forEach(panel => {
+    if (panel.id === tabId) {
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+    }
+  });
+
+  // Window scroll to top of main card smoothly
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update URL hash without reload
+  history.replaceState(null, null, '#' + tabId.replace('tab-', ''));
+}
+
+// Bind Click Listeners
+document.querySelectorAll('.circle-dock-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    switchTab(this.dataset.tab);
+  });
+});
+document.querySelectorAll('.circle-top-tab').forEach(btn => {
+  btn.addEventListener('click', function() {
+    switchTab(this.dataset.tabTarget);
+  });
+});
+
+// Check URL Hash on Load (e.g. #analytics, #marketplace, #info)
+document.addEventListener("DOMContentLoaded", function() {
+  const hash = window.location.hash.replace('#', '');
+  if (hash && document.getElementById('tab-' + hash)) {
+    switchTab('tab-' + hash);
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // 2. Initialize Chart.js for Historical Trends
+  // ────────────────────────────────────────────────────────────
+  try {
+    const rawTrendData = {{ trend_json | safe }};
+    const canvas = document.getElementById('skinTrendCanvas');
+
+    if (canvas && rawTrendData && rawTrendData.has_data && rawTrendData.labels && rawTrendData.labels.length > 0) {
+      const ctx = canvas.getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: rawTrendData.labels,
+          datasets: [
+            {
+              label: 'Kesehatan (Overall)',
+              data: rawTrendData.overall,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
+              borderWidth: 2.5,
+              tension: 0.35,
+              fill: true,
+              pointRadius: 4,
+              pointHoverRadius: 6
+            },
+            {
+              label: 'Jerawat (Acne)',
+              data: rawTrendData.acne,
+              borderColor: '#ef4444',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [3, 3],
+              tension: 0.35,
+              pointRadius: 3
+            },
+            {
+              label: 'Minyak (Sebum)',
+              data: rawTrendData.oily,
+              borderColor: '#f59e0b',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.35,
+              pointRadius: 3
+            },
+            {
+              label: 'Dehidrasi (Dryness)',
+              data: rawTrendData.dry,
+              borderColor: '#06b6d4',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.35,
+              pointRadius: 3
+            },
+            {
+              label: 'Noda Hitam (Spots)',
+              data: rawTrendData.dark_spots,
+              borderColor: '#8b5cf6',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.35,
+              pointRadius: 3
+            },
+            {
+              label: 'Garis Halus (Wrinkles)',
+              data: rawTrendData.wrinkles,
+              borderColor: '#ec4899',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              tension: 0.35,
+              pointRadius: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } }
+            }
+          },
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              ticks: { stepSize: 20, callback: function(v) { return v + '%'; } },
+              grid: { color: 'rgba(0, 0, 0, 0.05)' }
+            },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+  } catch (err) {
+    console.warn("Chart.js failed to initialize:", err);
+  }
+});
+
+// ────────────────────────────────────────────────────────────
+// 3. Live Dashboard Camera & Photo Capture
+// ────────────────────────────────────────────────────────────
+let localStream = null;
+
+async function toggleDashboardCamera() {
+  const video = document.getElementById('dashVideo');
+  const placeholder = document.getElementById('dashCameraPlaceholder');
+  const reticle = document.getElementById('faceReticle');
+  const btnToggle = document.getElementById('btnToggleCam');
+  const btnCapture = document.getElementById('btnCaptureSnap');
+
+  if (localStream) {
+    // Stop Camera
+    localStream.getTracks().forEach(t => t.stop());
+    localStream = null;
+    video.style.display = 'none';
+    placeholder.style.display = 'flex';
+    reticle.style.display = 'none';
+    btnToggle.innerHTML = '<i class="bi bi-camera-video-fill me-1"></i>Nyalakan Kamera';
+    btnCapture.style.display = 'none';
+    return;
+  }
+
+  try {
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' }
+    });
+    video.srcObject = localStream;
+    video.style.display = 'block';
+    placeholder.style.display = 'none';
+    reticle.style.display = 'block';
+    btnToggle.innerHTML = '<i class="bi bi-stop-circle-fill me-1"></i>Matikan Kamera';
+    btnCapture.style.display = 'inline-flex';
+  } catch (err) {
+    alert("Izin kamera tidak dapat diakses atau diblokir oleh browser. Anda dapat menggunakan tombol 'Upload Foto' di samping.");
+  }
+}
+
+async function captureDashboardSnapshot() {
+  const video = document.getElementById('dashVideo');
+  const alertBox = document.getElementById('scanFeedbackAlert');
+
+  if (!localStream || !video) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth || 640;
+  canvas.height = video.videoHeight || 480;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  alertBox.style.display = 'block';
+  alertBox.className = 'alert alert-info py-2 px-3 mt-3 small rounded-3';
+  alertBox.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Menganalisis foto wajah dengan model visual AI...';
+
+  canvas.toBlob(async (blob) => {
+    const formData = new FormData();
+    formData.append('image', blob, 'face_scan_capture.jpg');
+
+    try {
+      const resp = await fetch('/scan/face/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await resp.json();
+
+      if (resp.ok && data.redirect_url) {
+        alertBox.className = 'alert alert-success py-2 px-3 mt-3 small rounded-3';
+        alertBox.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Analisis berhasil! Membuka laporan...';
+        setTimeout(() => {
+          window.location.href = data.redirect_url;
+        }, 800);
+      } else {
+        alertBox.className = 'alert alert-danger py-2 px-3 mt-3 small rounded-3';
+        alertBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i>Gagal memproses foto: ' + (data.detail || 'Terjadi kesalahan sistem.');
+      }
+    } catch (err) {
+      alertBox.className = 'alert alert-danger py-2 px-3 mt-3 small rounded-3';
+      alertBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i>Koneksi bermasalah saat mengirim foto.';
+    }
+  }, 'image/jpeg', 0.92);
+}
+
+async function handleDashboardFileUpload(input) {
+  if (!input.files || input.files.length === 0) return;
+  const file = input.files[0];
+  const alertBox = document.getElementById('scanFeedbackAlert');
+
+  alertBox.style.display = 'block';
+  alertBox.className = 'alert alert-info py-2 px-3 mt-3 small rounded-3';
+  alertBox.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Mengunggah dan menganalisis foto wajah...';
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const resp = await fetch('/scan/face/upload', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await resp.json();
+
+    if (resp.ok && data.redirect_url) {
+      alertBox.className = 'alert alert-success py-2 px-3 mt-3 small rounded-3';
+      alertBox.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Analisis berhasil! Membuka laporan...';
+      setTimeout(() => {
+        window.location.href = data.redirect_url;
+      }, 800);
+    } else {
+      alertBox.className = 'alert alert-danger py-2 px-3 mt-3 small rounded-3';
+      alertBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i>Gagal memproses foto: ' + (data.detail || 'Format tidak didukung.');
+    }
+  } catch (err) {
+    alertBox.className = 'alert alert-danger py-2 px-3 mt-3 small rounded-3';
+    alertBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i>Koneksi bermasalah saat mengirim berkas.';
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+// 4. Marketplace Filter & Live Search
+// ────────────────────────────────────────────────────────────
+let currentMarketCategory = 'all';
+
+function filterMarketplaceCategory(cat, element) {
+  currentMarketCategory = cat;
+  document.querySelectorAll('.cat-pill-btn').forEach(btn => btn.classList.remove('active'));
+  if (element) element.classList.add('active');
+  filterMarketplaceProducts();
+}
+
+function filterMarketplaceProducts() {
+  const query = (document.getElementById('marketSearchInput').value || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.market-product-item');
+  let matchCount = 0;
+
+  items.forEach(card => {
+    const name = card.dataset.name || '';
+    const brand = card.dataset.brand || '';
+    const cat = card.dataset.cat || '';
+    const desc = card.dataset.desc || '';
+
+    const matchesCat = (currentMarketCategory === 'all') || (cat === currentMarketCategory);
+    const matchesSearch = !query || name.includes(query) || brand.includes(query) || desc.includes(query);
+
+    if (matchesCat && matchesSearch) {
+      card.style.display = 'flex';
+      matchCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  const noResults = document.getElementById('marketNoResults');
+  if (matchCount === 0) {
+    noResults.style.display = 'block';
+  } else {
+    noResults.style.display = 'none';
+  }
+}
+
+// ────────────────────────────────────────────────────────────
+// 5. Bug Report / Feedback Handler
+// ────────────────────────────────────────────────────────────
+function handleFeedbackSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btnSubmitFeedback');
+  const alertSuccess = document.getElementById('feedbackAlertSuccess');
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Mengirim...';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Terkirim';
+    alertSuccess.style.display = 'block';
+    document.getElementById('feedbackForm').reset();
+  }, 700);
+}
+</script>
+{% endblock %}

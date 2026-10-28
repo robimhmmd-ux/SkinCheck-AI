@@ -1,0 +1,90 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="auth-page position-relative overflow-hidden py-5" style="min-height: calc(100vh - 80px); background: radial-gradient(circle at 50% 30%, rgba(19, 31, 24, 0.95) 0%, #0d1410 70%, #070b09 100%);">
+    
+    <!-- Background Atmospheric Glows -->
+    <div class="position-absolute top-0 start-50 translate-middle-x" style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%); pointer-events: none; filter: blur(60px);"></div>
+    <div class="position-absolute bottom-0 end-0" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(57, 88, 68, 0.2) 0%, transparent 70%); pointer-events: none; filter: blur(70px);"></div>
+
+    <div class="container position-relative d-flex justify-content-center align-items-center" style="z-index: 10;">
+        <div class="auth-card p-4 p-sm-5 animate-fade-in-up" 
+             style="max-width: 440px; width: 100%; background: rgba(19, 31, 24, 0.85); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 32px; box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2);">
+            
+            <!-- Floating Top Circular Avatar / Shield Emblem -->
+            <div class="text-center position-relative mb-4" style="margin-top: -75px;">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                     style="width: 80px; height: 80px; background: #ffffff; border: 4px solid rgba(255, 255, 255, 0.35); box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5); overflow: hidden;">
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #131f18, #1e3325);">
+                        <i class="bi bi-shield-lock-fill text-success" style="font-size: 2rem; color: #86efac !important;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Titles -->
+            <div class="text-center mb-4">
+                <span class="badge px-3 py-1.5 rounded-pill small fw-semibold mb-2" style="background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(134, 239, 172, 0.25); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem;">
+                    Internal Access Only
+                </span>
+                <h3 class="fw-bold text-white mb-1" style="font-family: var(--font-heading); letter-spacing: -0.02em;">Admin Console</h3>
+                <p class="small text-white-50 mb-0">Autentikasi aman panel pengelola SkinCheck AI</p>
+            </div>
+
+            <!-- Alerts -->
+            {% if error %}
+            <div class="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2 mb-3 rounded-3" style="background: rgba(220, 38, 38, 0.2); border: 1px solid rgba(248, 113, 113, 0.4); color: #fecaca;">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <!-- Form -->
+            <form action="/admin/login" method="POST" autocomplete="on">
+                <!-- Email -->
+                <div class="mb-3">
+                    <div class="input-group" style="box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);">
+                        <span class="input-group-text border-0 text-white" style="background: #14241b; padding: 0.75rem 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                            <i class="bi bi-envelope-fill" style="color: #86efac; font-size: 1.1rem;"></i>
+                        </span>
+                        <input type="email" class="form-control border-0" id="email" name="email"
+                               placeholder="admin@skincheck.app" required autocomplete="email"
+                               style="background: #ffffff; color: #131f18; font-size: 0.95rem; padding: 0.75rem 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <div class="input-group" style="box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);">
+                        <span class="input-group-text border-0 text-white" style="background: #14241b; padding: 0.75rem 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                            <i class="bi bi-key-fill" style="color: #86efac; font-size: 1.1rem;"></i>
+                        </span>
+                        <input type="password" class="form-control border-0" id="password" name="password"
+                               placeholder="••••••••" required autocomplete="current-password"
+                               style="background: #ffffff; color: #131f18; font-size: 0.95rem; padding: 0.75rem 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn w-100 py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
+                        style="background: linear-gradient(135deg, #1e3325 0%, #15251c 100%); border: 1px solid rgba(134, 239, 172, 0.35); color: #ffffff; border-radius: 14px; font-size: 0.88rem; letter-spacing: 0.1em; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); transition: all 0.2s;"
+                        onmouseover="this.style.background='#0d1812'; this.style.borderColor='#86efac'; this.style.transform='translateY(-1px)';"
+                        onmouseout="this.style.background='linear-gradient(135deg, #1e3325 0%, #15251c 100%)'; this.style.borderColor='rgba(134, 239, 172, 0.35)'; this.style.transform='translateY(0)';">
+                    <i class="bi bi-shield-check"></i>
+                    <span>MASUK ADMIN CONSOLE</span>
+                </button>
+            </form>
+
+            <!-- Back to Customer -->
+            <div class="text-center mt-4 pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.12) !important;">
+                <p class="small mb-0">
+                    <a href="/login" class="text-decoration-none small text-white-50" style="transition: color 0.15s;" onmouseover="this.style.color='#a7f3d0'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+                        <i class="bi bi-arrow-left me-1"></i>Kembali ke Login Customer
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

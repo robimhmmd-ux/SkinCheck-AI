@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Console{% endblock %} — SkinCheck</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Shared CSS (includes admin-sidebar, table-clean, etc.) -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body style="background:var(--gray-50);">
+
+    <!-- Sidebar -->
+    <nav class="admin-sidebar" id="adminSidebar">
+        <!-- Brand -->
+        <div class="admin-sidebar-brand">
+            <a href="/admin/dashboard" class="text-decoration-none d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center rounded-2"
+                     style="width:32px;height:32px;background:linear-gradient(135deg,#395844,#10b981);box-shadow:0 4px 10px rgba(16,185,129,0.25);">
+                    <i class="bi bi-stars text-white" style="font-size:0.95rem;"></i>
+                </div>
+                <div>
+                    <div class="brand-name">SkinCheck</div>
+                    <div style="font-size:0.65rem;color:#86efac;letter-spacing:0.12em;text-transform:uppercase;margin-top:-2px;font-weight:700;">Admin Console</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Navigation -->
+        <div class="admin-sidebar-nav">
+            <div class="admin-nav-section-label">Overview & AI</div>
+            <a href="/admin/dashboard" class="admin-nav-link {% if request.url.path == '/admin/dashboard' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a href="/admin/ai-copilot" class="admin-nav-link {% if request.url.path.startswith('/admin/ai-copilot') %}active{% endif %}" style="{% if request.url.path.startswith('/admin/ai-copilot') %}background:rgba(16,185,129,0.18);color:#86efac;border-left:3px solid #10b981;font-weight:600;{% endif %}">
+                <i class="bi bi-robot text-success"></i> AI Copilot
+            </a>
+            <a href="javascript:void(0)" onclick="openVenChatAdmin()" class="admin-nav-link" id="navAdminVenChat" title="Konsultasi & Chatbot Luvenna">
+                <i class="bi bi-stars text-emerald-400"></i> Tanya Luvenna (Chatbot)
+            </a>
+
+            <div class="admin-nav-section-label">Pengguna & Data</div>
+            <a href="/admin/users" class="admin-nav-link {% if request.url.path.startswith('/admin/users') %}active{% endif %}">
+                <i class="bi bi-people"></i> Users
+            </a>
+            <a href="/admin/scans" class="admin-nav-link {% if request.url.path.startswith('/admin/scans') %}active{% endif %}">
+                <i class="bi bi-camera"></i> Face Skin Scans
+            </a>
+
+            <div class="admin-nav-section-label">Produk & Konfigurasi</div>
+            <a href="/admin/products" class="admin-nav-link {% if request.url.path.startswith('/admin/products') %}active{% endif %}">
+                <i class="bi bi-box-seam"></i> Products (Shopee)
+            </a>
+            <a href="/admin/logs" class="admin-nav-link {% if request.url.path.startswith('/admin/logs') %}active{% endif %}">
+                <i class="bi bi-journal-text"></i> Activity Logs
+            </a>
+            <a href="/admin/settings" class="admin-nav-link {% if request.url.path.startswith('/admin/settings') %}active{% endif %}">
+                <i class="bi bi-sliders"></i> Pengaturan Sistem
+            </a>
+            <a href="/admin/profile" class="admin-nav-link {% if request.url.path.startswith('/admin/profile') %}active{% endif %}">
+                <i class="bi bi-person-badge"></i> Profil Admin
+            </a>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="p-3 border-top mt-auto" style="border-color:rgba(255,255,255,0.08)!important;">
+            {% set current_admin = request.session.get('admin') or request.session.get('user') %}
+            {% if current_admin %}
+            <div class="d-flex align-items-center gap-2 mb-3 px-1">
+                <div class="navbar-user-avatar flex-shrink-0" style="width:32px;height:32px;font-size:0.8rem;">
+                    {{ (current_admin.name or current_admin.nama or 'A')[0] | upper }}
+                </div>
+                <div style="overflow:hidden;">
+                    <div class="small fw-semibold text-white" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ current_admin.name or current_admin.nama }}</div>
+                    <div style="font-size:0.7rem;color:#86efac;font-weight:600;">System Admin</div>
+                </div>
+            </div>
+            {% endif %}
+            <a href="/logout" class="d-flex align-items-center gap-2 px-2 py-2 rounded small fw-medium text-decoration-none" style="transition:all 0.15s;color:#fca5a5!important;" onmouseover="this.style.background='rgba(239,68,68,0.15)'" onmouseout="this.style.background='transparent'">
+                <i class="bi bi-box-arrow-right"></i> Keluar
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="admin-main" id="adminMain">
+        <!-- Top Bar -->
+        <div class="admin-topbar">
+            <!-- Mobile Menu Toggle -->
+            <button class="btn btn-sm btn-light d-md-none me-2" onclick="document.getElementById('adminSidebar').classList.toggle('show')">
+                <i class="bi bi-list"></i>
+            </button>
+            <!-- Page Breadcrumb -->
+            <div class="fw-semibold text-dark" style="font-size:0.9rem;">
+                {% block topbar_title %}Admin Console{% endblock %}
+            </div>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 small fw-semibold px-2 py-1">
+                    <i class="bi bi-broadcast me-1" style="font-size:0.65rem;"></i>Online
+                </span>
+                <a href="/" class="btn btn-sm btn-light px-2" title="Lihat Website">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+
+    <!-- Vella AI Floating Assistant Widget (Hanya ada di menu dashboard) -->
+    {% if request.url.path == '/admin/dashboard' %}
+      {% include "layouts/ven_assistant_widget.html" %}
+    {% endif %}
+
+    <script>
+      function openVenChatAdmin() {
+        if (typeof window.openVenChat === 'function') {
+          window.openVenChat();
+        } else {
+          window.location.href = '/admin/dashboard?open_ven=1';
+        }
+      }
+    </script>
+</body>
+</html>

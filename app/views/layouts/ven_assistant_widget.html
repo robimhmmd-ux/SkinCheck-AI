@@ -1,0 +1,859 @@
+<!-- ============================================================
+     VELLA FLOATING AI ASSISTANT WIDGET
+     Cyber-Dermatology Lab / Sage Luxury Floating Component
+     ============================================================ -->
+<div id="ven-assistant-root" class="ven-assistant-root">
+
+  <!-- Floating Trigger Button (Bottom-Right) -->
+  <button id="ven-chat-trigger"
+          type="button"
+          class="ven-chat-trigger shadow-lg"
+          aria-label="Konsultasi dengan Luvenna AI"
+          title="Tanya Luvenna — Asisten AI Skincare">
+    <div class="ven-trigger-pulse"></div>
+    <div class="ven-avatar-icon">
+      <i class="bi bi-stars"></i>
+    </div>
+    <span class="ven-trigger-text">Tanya Luvenna</span>
+    <span class="ven-online-status-dot"></span>
+  </button>
+
+  <!-- Floating Chat Window Card -->
+  <div id="ven-chat-window" class="ven-chat-window shadow-2xl" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="ven-chat-title">
+    
+    <!-- Widget Header -->
+    <div class="ven-widget-header">
+      <div class="d-flex align-items-center gap-2.5">
+        <div class="ven-header-avatar">
+          <i class="bi bi-stars"></i>
+          <span class="ven-header-badge-dot"></span>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-1.5">
+            <h6 id="ven-chat-title" class="ven-header-title mb-0">Luvenna</h6>
+            <span class="ven-tag-ai">AI Advisor</span>
+          </div>
+          <div class="ven-header-subtitle">
+            <span class="ven-pulse-dot"></span> Asisten Kesehatan Kulit Wajah
+          </div>
+        </div>
+      </div>
+      
+      <div class="d-flex align-items-center gap-1">
+        <button type="button" id="ven-btn-close" class="ven-header-btn ven-header-btn-close" title="Tutup / Perkecil" aria-label="Tutup jendela chat">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Scan Context Alert (Optional) -->
+    <div id="ven-scan-context-bar" class="ven-context-bar" style="display:none;">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-link-45deg text-emerald-400"></i>
+        <span class="small" id="ven-context-text">Konteks: Analisis Kulit #--</span>
+      </div>
+      <button type="button" class="btn-close btn-close-white small ms-auto" style="font-size:0.65rem;" onclick="window.clearVenScanContext()" title="Hapus konteks scan"></button>
+    </div>
+
+    <!-- Chat Messages Scrollable Body -->
+    <div class="ven-chat-body" id="ven-chat-messages">
+      <!-- Welcome Message from Luvenna -->
+      <div class="d-flex gap-2 align-items-end mb-3" id="ven-welcome-msg">
+        <div class="ven-bubble-avatar">
+          <i class="bi bi-stars"></i>
+        </div>
+        <div class="ven-msg-container">
+          <div class="ven-bubble ven-bubble-ai">
+            Halo! Saya <strong>Luvenna</strong>, asisten pribadi untuk kesehatan kulit wajahmu di <em>SkinCheck</em>.
+            <br><br>
+            Luvenna siap membantumu memahami kondisi kulit wajah, memeriksa riwayat dan rerata hasil scan, serta merekomendasikan produk perawatan yang cocok. Silakan tanyakan hal yang ingin kamu ketahui!
+          </div>
+          <div class="ven-bubble-meta">Luvenna AI · Konsultan Kulit Wajah</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth Prompt (Shown if not logged in) -->
+    <div id="ven-auth-gate" class="ven-auth-gate" style="display:none;">
+      <div class="text-center p-3">
+        <i class="bi bi-shield-lock-fill text-warning mb-2" style="font-size:1.6rem;"></i>
+        <h6 class="fw-bold mb-1" style="font-size:0.9rem;">Masuk untuk Konsultasi Personal</h6>
+        <p class="small text-muted mb-3" style="font-size:0.78rem;">Masuk agar Luvenna dapat mengingat riwayat percakapan dan menghubungkan rekomendasi dengan data scan kulit Anda.</p>
+        <div class="d-flex justify-content-center gap-2">
+          <button type="button" onclick="if(window.openAuthModal){openAuthModal('login');}else{window.location.href='/login';}" class="btn btn-sm btn-outline-success px-3 rounded-pill fw-semibold" style="font-size:0.8rem;">
+            Masuk
+          </button>
+          <button type="button" onclick="if(window.openAuthModal){openAuthModal('register');}else{window.location.href='/register';}" class="btn btn-sm btn-primary px-3 rounded-pill fw-semibold" style="font-size:0.8rem;">
+            Daftar Gratis
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Footer -->
+    <div class="ven-chat-footer">
+      <form id="ven-chat-form" class="ven-input-form" onsubmit="return false;">
+        <input type="text"
+               id="ven-chat-input"
+               class="ven-input"
+               placeholder="Tanyakan seputar kulit wajah atau perawatanmu ke Luvenna..."
+               autocomplete="off"
+               maxlength="2000" />
+        <button type="submit" id="ven-btn-send" class="ven-btn-send" title="Kirim Pesan" aria-label="Kirim Pesan">
+          <i class="bi bi-send-fill" id="ven-send-icon"></i>
+        </button>
+      </form>
+      <div class="ven-footer-disclaimer">
+        <span>Luvenna AI memberikan panduan edukasi kesehatan kulit wajah personal, bukan pengganti diagnosis medis dokter spesialis.</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ──────────────────────────────────────────────────────────
+   VEN AI FLOATING WIDGET STYLES (Cyber-Dermatology Lab)
+   ────────────────────────────────────────────────────────── */
+.ven-assistant-root {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  color: #131f18;
+}
+
+/* Floating Trigger Button */
+.ven-chat-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1050;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #131f18 0%, #1e3a2b 55%, #10b981 100%);
+  color: #ffffff;
+  border: 1px solid rgba(167, 243, 208, 0.35);
+  box-shadow: 0 10px 28px -4px rgba(19, 31, 24, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.ven-chat-trigger:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 34px -4px rgba(16, 185, 129, 0.5), 0 0 0 2px rgba(167, 243, 208, 0.5);
+  background: linear-gradient(135deg, #0d1611 0%, #173324 50%, #059669 100%);
+}
+
+.ven-chat-trigger:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.ven-avatar-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  color: #a7f3d0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.ven-trigger-pulse {
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  border: 2px solid rgba(16, 185, 129, 0.6);
+  opacity: 0;
+  animation: venPulseRings 2.8s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+
+@keyframes venPulseRings {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  60% { transform: scale(1.15); opacity: 0; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+
+.ven-trigger-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.ven-online-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+}
+
+/* Chat Window Box */
+.ven-chat-window {
+  position: fixed;
+  bottom: 86px;
+  right: 24px;
+  z-index: 1055;
+  width: 395px;
+  max-width: calc(100vw - 32px);
+  height: 580px;
+  max-height: calc(100vh - 105px);
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(19, 31, 24, 0.12);
+  box-shadow: 0 24px 60px -12px rgba(10, 17, 13, 0.4), 0 0 0 1px rgba(16, 185, 129, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: venWindowIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes venWindowIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.ven-widget-header {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #131f18 0%, #1e3a2b 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.25);
+  flex-shrink: 0;
+}
+
+.ven-header-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #395844 0%, #10b981 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.ven-header-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #131f18;
+}
+
+.ven-header-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.ven-tag-ai {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.ven-header-subtitle {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+.ven-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  display: inline-block;
+  box-shadow: 0 0 6px #34d399;
+}
+
+.ven-header-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.ven-header-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.ven-header-btn-close:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+/* Context Bar */
+.ven-context-bar {
+  background: #0f2319;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  color: #a7f3d0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Chat Messages Area */
+.ven-chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #fbfdfc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+
+.ven-chat-body::-webkit-scrollbar {
+  width: 5px;
+}
+.ven-chat-body::-webkit-scrollbar-thumb {
+  background: rgba(19, 31, 24, 0.15);
+  border-radius: 10px;
+}
+
+/* Bubbles & Avatars */
+.ven-bubble-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #131f18 0%, #10b981 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.ven-bubble-avatar-user {
+  background: #395844;
+}
+
+.ven-msg-container {
+  max-width: 82%;
+}
+
+.ven-bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.ven-bubble-ai {
+  background: #f0fdf4;
+  color: #131f18;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 8px rgba(19, 31, 24, 0.04);
+}
+
+.ven-bubble-user {
+  background: linear-gradient(135deg, #1e3a2b 0%, #395844 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+  box-shadow: 0 2px 8px rgba(57, 88, 68, 0.25);
+}
+
+.ven-bubble-meta {
+  font-size: 0.68rem;
+  color: #6b7280;
+  margin-top: 3px;
+  padding: 0 4px;
+}
+
+/* Shopee Button Pills */
+.ven-shopee-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ee4d2d;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  margin: 4px 2px;
+  box-shadow: 0 2px 6px rgba(238, 77, 45, 0.35);
+  transition: transform 0.15s ease;
+}
+
+.ven-shopee-pill:hover {
+  transform: translateY(-1px) scale(1.03);
+  color: #ffffff !important;
+  background: #d73211;
+}
+
+/* Suggestions Area */
+.ven-suggestions-wrap {
+  background: #ffffff;
+  border-top: 1px solid rgba(19, 31, 24, 0.06);
+  padding: 8px 14px;
+  flex-shrink: 0;
+}
+
+.ven-suggestions-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #4b5563;
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+
+.ven-suggestions-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.ven-suggestions-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.ven-chip {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ven-chip:hover {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+  transform: translateY(-1px);
+}
+
+/* Auth Gate */
+.ven-auth-gate {
+  background: #fefce8;
+  border-top: 1px solid #fde047;
+  flex-shrink: 0;
+}
+
+/* Footer & Input */
+.ven-chat-footer {
+  padding: 10px 14px 12px;
+  background: #ffffff;
+  border-top: 1px solid rgba(19, 31, 24, 0.08);
+  flex-shrink: 0;
+}
+
+.ven-input-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ven-input {
+  flex: 1;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: #131f18;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #f9fafb;
+}
+
+.ven-input:focus {
+  border-color: #10b981;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.ven-btn-send {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #131f18 0%, #10b981 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.ven-btn-send:hover {
+  transform: scale(1.06);
+  background: linear-gradient(135deg, #0d1611 0%, #059669 100%);
+}
+
+.ven-btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ven-footer-disclaimer {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.3;
+}
+
+/* Typing Dots */
+.ven-typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 6px;
+}
+.ven-typing-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: venDotBounce 1.4s infinite ease-in-out;
+}
+.ven-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.ven-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes venDotBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .ven-chat-window {
+    width: calc(100vw - 20px);
+    right: 10px;
+    bottom: 80px;
+    height: calc(100vh - 95px);
+  }
+  .ven-chat-trigger {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+</style>
+
+<script>
+/**
+ * Global Ven AI Assistant Widget Controller
+ */
+(function() {
+  let activeScanId = null;
+  let isChatLoading = false;
+  let historyLoaded = false;
+
+  const triggerBtn    = document.getElementById("ven-chat-trigger");
+  const chatWindow    = document.getElementById("ven-chat-window");
+  const btnClose      = document.getElementById("ven-btn-close");
+  const chatMessages  = document.getElementById("ven-chat-messages");
+  const chatForm      = document.getElementById("ven-chat-form");
+  const chatInput     = document.getElementById("ven-chat-input");
+  const btnSend       = document.getElementById("ven-btn-send");
+  const sendIcon      = document.getElementById("ven-send-icon");
+  const contextBar    = document.getElementById("ven-scan-context-bar");
+  const contextText   = document.getElementById("ven-context-text");
+  const suggestions   = document.getElementById("ven-suggestions");
+  const authGate      = document.getElementById("ven-auth-gate");
+
+  // Format Text with Links & Shopee
+  function formatVenText(text) {
+    if (!text) return "";
+    let safe = text
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // Markdown Links [Title](URL)
+    safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, function(match, title, url) {
+      if (url.includes("shopee.co.id")) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="ven-shopee-pill"><i class="bi bi-bag-check-fill"></i> ${title}</a>`;
+      } else if (url.includes("tokopedia.com")) {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="ven-shopee-pill" style="background:#03ac0e;"><i class="bi bi-bag-check-fill"></i> ${title}</a>`;
+      } else {
+        return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-success fw-bold text-decoration-underline">${title}</a>`;
+      }
+    });
+
+    // Standalone Shopee URLs
+    safe = safe.replace(/(^|[^"'>])(https?:\/\/(?:www\.)?shopee\.co\.id\/[^\s<]+)/g, function(match, prefix, url) {
+      return prefix + `<a href="${url}" target="_blank" rel="noopener noreferrer" class="ven-shopee-pill"><i class="bi bi-bag-check-fill"></i> Beli di Shopee</a>`;
+    });
+
+    // Markdown Bold & Italics & Linebreaks
+    safe = safe
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/\n/g, "<br>");
+
+    return safe;
+  }
+
+  function getTimestampStr() {
+    const d = new Date();
+    return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function appendVenMessage(role, content, timeStr) {
+    const isUser = role === "user";
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex gap-2 align-items-end mb-3" + (isUser ? " flex-row-reverse" : "");
+
+    const avatar = document.createElement("div");
+    avatar.className = "ven-bubble-avatar " + (isUser ? "ven-bubble-avatar-user" : "");
+    avatar.innerHTML = isUser ? '<i class="bi bi-person-fill"></i>' : '<i class="bi bi-stars"></i>';
+
+    const container = document.createElement("div");
+    container.className = "ven-msg-container";
+
+    const bubble = document.createElement("div");
+    bubble.className = "ven-bubble " + (isUser ? "ven-bubble-user" : "ven-bubble-ai");
+    if (isUser) {
+      bubble.textContent = content;
+    } else {
+      bubble.innerHTML = formatVenText(content);
+    }
+
+    const meta = document.createElement("div");
+    meta.className = "ven-bubble-meta";
+    meta.style.textAlign = isUser ? "right" : "left";
+    meta.textContent = (isUser ? "Anda" : "Luvenna AI") + " · " + (timeStr || getTimestampStr());
+
+    container.appendChild(bubble);
+    container.appendChild(meta);
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(container);
+    chatMessages.appendChild(wrapper);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showVenTyping() {
+    isChatLoading = true;
+    btnSend.disabled = true;
+    chatInput.disabled = true;
+    sendIcon.className = "bi bi-hourglass-split";
+
+    const loader = document.createElement("div");
+    loader.id = "ven-typing-box";
+    loader.className = "d-flex gap-2 align-items-end mb-3";
+    loader.innerHTML = `
+      <div class="ven-bubble-avatar"><i class="bi bi-stars"></i></div>
+      <div class="ven-msg-container">
+        <div class="ven-bubble ven-bubble-ai">
+          <div class="ven-typing-indicator">
+            <span class="ven-typing-dot"></span>
+            <span class="ven-typing-dot"></span>
+            <span class="ven-typing-dot"></span>
+          </div>
+        </div>
+      </div>
+    `;
+    chatMessages.appendChild(loader);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function hideVenTyping() {
+    isChatLoading = false;
+    btnSend.disabled = false;
+    chatInput.disabled = false;
+    sendIcon.className = "bi bi-send-fill";
+    const loader = document.getElementById("ven-typing-box");
+    if (loader) loader.remove();
+    chatInput.focus();
+  }
+
+  async function loadVenHistory() {
+    if (historyLoaded) return;
+    try {
+      const res = await fetch("/assistant/history");
+      if (!res.ok) return;
+      const data = await res.json();
+      historyLoaded = true;
+
+      if (!data.authenticated) {
+        if (authGate) authGate.style.display = "block";
+      } else {
+        if (authGate) authGate.style.display = "none";
+      }
+
+      if (data.history && data.history.length > 0) {
+        const welcome = document.getElementById("ven-welcome-msg");
+        if (welcome) welcome.style.display = "none";
+
+        data.history.forEach(m => {
+          appendVenMessage(m.role, m.content, m.time);
+        });
+      }
+    } catch (e) {
+      console.warn("Could not load Luvenna chat history:", e);
+    }
+  }
+
+  async function sendVenMessage(text) {
+    if (!text || !text.trim() || isChatLoading) return;
+    const msg = text.trim();
+    chatInput.value = "";
+
+    const welcome = document.getElementById("ven-welcome-msg");
+    if (welcome) welcome.style.display = "none";
+    if (suggestions) suggestions.style.display = "none";
+
+    appendVenMessage("user", msg);
+    showVenTyping();
+
+    try {
+      const payload = { message: msg };
+      if (activeScanId) payload.scan_id = activeScanId;
+
+      const res = await fetch("/assistant/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      hideVenTyping();
+
+      if (res.status === 401 && data.require_auth) {
+        appendVenMessage("ai", data.error || "Silakan masuk ke akun Anda terlebih dahulu untuk konsultasi personal dengan Luvenna.");
+        if (authGate) authGate.style.display = "block";
+        return;
+      }
+
+      if (res.ok && data.response) {
+        appendVenMessage("ai", data.response);
+      } else {
+        appendVenMessage("ai", data.error || "Maaf, Luvenna sedang mengalami kendala jaringan. Mohon coba sesaat lagi.");
+      }
+    } catch (err) {
+      hideVenTyping();
+      appendVenMessage("ai", "Maaf, koneksi terputus. Silakan periksa jaringan internet Anda.");
+    }
+  }
+
+  // Global methods
+  window.openVenChat = function(scanId, contextType) {
+    if (scanId) {
+      activeScanId = scanId;
+      if (contextBar && contextText) {
+        contextText.textContent = `Konteks: ${contextType === 'sunscreen' ? 'Sunscreen Check' : 'Scan Kulit'} #${scanId}`;
+        contextBar.style.display = "flex";
+      }
+    }
+    chatWindow.style.display = "flex";
+    triggerBtn.style.display = "none";
+    loadVenHistory();
+    chatInput.focus();
+  };
+
+  window.closeVenChat = function() {
+    chatWindow.style.display = "none";
+    triggerBtn.style.display = "inline-flex";
+  };
+
+  window.toggleVenChat = function() {
+    if (chatWindow.style.display === "none" || !chatWindow.style.display) {
+      window.openVenChat();
+    } else {
+      window.closeVenChat();
+    }
+  };
+
+  window.clearVenScanContext = function() {
+    activeScanId = null;
+    if (contextBar) contextBar.style.display = "none";
+  };
+
+  // Event Listeners
+  if (triggerBtn) {
+    triggerBtn.addEventListener("click", window.toggleVenChat);
+  }
+  if (btnClose) {
+    btnClose.addEventListener("click", window.closeVenChat);
+  }
+
+  if (chatForm) {
+    chatForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      sendVenMessage(chatInput.value);
+    });
+  }
+
+  // Quick Chips
+  document.querySelectorAll(".ven-chip").forEach(chip => {
+    chip.addEventListener("click", function() {
+      sendVenMessage(this.dataset.q);
+    });
+  });
+
+  // Check URL query param ?open_ven=1
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("open_ven") === "1") {
+    const sId = urlParams.get("scan_id");
+    const cType = urlParams.get("context");
+    setTimeout(() => {
+      window.openVenChat(sId, cType);
+    }, 400);
+  }
+})();
+</script>

@@ -1,0 +1,364 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:1000px;">
+
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="d-flex align-items-center">
+            <a href="/history" class="btn btn-sm btn-light rounded-circle me-3 shadow-sm" style="width:38px;height:38px;">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div>
+                <h3 class="fw-bold mb-0">Detail Scan #{{ scan.id }}</h3>
+                <p class="text-muted small mb-0"><i class="bi bi-calendar3 me-1"></i>{{ scan.created_at.strftime("%d %B %Y, %H:%M") }} WIB</p>
+            </div>
+        </div>
+        <div>
+            {% if scan.status == 'completed' %}
+                <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 border border-success border-opacity-25">
+                    <i class="bi bi-check-circle me-1"></i>Selesai
+                </span>
+            {% elif scan.status == 'failed' %}
+                <span class="badge bg-danger bg-opacity-10 text-danger fw-bold px-3 py-2 border border-danger border-opacity-25">
+                    <i class="bi bi-x-circle me-1"></i>Gagal
+                </span>
+            {% else %}
+                <span class="badge bg-warning bg-opacity-10 text-warning fw-bold px-3 py-2 border border-warning border-opacity-25">
+                    <i class="bi bi-hourglass-split me-1"></i>Memproses
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="medical-disclaimer d-flex gap-2 align-items-start mb-4">
+        <i class="bi bi-shield-check flex-shrink-0 mt-1" style="color:#d97706;"></i>
+        <div class="small">
+            <strong>Disclaimer Penting:</strong> Seluruh hasil analisis di bawah ini merupakan <em>indikasi visual berbasis AI</em>, bukan diagnosis medis. Skor menunjukkan intensitas visual yang terdeteksi pada gambar. Konsultasikan kondisi kulit serius dengan dokter spesialis (Dermatologist).
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Face Image -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3 text-muted text-uppercase" style="letter-spacing:0.05em;font-size:0.75rem;">
+                        <i class="bi bi-image me-1"></i>Foto Analisis
+                    </h6>
+                    <div class="rounded-3 overflow-hidden mb-3" style="height:280px;background:var(--gray-100);">
+                        <img src="/storage/scans/{{ scan.image_path }}"
+                             class="w-100 h-100"
+                             style="object-fit:cover;"
+                             alt="Foto Wajah Scan #{{ scan.id }}"
+                             loading="lazy"
+                             onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\'d-flex h-100 align-items-center justify-content-center flex-column text-muted\'><i class=\'bi bi-image-fill\' style=\'font-size:3rem;opacity:0.3;\'></i><p class=\'small mt-2\'>Gambar tidak tersedia</p></div>'">
+                    </div>
+                    {% if scan.image_quality_score %}
+                    <div class="d-flex justify-content-between align-items-center small">
+                        <span class="text-muted fw-semibold">Kualitas Gambar</span>
+                        <span class="badge {% if scan.image_quality_score >= 0.7 %}bg-success{% elif scan.image_quality_score >= 0.5 %}bg-warning{% else %}bg-danger{% endif %} bg-opacity-10 text-dark fw-bold">
+                            {{ "%.0f" | format(scan.image_quality_score * 100) }}%
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- AI CTA Card -->
+            {% if scan.status == 'completed' %}
+            <div class="card border-0 shadow-sm mt-3" style="background:linear-gradient(135deg,var(--primary-light),#f0fdfa);">
+                <div class="card-body p-4 text-center">
+                    <i class="bi bi-stars text-primary" style="font-size:2rem;"></i>
+                    <h6 class="fw-bold mt-2 mb-1">Tanya Ven AI</h6>
+                    <p class="small text-muted mb-3">Pahami hasil scan ini lebih dalam bersama asisten cerdas Ven</p>
+                    <button type="button" onclick="window.openVenChat('{{ scan.id }}', 'scan');" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold">
+                        <i class="bi bi-chat-dots me-1"></i>Tanya Ven tentang Scan Ini
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Analysis Results -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-1">Estimasi Kondisi Visual Kulit (AI)</h5>
+                    <p class="text-muted small mb-4">Skor 0–100: Semakin tinggi = indikasi lebih intens secara visual</p>
+
+                    {% if scan.status == 'completed' and analysis %}
+                        <!-- Overall Score -->
+                        <div class="d-flex align-items-center gap-4 p-3 rounded-3 mb-4" style="background:var(--gray-50);">
+                            <div class="score-circle flex-shrink-0 {% if analysis.overall_score >= 70 %}score-great{% elif analysis.overall_score >= 50 %}score-good{% elif analysis.overall_score >= 30 %}score-fair{% else %}score-poor{% endif %}" style="width:100px;height:100px;">
+                                <span class="score-number {% if analysis.overall_score >= 70 %}text-success{% elif analysis.overall_score >= 50 %}text-info{% else %}text-warning{% endif %}" style="font-size:1.6rem;">
+                                    {{ analysis.overall_score }}
+                                </span>
+                                <span class="small text-muted">/100</span>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark mb-1">Skor Visual Keseluruhan</div>
+                                <div class="small text-muted">
+                                    {% if analysis.overall_score >= 70 %}
+                                        Kondisi kulit tampak baik berdasarkan estimasi visual.
+                                    {% elif analysis.overall_score >= 50 %}
+                                        Terdapat beberapa indikasi yang perlu diperhatikan.
+                                    {% else %}
+                                        Ditemukan beberapa indikasi visual yang memerlukan perhatian lebih.
+                                    {% endif %}
+                                </div>
+                                {% if analysis.ai_response %}
+                                <div class="mt-2 small text-muted fst-italic">{{ analysis.ai_response }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Individual Indicators for 5 Facial Conditions -->
+                        {% set dark_spots = analysis.dark_spots_score if analysis.dark_spots_score is not none and analysis.dark_spots_score > 0 else (analysis.hyperpigmentation_score or 0) %}
+                        {% set wrinkles = analysis.wrinkles_score if analysis.wrinkles_score is not none and analysis.wrinkles_score > 0 else (analysis.texture_score or 0) %}
+                        {% set dry_skin = analysis.dry_skin_score or 0 %}
+                        {% set oily_skin = analysis.oily_skin_score or 0 %}
+                        {% for label, score, color, desc in [
+                            ('Acne (Jerawat & Komedo)', analysis.acne_score, 'danger', 'Estimasi visual intensitas jerawat aktif dan komedo'),
+                            ('Dry Skin (Kulit Kering)', dry_skin, 'warning', 'Estimasi visual tingkat kekeringan atau dehidrasi kulit'),
+                            ('Oily Skin (Kulit Berminyak)', oily_skin, 'primary', 'Estimasi visual tingkat sebum dan kilap produksi minyak berlebih'),
+                            ('Dark Spots (Flek & Noda Hitam)', dark_spots, 'dark', 'Estimasi visual noda bintik hitam dan hiperpigmentasi'),
+                            ('Wrinkles (Garis Halus & Kerutan)', wrinkles, 'info', 'Estimasi visual garis halus dan kerutan permukaan kulit')
+                        ] %}
+                        <div class="indicator-row mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <div>
+                                    <div class="small fw-semibold text-dark">{{ label }}</div>
+                                    <div class="text-muted" style="font-size:0.78rem;">{{ desc }}</div>
+                                </div>
+                                <div class="ms-3 flex-shrink-0 text-end">
+                                    <span class="fw-bold text-{{ color }}" style="font-size:1.2rem;">{{ score | round(1) if score is float else score }}</span>
+                                    <span class="text-muted small">/100</span>
+                                </div>
+                            </div>
+                            <div class="progress" style="height:6px;">
+                                <div class="progress-bar bg-{{ color }}" style="width:{{ score }}%;"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    {% elif scan.status == 'failed' %}
+                        <div class="empty-state">
+                            <i class="bi bi-x-circle empty-state-icon text-danger"></i>
+                            <p class="empty-state-title">Analisis Gagal</p>
+                            <p class="empty-state-text">{{ analysis.ai_response if analysis else 'Layanan AI tidak dapat memproses gambar.' }}</p>
+                            <form action="/history/{{ scan.id }}/retry" method="POST">
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Coba Analisis Ulang
+                                </button>
+                            </form>
+                        </div>
+
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="spinner-border text-primary mb-3" style="width:3rem;height:3rem;" role="status"></div>
+                            <p class="empty-state-title">Sedang Diproses</p>
+                            <p class="empty-state-text">AI sedang menganalisis gambar wajah Anda. Ini mungkin membutuhkan beberapa detik.</p>
+                            <button class="btn btn-outline-primary btn-sm rounded-pill px-4" onclick="location.reload()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Refresh Halaman
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         LIVE ACNE DETECTION — YOLO Bounding Box Overlay
+    ============================================================ -->
+    <div id="yolo-panel" class="mt-4">
+        <div class="card border-0 shadow-sm" style="border-radius:16px;overflow:hidden;">
+            <div class="card-header text-white d-flex justify-content-between align-items-center p-3" style="background:#131f18;border-radius:0;cursor:pointer;" onclick="toggleYOLOPanel()">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;animation:pulseDot 1.5s infinite;flex-shrink:0;"></div>
+                    <i class="bi bi-camera-video-fill text-danger"></i>
+                    <span class="fw-bold">Live Acne Detection — YOLO AI</span>
+                    <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 small">LIVE</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="yolo-count-badge" class="badge bg-dark border border-secondary text-white small d-none">0 terdeteksi</span>
+                    <i id="yolo-chevron" class="bi bi-chevron-down text-white-50" style="transition:transform 0.2s;"></i>
+                </div>
+            </div>
+
+            <div id="yolo-body" class="d-none">
+                <div class="p-3 bg-dark bg-opacity-10">
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-info-circle text-primary me-1"></i>
+                        Kamera menyala kembali untuk mendeteksi jerawat secara <strong>real-time</strong> menggunakan model YOLOv8 langsung di browser (WebAssembly — tanpa kirim data ke server).
+                    </p>
+                </div>
+
+                <!-- Camera + Canvas overlay -->
+                <div class="position-relative" style="background:#070b14;min-height:320px;max-height:520px;">
+                    <video id="yolo-video" class="w-100 d-block" autoplay playsinline muted
+                           style="height:100%;max-height:520px;object-fit:cover;display:block;"></video>
+                    <canvas id="yolo-canvas" class="position-absolute top-0 start-0 w-100 h-100"
+                            style="pointer-events:none;"></canvas>
+
+                    <!-- Status overlay -->
+                    <div id="yolo-status" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white" style="background:rgba(7,11,20,0.88);z-index:5;">
+                        <div id="yolo-status-icon" class="mb-3">
+                            <i class="bi bi-camera-video fs-1 text-primary"></i>
+                        </div>
+                        <div id="yolo-status-text" class="fw-semibold text-center px-3">Klik tombol di bawah untuk memulai</div>
+                        <div id="yolo-status-sub" class="text-muted small mt-1">Kamera akan menyala kembali untuk deteksi jerawat live</div>
+                    </div>
+                </div>
+
+                <!-- Controls bar -->
+                <div class="p-3 d-flex flex-wrap justify-content-between align-items-center gap-2 border-top">
+                    <div class="d-flex gap-2">
+                        <button id="yolo-btn-start" class="btn btn-sm btn-danger rounded-pill px-3 fw-semibold">
+                            <i class="bi bi-play-fill me-1"></i>Mulai Live Detection
+                        </button>
+                        <button id="yolo-btn-stop" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold d-none">
+                            <i class="bi bi-stop-fill me-1"></i>Stop
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 text-muted small">
+                        <i class="bi bi-shield-check text-success"></i>
+                        Berjalan 100% di browser — tidak ada data dikirim ke server
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="p-3 border-top bg-light bg-opacity-50">
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span class="small text-muted fw-semibold">Legenda:</span>
+                        {% set legend = [('acne','#ef4444','Jerawat'), ('whitehead','#f97316','Whitehead'), ('blackhead','#78716c','Blackhead'), ('papule','#ec4899','Papul'), ('pustule','#f59e0b','Pustul')] %}
+                        {% for cls, color, label in legend %}
+                        <span class="badge rounded-pill border fw-medium small" style="background:{{ color }}22;color:{{ color }};border-color:{{ color }}55;">{{ label }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+</style>
+
+<script src="/static/js/yolo_detector.js"></script>
+<script>
+(function() {
+    let detector = null;
+    let yoloStream = null;
+    let panelOpen = false;
+
+    const yoloVideo  = document.getElementById('yolo-video');
+    const yoloCanvas = document.getElementById('yolo-canvas');
+    const yoloStatus = document.getElementById('yolo-status');
+    const yoloStatusIcon = document.getElementById('yolo-status-icon');
+    const yoloStatusText = document.getElementById('yolo-status-text');
+    const yoloStatusSub  = document.getElementById('yolo-status-sub');
+    const yoloBtnStart   = document.getElementById('yolo-btn-start');
+    const yoloBtnStop    = document.getElementById('yolo-btn-stop');
+    const yoloCountBadge = document.getElementById('yolo-count-badge');
+    const chevron        = document.getElementById('yolo-chevron');
+    const yoloBody       = document.getElementById('yolo-body');
+
+    window.toggleYOLOPanel = function() {
+        panelOpen = !panelOpen;
+        if (panelOpen) {
+            yoloBody.classList.remove('d-none');
+            chevron.style.transform = 'rotate(180deg)';
+        } else {
+            yoloBody.classList.add('d-none');
+            chevron.style.transform = 'rotate(0deg)';
+            stopYOLO();
+        }
+    };
+
+    yoloBtnStart.addEventListener('click', async function() {
+        yoloBtnStart.disabled = true;
+        setStatus('spinner', 'Memuat model AI...', 'Mengunduh YOLOv8 (sekali saja ~2MB)');
+
+        try {
+            yoloStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+                audio: false
+            });
+            yoloVideo.srcObject = yoloStream;
+            await new Promise(r => yoloVideo.addEventListener('loadedmetadata', r, { once: true }));
+
+            detector = new AcneDetector(yoloVideo, yoloCanvas, {
+                modelUrl: '/static/models/best.onnx',
+                onReady() {
+                    yoloStatus.classList.add('d-none');
+                    yoloBtnStart.classList.add('d-none');
+                    yoloBtnStop.classList.remove('d-none');
+                    detector.start();
+                },
+                onResult({ count, fps }) {
+                    yoloCountBadge.classList.remove('d-none');
+                    yoloCountBadge.textContent = count + ' terdeteksi';
+                    if (count > 0) {
+                        yoloCountBadge.className = 'badge bg-danger border border-danger border-opacity-25 small';
+                    } else {
+                        yoloCountBadge.className = 'badge bg-dark border border-secondary text-white small';
+                    }
+                },
+                onError(err) {
+                    console.warn('[YOLO]', err);
+                    setStatus('warning', 'Mode simulasi', 'Model tersedia setelah upload ke server');
+                }
+            });
+
+            await detector.init();
+
+        } catch (err) {
+            yoloBtnStart.disabled = false;
+            if (err.name === 'NotAllowedError') {
+                setStatus('error', 'Izin kamera ditolak', 'Izinkan akses kamera di browser untuk fitur ini');
+            } else {
+                setStatus('error', 'Kamera tidak tersedia', err.message);
+            }
+        }
+    });
+
+    yoloBtnStop.addEventListener('click', stopYOLO);
+
+    function stopYOLO() {
+        if (detector) { detector.destroy(); detector = null; }
+        if (yoloStream) { yoloStream.getTracks().forEach(t => t.stop()); yoloStream = null; }
+        yoloVideo.srcObject = null;
+        yoloStatus.classList.remove('d-none');
+        yoloBtnStart.classList.remove('d-none');
+        yoloBtnStart.disabled = false;
+        yoloBtnStop.classList.add('d-none');
+        yoloCountBadge.classList.add('d-none');
+        setStatus('camera', 'Klik tombol di bawah untuk memulai', 'Kamera akan menyala kembali untuk deteksi jerawat live');
+    }
+
+    function setStatus(type, text, sub) {
+        const icons = {
+            spinner: '<div class="spinner-border text-primary mb-2" style="width:2.5rem;height:2.5rem;"></div>',
+            camera:  '<i class="bi bi-camera-video fs-1 text-primary"></i>',
+            warning: '<i class="bi bi-exclamation-triangle fs-1 text-warning"></i>',
+            error:   '<i class="bi bi-x-circle fs-1 text-danger"></i>'
+        };
+        yoloStatus.classList.remove('d-none');
+        yoloStatusIcon.innerHTML = icons[type] || icons.camera;
+        yoloStatusText.textContent = text;
+        yoloStatusSub.textContent  = sub || '';
+    }
+
+    window.addEventListener('beforeunload', stopYOLO);
+})();
+</script>
+{% endblock %}

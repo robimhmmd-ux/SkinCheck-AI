@@ -1,0 +1,14 @@
+disable-type-errors-in-ide = true
+python-interpreter-path = "C:/Users/roboy/AppData/Local/Programs/Python/Python313/python.exe"
+
+project-includes = [
+    "app/**/*.py",
+    "*.py"
+]
+
+project-excludes = [
+    "notebooks/**",
+    "scratch/**",
+    ".venv/**",
+    "venv/**"
+]

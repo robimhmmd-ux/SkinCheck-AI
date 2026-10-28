@@ -1,0 +1,786 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4" style="max-width:1160px;">
+    <!-- Top Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <div class="d-flex align-items-center">
+            <a href="/dashboard" class="btn btn-sm btn-light border rounded-circle me-3 shadow-sm d-flex align-items-center justify-content-center" style="width:42px;height:42px;">
+                <i class="bi bi-arrow-left fs-5"></i>
+            </a>
+            <div>
+                <div class="d-flex align-items-center gap-2">
+                    <h3 class="fw-bold mb-0 text-dark">Face Skin Diagnostic Studio</h3>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1">
+                        <i class="bi bi-cpu-fill me-1"></i>VGG16 + CLAHE
+                    </span>
+                </div>
+                <p class="text-muted small mb-0">Pemindaian kondisi kulit wajah multi-sudut</p>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark bg-opacity-10 text-dark border rounded-pill px-3 py-2 small">
+                <i class="bi bi-shield-check text-success me-1"></i>Privasi Terlindungi
+            </span>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="error-alert" class="alert alert-danger d-flex gap-2 align-items-center d-none mb-3 shadow-sm rounded-3">
+        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 fs-5"></i>
+        <span id="error-msg" class="fw-medium"></span>
+    </div>
+    <div id="success-alert" class="alert alert-success d-flex gap-2 align-items-center d-none mb-3 shadow-sm rounded-3">
+        <i class="bi bi-check-circle-fill flex-shrink-0 fs-5"></i>
+        <span id="success-msg" class="fw-medium"></span>
+    </div>
+
+    <!-- Camera Studio Viewport -->
+    <div id="camera-viewport-card" class="camera-viewport-card mb-4 position-relative overflow-hidden shadow-2-strong rounded-4"
+         style="background:#070b14;border:1px solid rgba(255,255,255,0.1);min-height:480px;height:calc(min(600px, 66vh));">
+
+        <!-- Top HUD Floating Overlay -->
+        <div id="camera-hud-top" class="position-absolute top-0 start-0 w-100 p-3 d-flex justify-content-between align-items-center d-none" style="z-index:20;pointer-events:none;">
+            <div style="pointer-events:auto;">
+                <div id="lighting-badge" class="badge bg-dark bg-opacity-75 text-white border border-secondary rounded-pill px-3 py-2 shadow-sm d-flex align-items-center gap-2 backdrop-blur">
+                    <span id="lighting-indicator-dot" class="spinner-grow spinner-grow-sm text-success" style="width:10px;height:10px;" role="status"></span>
+                    <span id="lighting-text" class="fw-semibold small">Mengecek...</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-dark bg-opacity-75 text-white-50 border border-secondary rounded-pill px-2 py-1 backdrop-blur small">
+                    <i class="bi bi-camera-video text-info me-1"></i><span id="resolution-label">FHD</span>
+                </span>
+                <div style="pointer-events:auto;">
+                    <button id="btn-toggle-mirror" type="button" class="btn btn-sm btn-dark bg-opacity-75 text-white border border-secondary rounded-pill px-2 py-1 shadow-sm backdrop-blur">
+                        <i class="bi bi-arrow-left-right"></i>
+                        <span id="mirror-label" class="d-none d-sm-inline small"> Normal</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Initial Permission State -->
+        <div id="initial-state" class="position-absolute w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white text-center p-4" style="z-index:15;background:radial-gradient(circle at center, #111827 0%, #030712 100%);">
+            <div class="mb-4 d-flex align-items-center justify-content-center rounded-circle shadow-lg"
+                 style="width:80px;height:80px;background:rgba(16,185,129,0.15);border:2px solid rgba(16,185,129,0.4);">
+                <i class="bi bi-camera-fill" style="font-size:2.2rem;color:#86efac;"></i>
+            </div>
+            <h4 class="fw-bold text-white mb-2">Buka Kamera Pemindai Wajah</h4>
+            <p class="text-secondary small mb-4" style="max-width:400px;line-height:1.6;">
+                Resolusi Full HD menangkap tekstur pori dan bintik jerawat secara akurat.
+            </p>
+            <button id="btn-start" class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-lg d-flex align-items-center gap-2">
+                <i class="bi bi-camera-video-fill"></i>Nyalakan Kamera
+            </button>
+            <button id="btn-mobile-trigger" type="button" class="btn btn-outline-light px-4 py-2 mt-3 rounded-pill small fw-semibold d-flex align-items-center gap-2">
+                <i class="bi bi-phone-fill text-warning"></i><span>Pakai Kamera HP / Upload Foto</span>
+            </button>
+            <input type="file" id="mobile-photo-input" accept="image/*" class="d-none">
+        </div>
+
+        <!-- Camera Denied State -->
+        <div id="denied-state" class="position-absolute w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white text-center p-4 d-none" style="z-index:15;background:#030712;">
+            <div class="mb-3 d-flex align-items-center justify-content-center rounded-circle" style="width:70px;height:70px;background:rgba(239,68,68,0.15);border:2px solid rgba(239,68,68,0.4);">
+                <i class="bi bi-camera-video-off" style="font-size:2rem;color:#f87171;"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-2">Kamera Tidak Bisa Diakses</h5>
+            <p class="text-secondary small mb-4" style="max-width:340px;">
+                Browser memblokir live kamera. Gunakan fitur upload foto di bawah:
+            </p>
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <button id="btn-mobile-fallback" type="button" class="btn btn-warning px-4 py-2 rounded-pill fw-semibold">
+                    <i class="bi bi-camera-fill me-2"></i>Ambil Foto dengan HP
+                </button>
+                <button class="btn btn-outline-light px-3 py-2 rounded-pill fw-semibold" onclick="location.reload()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Muat Ulang
+                </button>
+            </div>
+        </div>
+
+        <!-- Video Stream -->
+        <video id="camera-stream" class="w-100 h-100 d-none" autoplay playsinline
+               style="object-fit:cover;transition:transform 0.2s ease;filter:brightness(1.02);"></video>
+
+        <!-- Single Capture Preview -->
+        <img id="capture-preview" class="position-absolute top-0 start-0 w-100 h-100 d-none"
+             style="object-fit:cover;z-index:10;">
+
+        <!-- Hidden Canvas -->
+        <canvas id="snapshot-canvas" class="d-none"></canvas>
+        <canvas id="lighting-canvas" class="d-none" width="32" height="32"></canvas>
+
+        <!-- Static Face Framing Reticle (idle) -->
+        <div id="framing-guide" class="position-absolute top-0 start-0 w-100 h-100 d-none" style="pointer-events:none;z-index:8;">
+            <div class="camera-framing-guide-wide"></div>
+            <div class="camera-framing-text-wide">
+                <i class="bi bi-person-bounding-box me-1"></i>Posisikan wajah di sini
+            </div>
+        </div>
+
+        <!-- ============================================================
+             COMPACT Motion Guided Overlay
+             The oval reticle is absolutely centered.
+             Top bar = compact step chip. Bottom bar = compact progress.
+        ============================================================ -->
+        <div id="motion-guided-overlay" class="position-absolute top-0 start-0 w-100 h-100 d-none"
+             style="z-index:25;pointer-events:none;background:rgba(3,7,18,0.25);">
+
+            <!-- Centered oval reticle (pure absolute positioning, not in flex flow) -->
+            <div id="motion-reticle" class="motion-reticle-ring"></div>
+
+            <!-- Compact top bar -->
+            <div class="position-absolute top-0 start-0 w-100 p-2 d-flex justify-content-center" style="z-index:30;">
+                <div class="d-inline-flex align-items-center gap-2 bg-dark bg-opacity-85 border border-primary border-opacity-40 rounded-pill px-3 py-2 shadow-lg">
+                    <span id="motion-step-badge" class="badge bg-primary rounded-pill fw-bold" style="font-size:0.7rem;">1/6</span>
+                    <i id="motion-instruction-icon" class="bi bi-bullseye text-primary" style="font-size:1.4rem;"></i>
+                    <span id="motion-instruction-text" class="text-white fw-semibold small">Hadap Depan</span>
+                </div>
+            </div>
+
+            <!-- Compact bottom bar -->
+            <div class="position-absolute bottom-0 start-0 w-100 p-2" style="z-index:30;">
+                <div class="bg-dark bg-opacity-85 border border-secondary border-opacity-40 rounded-3 px-3 py-2 mx-auto shadow-lg" style="max-width:380px;">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="spinner-grow spinner-grow-sm text-danger" role="status" style="width:8px;height:8px;"></span>
+                            <span class="text-white-50 small">Merekam</span>
+                            <span id="motion-counter-pill" class="badge bg-danger rounded-pill fw-bold" style="font-size:0.65rem;">0 frame</span>
+                        </div>
+                        <span id="motion-percentage-label" class="text-info fw-bold small">0%</span>
+                    </div>
+                    <div class="progress" style="height:6px;background:rgba(255,255,255,0.1);border-radius:10px;">
+                        <div id="motion-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width:0%;transition:width 0.15s ease;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading / Analysis Overlay -->
+        <div id="loading-overlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-white d-none"
+             style="z-index:30;background:rgba(3,7,18,0.92);backdrop-filter:blur(8px);">
+            <div class="text-center p-4" style="max-width:440px;">
+                <div class="radar-scan-container mb-4 mx-auto">
+                    <div class="radar-circle"></div>
+                    <div class="radar-sweep"></div>
+                    <i class="bi bi-cpu-fill text-primary" style="font-size:2.5rem;"></i>
+                </div>
+                <h4 class="fw-bold text-white mb-2">Menganalisis Kondisi Kulit...</h4>
+                <p id="loading-subtext" class="text-secondary small mb-3">
+                    VGG16 memproses frame multi-sudut dengan filter CLAHE
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <span class="badge bg-dark border border-secondary text-white-50 px-2 py-1">Jerawat</span>
+                    <span class="badge bg-dark border border-secondary text-white-50 px-2 py-1">Kering</span>
+                    <span class="badge bg-dark border border-secondary text-white-50 px-2 py-1">Berminyak</span>
+                    <span class="badge bg-dark border border-secondary text-white-50 px-2 py-1">Flek</span>
+                    <span class="badge bg-dark border border-secondary text-white-50 px-2 py-1">Kerutan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Controls & Action Bar -->
+    <div class="d-flex flex-column align-items-center gap-3 mb-4">
+        <div id="action-controls" class="d-none flex-column align-items-center w-100">
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-3">
+                <button id="btn-start-dynamic-scan" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg d-flex align-items-center gap-2">
+                    <i class="bi bi-play-circle-fill fs-4"></i>
+                    <span>Scan Dinamis (360°)</span>
+                </button>
+                <button id="btn-single-capture" class="btn btn-outline-dark rounded-pill px-4 py-3 fw-semibold d-flex align-items-center gap-2">
+                    <i class="bi bi-camera"></i>
+                    <span>Snapshot Cepat</span>
+                </button>
+            </div>
+            <p class="text-muted small mt-2 mb-0 text-center">
+                <i class="bi bi-info-circle text-primary me-1"></i>
+                <strong>Rekomendasi:</strong> Scan Dinamis lebih akurat karena memindai dari berbagai sudut.
+            </p>
+        </div>
+
+        <div id="post-capture-controls" class="d-none flex-wrap justify-content-center gap-3 align-items-center">
+            <button id="btn-retake" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold">
+                <i class="bi bi-arrow-counterclockwise me-1"></i>Ambil Ulang
+            </button>
+            <button id="btn-submit-single" class="btn btn-success rounded-pill px-5 py-2 fw-bold shadow">
+                <i class="bi bi-check-circle me-1"></i>Gunakan Foto Ini &amp; Analisis
+            </button>
+        </div>
+    </div>
+
+    <!-- Feature Info Cards -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-3 p-2 bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-arrows-move fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Multi-Angle Coverage</h6>
+                        <small class="text-muted">Kanan, Kiri, Atas, Bawah</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0">
+                    Menangkap jerawat di sisi pipi samping dan kerutan dahi yang sering luput dari 1 foto depan.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-3 p-2 bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-zoom-in fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Macro &amp; Close-Up</h6>
+                        <small class="text-muted">Deteksi Tekstur &amp; Pori</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0">
+                    Gerakan maju menangkap detail pori-pori dan serpihan kulit kering secara tajam.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="rounded-3 p-2 bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-magic fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-0">Filter CLAHE Ilmiah</h6>
+                        <small class="text-muted">Kontras Adaptif L-Channel</small>
+                    </div>
+                </div>
+                <p class="text-muted small mb-0">
+                    Mempertajam garis kerutan dan bintik hiperpigmentasi sebelum dievaluasi VGG16.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== FULLSCREEN LOCK during scan ===== */
+body.scanning-active {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+#camera-viewport-card.fullscreen-scan {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    min-height: unset !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* ===== Static idle reticle ===== */
+.camera-framing-guide-wide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(260px, 56vw);
+    height: min(360px, 70vh);
+    border: 2px dashed rgba(59, 130, 246, 0.6);
+    border-radius: 50% / 45%;
+    box-shadow: 0 0 0 9999px rgba(3, 7, 18, 0.45);
+    pointer-events: none;
+    transition: border-color 0.3s ease;
+}
+.camera-framing-text-wide {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(3, 7, 18, 0.75);
+    color: #f8fafc;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    white-space: nowrap;
+}
+
+/* ===== Motion reticle - ABSOLUTELY centered, not in flex flow ===== */
+.motion-reticle-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(260px, 56vw);
+    height: min(360px, 70vh);
+    border: 3px solid #10b981;
+    border-radius: 50% / 45%;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 20px rgba(16, 185, 129, 0.3);
+    animation: reticlePulse 1.8s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 5;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+@keyframes reticlePulse {
+    0%   { transform: translate(-50%, -50%) scale(1);    border-color: #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.5); }
+    50%  { transform: translate(-50%, -50%) scale(1.02); border-color: #34d399; box-shadow: 0 0 35px rgba(52,211,153,0.8); }
+    100% { transform: translate(-50%, -50%) scale(1);    border-color: #10b981; box-shadow: 0 0 20px rgba(16,185,129,0.5); }
+}
+
+/* ===== Radar loading ===== */
+.radar-scan-container {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.05);
+}
+.radar-sweep {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border-top: 3px solid #10b981;
+    animation: radarSweep 1.5s infinite linear;
+}
+@keyframes radarSweep {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const video        = document.getElementById("camera-stream");
+    const canvas       = document.getElementById("snapshot-canvas");
+    const lightCanvas  = document.getElementById("lighting-canvas");
+    const preview      = document.getElementById("capture-preview");
+    const viewportCard = document.getElementById("camera-viewport-card");
+
+    // Buttons
+    const btnStart             = document.getElementById("btn-start");
+    const btnStartDynamicScan  = document.getElementById("btn-start-dynamic-scan");
+    const btnSingleCapture     = document.getElementById("btn-single-capture");
+    const btnRetake            = document.getElementById("btn-retake");
+    const btnSubmitSingle      = document.getElementById("btn-submit-single");
+    const btnToggleMirror      = document.getElementById("btn-toggle-mirror");
+    const mirrorLabel          = document.getElementById("mirror-label");
+    const btnMobileTrigger     = document.getElementById("btn-mobile-trigger");
+    const btnMobileFallback    = document.getElementById("btn-mobile-fallback");
+    const mobilePhotoInput     = document.getElementById("mobile-photo-input");
+
+    // Overlays & UI
+    const cameraHudTop         = document.getElementById("camera-hud-top");
+    const initialState         = document.getElementById("initial-state");
+    const deniedState          = document.getElementById("denied-state");
+    const framingGuide         = document.getElementById("framing-guide");
+    const actionControls       = document.getElementById("action-controls");
+    const postControls         = document.getElementById("post-capture-controls");
+    const loadingOverlay       = document.getElementById("loading-overlay");
+    const loadingSubtext       = document.getElementById("loading-subtext");
+    const errorAlert           = document.getElementById("error-alert");
+    const errorMsg             = document.getElementById("error-msg");
+    const successAlert         = document.getElementById("success-alert");
+    const successMsg           = document.getElementById("success-msg");
+
+    // Lighting
+    const lightingBadge        = document.getElementById("lighting-badge");
+    const lightingIndicatorDot = document.getElementById("lighting-indicator-dot");
+    const lightingText         = document.getElementById("lighting-text");
+    const resolutionLabel      = document.getElementById("resolution-label");
+
+    // Motion Overlay
+    const motionOverlay        = document.getElementById("motion-guided-overlay");
+    const motionStepBadge      = document.getElementById("motion-step-badge");
+    const motionInstruction    = document.getElementById("motion-instruction-text");
+    const motionInstructionIcon= document.getElementById("motion-instruction-icon");
+    const motionCounterPill    = document.getElementById("motion-counter-pill");
+    const motionPercentLabel   = document.getElementById("motion-percentage-label");
+    const motionProgressBar    = document.getElementById("motion-progress-bar");
+    const motionReticle        = document.getElementById("motion-reticle");
+
+    let stream = null;
+    let singleBlob = null;
+    let isMirrored = false;
+    let lightCheckInterval = null;
+    let isScanning = false;
+    let scrollTop = 0;
+
+    // ===== Fullscreen lock/unlock =====
+    function lockScreen() {
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        document.body.classList.add("scanning-active");
+        document.body.style.top = `-${scrollTop}px`;
+        viewportCard.classList.add("fullscreen-scan");
+    }
+    function unlockScreen() {
+        document.body.classList.remove("scanning-active");
+        document.body.style.top = "";
+        viewportCard.classList.remove("fullscreen-scan");
+        window.scrollTo(0, scrollTop);
+    }
+
+    // ===== Beep =====
+    function playBeep(freq, duration) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.frequency.value = freq || 600;
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (duration || 0.15));
+            osc.start(); osc.stop(ctx.currentTime + (duration || 0.15));
+        } catch(e) {}
+    }
+
+    function updateMirrorMode() {
+        video.style.transform = isMirrored ? "scaleX(-1)" : "none";
+        preview.style.transform = isMirrored ? "scaleX(-1)" : "none";
+        if (mirrorLabel) mirrorLabel.textContent = isMirrored ? " Cermin" : " Normal";
+    }
+    btnToggleMirror.addEventListener("click", () => { isMirrored = !isMirrored; updateMirrorMode(); });
+
+    // ===== Mobile camera upload =====
+    if (btnMobileTrigger)  btnMobileTrigger.addEventListener("click",  () => mobilePhotoInput.click());
+    if (btnMobileFallback) btnMobileFallback.addEventListener("click", () => mobilePhotoInput.click());
+    if (mobilePhotoInput) {
+        mobilePhotoInput.addEventListener("change", function() {
+            if (this.files && this.files[0]) {
+                singleBlob = this.files[0];
+                preview.src = URL.createObjectURL(singleBlob);
+                preview.classList.remove("d-none");
+                video.classList.add("d-none");
+                initialState.classList.add("d-none");
+                deniedState.classList.add("d-none");
+                if (framingGuide.classList.contains("d-block"))
+                    framingGuide.classList.replace("d-block", "d-none");
+                if (actionControls.classList.contains("d-flex"))
+                    actionControls.classList.replace("d-flex", "d-none");
+                postControls.classList.replace("d-none", "d-flex");
+                if (stream) stream.getTracks().forEach(t => t.stop());
+                if (lightCheckInterval) clearInterval(lightCheckInterval);
+            }
+        });
+    }
+
+    function showError(msg) {
+        errorMsg.textContent = msg;
+        errorAlert.classList.remove("d-none");
+        successAlert.classList.add("d-none");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function showSuccess(msg) {
+        successMsg.textContent = msg;
+        successAlert.classList.remove("d-none");
+        errorAlert.classList.add("d-none");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function clearAlerts() {
+        errorAlert.classList.add("d-none");
+        successAlert.classList.add("d-none");
+    }
+
+    // ===== Lighting sensor =====
+    function startLightingSensor() {
+        const lCtx = lightCanvas.getContext("2d");
+        lightCheckInterval = setInterval(() => {
+            if (!video || video.paused || video.ended || video.videoWidth === 0) return;
+            try {
+                lCtx.drawImage(video, 0, 0, 32, 32);
+                const d = lCtx.getImageData(0, 0, 32, 32).data;
+                let tot = 0;
+                for (let i = 0; i < d.length; i += 4)
+                    tot += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+                const avg = tot / (32*32);
+                if (avg < 65) {
+                    lightingIndicatorDot.className = "spinner-grow spinner-grow-sm text-warning";
+                    lightingText.textContent = "Redup";
+                    lightingBadge.style.borderColor = "#f59e0b";
+                } else if (avg > 200) {
+                    lightingIndicatorDot.className = "spinner-grow spinner-grow-sm text-warning";
+                    lightingText.textContent = "Terlalu Silau";
+                    lightingBadge.style.borderColor = "#f59e0b";
+                } else {
+                    lightingIndicatorDot.className = "spinner-grow spinner-grow-sm text-success";
+                    lightingText.textContent = "Cahaya OK";
+                    lightingBadge.style.borderColor = "#10b981";
+                }
+            } catch(e) {}
+        }, 600);
+    }
+
+    // ===== Start Camera =====
+    btnStart.addEventListener("click", async function() {
+        clearAlerts();
+        try {
+            const constraints = {
+                video: { width: { ideal: 1920, min: 1280 }, height: { ideal: 1080, min: 720 }, facingMode: "user" },
+                audio: false
+            };
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                resolutionLabel.textContent = video.videoWidth + "x" + video.videoHeight;
+            };
+            video.classList.remove("d-none");
+            framingGuide.classList.replace("d-none", "d-block");
+            initialState.classList.add("d-none");
+            actionControls.classList.replace("d-none", "d-flex");
+            cameraHudTop.classList.remove("d-none");
+            updateMirrorMode();
+            startLightingSensor();
+        } catch (err) {
+            console.error("Camera Error:", err);
+            if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                initialState.classList.add("d-none");
+                deniedState.classList.remove("d-none");
+            } else {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                    video.srcObject = stream;
+                    video.classList.remove("d-none");
+                    framingGuide.classList.replace("d-none", "d-block");
+                    initialState.classList.add("d-none");
+                    actionControls.classList.replace("d-none", "d-flex");
+                    cameraHudTop.classList.remove("d-none");
+                    updateMirrorMode();
+                    startLightingSensor();
+                } catch(fb) {
+                    initialState.classList.add("d-none");
+                    deniedState.classList.remove("d-none");
+                }
+            }
+        }
+    });
+
+    // =========================================================================
+    // DYNAMIC MULTI-FRAME SCAN
+    // =========================================================================
+    const MOTION_STEPS = [
+        { badge:"1/6", icon:"bi-bullseye text-primary",               title:"Hadap Depan",       ms:1600, color:"#10b981" },
+        { badge:"2/6", icon:"bi-arrow-right-circle-fill text-warning", title:"Tengok Kanan \u2192", ms:1800, color:"#f59e0b" },
+        { badge:"3/6", icon:"bi-arrow-left-circle-fill text-warning",  title:"\u2190 Tengok Kiri",  ms:1800, color:"#f59e0b" },
+        { badge:"4/6", icon:"bi-arrow-up-circle-fill text-info",       title:"\u2191 Angkat Dagu",  ms:1600, color:"#06b6d4" },
+        { badge:"5/6", icon:"bi-arrow-down-circle-fill text-info",     title:"\u2193 Tunduk Sedikit",ms:1600, color:"#06b6d4" },
+        { badge:"6/6", icon:"bi-zoom-in text-success",                 title:"\uD83D\uDD0D Maju Dekat", ms:1800, color:"#10b981" },
+    ];
+
+    btnStartDynamicScan.addEventListener("click", async function() {
+        if (isScanning) return;
+        isScanning = true;
+        clearAlerts();
+
+        // Lock to fullscreen
+        lockScreen();
+
+        actionControls.classList.replace("d-flex", "d-none");
+        framingGuide.classList.replace("d-block", "d-none");
+        motionOverlay.classList.remove("d-none");
+
+        const capturedBlobs = [];
+        let framesCaptured = 0;
+
+        canvas.width  = video.videoWidth  || 1280;
+        canvas.height = video.videoHeight || 720;
+        const ctx = canvas.getContext("2d");
+
+        // Frame capture loop
+        const captureInterval = setInterval(() => {
+            if (!isScanning) return;
+            if (!video || video.videoWidth === 0 || video.paused) return;
+            try {
+                ctx.save();
+                if (isMirrored) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                ctx.restore();
+                canvas.toBlob((blob) => {
+                    if (blob && blob.size > 2000) {
+                        capturedBlobs.push(blob);
+                        framesCaptured++;
+                        motionCounterPill.textContent = framesCaptured + " frame";
+                    }
+                }, "image/jpeg", 0.85);
+            } catch(e) { console.warn("Frame err:", e); }
+        }, 115);
+
+        // Step sequence
+        let totalElapsed = 0;
+        const totalDuration = MOTION_STEPS.reduce((acc, s) => acc + s.ms, 0);
+
+        for (let i = 0; i < MOTION_STEPS.length; i++) {
+            const step = MOTION_STEPS[i];
+            motionStepBadge.textContent = step.badge;
+            motionInstructionIcon.className = "bi " + step.icon;
+            motionInstructionIcon.style.fontSize = "1.4rem";
+            motionInstruction.textContent = step.title;
+            motionReticle.style.borderColor = step.color;
+            motionReticle.style.boxShadow = "0 0 25px " + step.color + "99, inset 0 0 20px " + step.color + "44";
+            playBeep(480 + i*70, 0.12);
+
+            const stepStart = Date.now();
+            while (Date.now() - stepStart < step.ms) {
+                const pct = Math.min(98, Math.round(((totalElapsed + Date.now() - stepStart) / totalDuration) * 100));
+                motionProgressBar.style.width = pct + "%";
+                motionPercentLabel.textContent = pct + "%";
+                await new Promise(r => setTimeout(r, 60));
+            }
+            totalElapsed += step.ms;
+        }
+
+        // Finish
+        clearInterval(captureInterval);
+        // Small wait for pending toBlob callbacks
+        await new Promise(r => setTimeout(r, 400));
+
+        motionProgressBar.style.width = "100%";
+        motionPercentLabel.textContent = "100%";
+        playBeep(880, 0.25);
+
+        motionOverlay.classList.add("d-none");
+        loadingOverlay.classList.remove("d-none");
+        loadingSubtext.textContent = "VGG16 memproses " + capturedBlobs.length + " frame...";
+
+        // Guard: no frames captured
+        if (capturedBlobs.length === 0) {
+            unlockScreen();
+            loadingOverlay.classList.add("d-none");
+            actionControls.classList.replace("d-none", "d-flex");
+            framingGuide.classList.replace("d-none", "d-block");
+            isScanning = false;
+            showError("Tidak ada frame yang terekam. Pastikan kamera aktif dan wajah terlihat, lalu coba lagi.");
+            return;
+        }
+
+        // Select keyframes (evenly spaced)
+        const numSamples = Math.min(10, Math.max(4, Math.floor(capturedBlobs.length / 8)));
+        const stepSize = Math.max(1, Math.floor(capturedBlobs.length / numSamples));
+        const selectedKeyframes = [];
+        for (let idx = 0; idx < capturedBlobs.length; idx += stepSize) {
+            if (selectedKeyframes.length < numSamples) selectedKeyframes.push(capturedBlobs[idx]);
+        }
+        const last = capturedBlobs[capturedBlobs.length - 1];
+        if (selectedKeyframes.indexOf(last) === -1) selectedKeyframes.push(last);
+
+        const formData = new FormData();
+        selectedKeyframes.forEach((blob, i) => formData.append("files", blob, "frame_" + i + ".jpg"));
+
+        try {
+            const res = await fetch("/scan/face/upload", { method: "POST", body: formData });
+            const result = await res.json();
+            unlockScreen();
+            loadingOverlay.classList.add("d-none");
+
+            if (res.ok) {
+                if (stream) stream.getTracks().forEach(t => t.stop());
+                if (lightCheckInterval) clearInterval(lightCheckInterval);
+                showSuccess("Pemindaian selesai! Mengalihkan ke hasil...");
+                setTimeout(() => { window.location.href = "/history/" + result.scan_id; }, 1600);
+            } else {
+                showError(result.error || "Gagal memproses gambar. Pastikan wajah terlihat jelas.");
+                actionControls.classList.replace("d-none", "d-flex");
+                framingGuide.classList.replace("d-none", "d-block");
+                isScanning = false;
+            }
+        } catch(err) {
+            unlockScreen();
+            loadingOverlay.classList.add("d-none");
+            showError("Kesalahan jaringan saat mengunggah. Coba lagi.");
+            actionControls.classList.replace("d-none", "d-flex");
+            framingGuide.classList.replace("d-none", "d-block");
+            isScanning = false;
+        }
+    });
+
+    // =========================================================================
+    // SINGLE SNAPSHOT MODE
+    // =========================================================================
+    btnSingleCapture.addEventListener("click", function() {
+        clearAlerts();
+        canvas.width  = video.videoWidth  || 1280;
+        canvas.height = video.videoHeight || 720;
+        const ctx = canvas.getContext("2d");
+        ctx.save();
+        if (isMirrored) { ctx.translate(canvas.width, 0); ctx.scale(-1, 1); }
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
+        canvas.toBlob(function(blob) {
+            singleBlob = blob;
+            preview.src = URL.createObjectURL(blob);
+            preview.classList.remove("d-none");
+            video.classList.add("d-none");
+            framingGuide.classList.replace("d-block", "d-none");
+            actionControls.classList.replace("d-flex", "d-none");
+            postControls.classList.replace("d-none", "d-flex");
+        }, "image/jpeg", 0.92);
+    });
+
+    btnRetake.addEventListener("click", function() {
+        clearAlerts();
+        singleBlob = null;
+        preview.src = "";
+        preview.classList.add("d-none");
+        video.classList.remove("d-none");
+        framingGuide.classList.replace("d-none", "d-block");
+        postControls.classList.replace("d-flex", "d-none");
+        actionControls.classList.replace("d-none", "d-flex");
+    });
+
+    btnSubmitSingle.addEventListener("click", async function() {
+        if (!singleBlob) return;
+        clearAlerts();
+        postControls.classList.replace("d-flex", "d-none");
+        lockScreen();
+        loadingOverlay.classList.remove("d-none");
+        loadingSubtext.textContent = "AI mengevaluasi kondisi kulit dengan filter CLAHE...";
+
+        const formData = new FormData();
+        formData.append("files", singleBlob, "scan.jpg");
+
+        try {
+            const res = await fetch("/scan/face/upload", { method: "POST", body: formData });
+            const result = await res.json();
+            unlockScreen();
+            loadingOverlay.classList.add("d-none");
+
+            if (res.ok) {
+                if (stream) stream.getTracks().forEach(t => t.stop());
+                if (lightCheckInterval) clearInterval(lightCheckInterval);
+                showSuccess("Foto berhasil dianalisis! Mengalihkan...");
+                setTimeout(() => { window.location.href = "/history/" + result.scan_id; }, 1600);
+            } else {
+                showError(result.error || "Gagal memproses gambar.");
+                postControls.classList.replace("d-none", "d-flex");
+            }
+        } catch(err) {
+            unlockScreen();
+            loadingOverlay.classList.add("d-none");
+            showError("Terjadi gangguan jaringan.");
+            postControls.classList.replace("d-none", "d-flex");
+        }
+    });
+
+    window.addEventListener("beforeunload", function() {
+        if (stream) stream.getTracks().forEach(t => t.stop());
+        if (lightCheckInterval) clearInterval(lightCheckInterval);
+        unlockScreen();
+    });
+});
+</script>
+{% endblock %}

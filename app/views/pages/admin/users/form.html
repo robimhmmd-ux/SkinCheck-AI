@@ -1,0 +1,64 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}{% if user_obj %}Edit User{% else %}Add New User{% endif %}{% endblock %}
+{% block topbar_title %}User Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid" style="max-width: 600px; padding: 0;">
+    
+    <!-- Header -->
+    <div class="d-flex align-items-center mb-4">
+        <a href="/admin/users" class="btn btn-sm btn-light rounded-circle me-3 shadow-sm" style="width:38px;height:38px;">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <div>
+            <h4 class="fw-bold mb-1">{% if user_obj %}Edit User{% else %}Tambah User Baru{% endif %}</h4>
+            <p class="text-muted small mb-0">Kelola informasi akun dan akses sistem.</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            
+            {% if request.query_params.get('error') %}
+            <div class="alert alert-danger d-flex align-items-center gap-2 mb-4 py-2">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                <span class="small">{{ request.query_params.get('error') }}</span>
+            </div>
+            {% endif %}
+
+            <form action="{% if user_obj %}/admin/users/{{ user_obj.id }}/edit{% else %}/admin/users{% endif %}" method="POST">
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small text-dark">Nama Lengkap <span class="text-danger">*</span></label>
+                    <input type="text" name="name" class="form-control" required value="{{ user_obj.name if user_obj else '' }}" placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small text-dark">Alamat Email <span class="text-danger">*</span></label>
+                    <input type="email" name="email" class="form-control" required value="{{ user_obj.email if user_obj else '' }}" placeholder="email@contoh.com">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold small text-dark">Password {% if not user_obj %}<span class="text-danger">*</span>{% endif %}</label>
+                    <input type="password" name="password" class="form-control" {% if not user_obj %}required{% endif %} placeholder="{% if user_obj %}Kosongkan jika tidak ingin diubah{% else %}Minimal 8 karakter{% endif %}">
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-dark">Status Akun</label>
+                    <select name="status" class="form-select">
+                        <option value="active" {% if user_obj and user_obj.status == 'active' %}selected{% endif %}>Aktif</option>
+                        <option value="inactive" {% if user_obj and user_obj.status == 'inactive' %}selected{% endif %}>Nonaktif</option>
+                    </select>
+                </div>
+
+                <div class="mt-5 pt-4 border-top d-flex justify-content-end gap-3">
+                    <a href="/admin/users" class="btn btn-light px-4 fw-semibold">Batal</a>
+                    <button type="submit" class="btn btn-primary px-5 fw-semibold shadow-sm">
+                        <i class="bi bi-save me-1"></i>Simpan User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

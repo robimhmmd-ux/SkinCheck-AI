@@ -1,0 +1,193 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}Product Management{% endblock %}
+{% block topbar_title %}Product Management{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Product Management</h4>
+        <p class="text-muted small mb-0">Kelola katalog produk untuk rekomendasi AI Skincare Assistant</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/admin/ai-copilot" class="btn fw-semibold shadow-sm" style="color:#065f46;border:1px solid rgba(16,185,129,0.3);background:#ecfdf5;">
+            <i class="bi bi-robot me-1 text-success"></i>AI Copilot & Usulan Produk
+        </a>
+        <a href="/admin/products/create" class="btn btn-primary fw-semibold shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i>Tambah Produk Manual
+        </a>
+    </div>
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+    <i class="bi bi-check-circle-fill flex-shrink-0"></i>
+    <div>{{ request.query_params.get('success') }}</div>
+    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<!-- Search & Filter -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-3">
+        <form method="GET" action="/admin/products" class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-semibold text-muted mb-1">Cari Brand / Nama Produk</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Contoh: Skintific, Cleanser..." value="{{ search }}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold text-muted mb-1">Kategori</label>
+                <select name="category" class="form-select">
+                    <option value="">Semua Kategori</option>
+                    <option value="cleanser" {% if category == 'cleanser' %}selected{% endif %}>Cleanser</option>
+                    <option value="toner" {% if category == 'toner' %}selected{% endif %}>Toner</option>
+                    <option value="serum" {% if category == 'serum' %}selected{% endif %}>Serum</option>
+                    <option value="moisturizer" {% if category == 'moisturizer' %}selected{% endif %}>Moisturizer</option>
+                    <option value="sunscreen" {% if category == 'sunscreen' %}selected{% endif %}>Sunscreen</option>
+                    <option value="treatment" {% if category == 'treatment' %}selected{% endif %}>Treatment</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-secondary w-100 fw-semibold">
+                    <i class="bi bi-funnel me-1"></i>Filter
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a href="/admin/products" class="btn btn-light w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Products Table -->
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Brand & Produk</th>
+                    <th>Kategori</th>
+                    <th>Skin Concern</th>
+                    <th>Marketplace</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in products %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="text-muted small">#{{ p.id }}</span>
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark" style="font-size:0.95rem;">{{ p.brand }}</div>
+                        <div class="text-muted small text-truncate" style="max-width:250px;">{{ p.name }}</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-dark border fw-medium">{{ p.category | capitalize }}</span>
+                    </td>
+                    <td>
+                        {% set concerns = p.get_skin_concern() %}
+                        {% if concerns %}
+                            <div class="d-flex flex-wrap gap-1" style="max-width: 200px;">
+                            {% for c in concerns[:2] %}
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:0.7rem;">{{ c | capitalize }}</span>
+                            {% endfor %}
+                            {% if concerns|length > 2 %}
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary" style="font-size:0.7rem;">+{{ concerns|length - 2 }}</span>
+                            {% endif %}
+                            </div>
+                        {% else %}
+                            <span class="text-muted small">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            {% if p.shopee_link %}
+                            <a href="{{ p.shopee_link }}" target="_blank" class="btn btn-sm px-2 py-1 btn-danger btn-opacity-10"
+                               style="background:rgba(238,44,44,0.1);color:#ee2c2c;border:1px solid rgba(238,44,44,0.2);font-size:0.7rem;"
+                               title="Buka di Shopee" onclick="event.stopPropagation()">
+                                <i class="bi bi-bag-fill me-1"></i>Shopee
+                            </a>
+                            {% endif %}
+                            {% if p.tokopedia_link %}
+                            <a href="{{ p.tokopedia_link }}" target="_blank" class="btn btn-sm px-2 py-1"
+                               style="background:rgba(38,175,84,0.1);color:#26af54;border:1px solid rgba(38,175,84,0.2);font-size:0.7rem;"
+                               title="Buka di Tokopedia" onclick="event.stopPropagation()">
+                                <i class="bi bi-bag-fill me-1"></i>Tokopedia
+                            </a>
+                            {% endif %}
+                            {% if not p.shopee_link and not p.tokopedia_link %}
+                            <span class="text-muted small">—</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        {% if p.status == 'active' %}
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 fw-semibold">
+                                <i class="bi bi-check-circle me-1"></i>Aktif
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border fw-semibold">
+                                <i class="bi bi-dash-circle me-1"></i>Nonaktif
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-4">
+                        <div class="d-flex gap-1 justify-content-end">
+                            <a href="/admin/products/{{ p.id }}/edit" class="btn btn-sm btn-outline-primary rounded fw-semibold px-2">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            {% if p.status == 'active' %}
+                            <form action="/admin/products/{{ p.id }}/delete" method="POST" class="d-inline"
+                                  onsubmit="return confirm('Nonaktifkan produk ini?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded px-2">
+                                    <i class="bi bi-archive"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bi bi-box-seam empty-state-icon"></i>
+                            <p class="empty-state-title">Tidak Ada Produk</p>
+                            <p class="empty-state-text">{% if search %}Tidak ditemukan produk dengan filter tersebut.{% else %}Belum ada produk dalam katalog.{% endif %}</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="card-footer bg-white border-0 py-3 px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="small text-muted">Halaman {{ page }} dari {{ total_pages }} (Total: {{ total }})</span>
+            <nav>
+                <ul class="pagination pagination-sm mb-0 gap-1">
+                    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                        <a class="page-link rounded" href="?page={{ page - 1 }}&search={{ search }}&category={{ category }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                        <a class="page-link rounded" href="?page={{ page + 1 }}&search={{ search }}&category={{ category }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

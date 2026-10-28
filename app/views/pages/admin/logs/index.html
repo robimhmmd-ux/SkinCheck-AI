@@ -1,0 +1,91 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}Activity Logs{% endblock %}
+{% block topbar_title %}Activity Logs{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">Activity Logs</h4>
+        <p class="text-muted small mb-0">Monitor seluruh aktivitas pengguna dan sistem</p>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-clean mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">#</th>
+                    <th>Pengguna</th>
+                    <th>Role</th>
+                    <th>Aktivitas</th>
+                    <th>IP Address</th>
+                    <th class="text-end pe-4">Waktu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in results %}
+                {% set log = r.ActivityLog %}
+                {% set user = r.User %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="small text-muted">#{{ log.id }}</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="navbar-user-avatar flex-shrink-0" style="width:28px;height:28px;font-size:0.7rem;
+                                background:{% if user.role == 'admin' %}linear-gradient(135deg,#131f18,#395844){% else %}linear-gradient(135deg,#395844,#10b981){% endif %};">
+                                {{ user.name[0] | upper }}
+                            </div>
+                            <span class="fw-semibold small text-dark">{{ user.name }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        {% if user.role == 'admin' %}
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 fw-semibold">Admin</span>
+                        {% else %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 fw-semibold">Customer</span>
+                        {% endif %}
+                    </td>
+                    <td class="small">{{ log.activity }}</td>
+                    <td>
+                        <code class="small text-muted" style="font-size:0.78rem;">{{ log.ip_address or '—' }}</code>
+                    </td>
+                    <td class="text-end pe-4 small text-muted">
+                        {{ log.created_at.strftime('%d %b %Y, %H:%M:%S') }}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bi bi-journal-text empty-state-icon"></i>
+                            <p class="empty-state-title">Belum Ada Activity Log</p>
+                            <p class="empty-state-text">Log aktivitas sistem akan dicatat secara otomatis.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="card-footer bg-white border-0 py-3 px-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="small text-muted">Halaman {{ page }} dari {{ total_pages }} (Total: {{ total }})</span>
+            <nav>
+                <ul class="pagination pagination-sm mb-0 gap-1">
+                    <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                        <a class="page-link rounded" href="?page={{ page - 1 }}"><i class="bi bi-chevron-left"></i></a>
+                    </li>
+                    <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+                        <a class="page-link rounded" href="?page={{ page + 1 }}"><i class="bi bi-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

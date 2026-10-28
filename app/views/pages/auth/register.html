@@ -1,0 +1,140 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="auth-page position-relative overflow-hidden py-5" style="min-height: calc(100vh - 80px); background: radial-gradient(circle at 50% 30%, rgba(57, 88, 68, 0.4) 0%, rgba(19, 31, 24, 0.95) 70%, #0d1410 100%);">
+    
+    <!-- Background Atmospheric Glows -->
+    <div class="position-absolute top-0 start-50 translate-middle-x" style="width: 600px; height: 600px; background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%); pointer-events: none; filter: blur(50px);"></div>
+    <div class="position-absolute bottom-0 start-0" style="width: 400px; height: 400px; background: radial-gradient(circle, rgba(57, 88, 68, 0.25) 0%, transparent 70%); pointer-events: none; filter: blur(60px);"></div>
+
+    <div class="container position-relative d-flex justify-content-center align-items-center" style="z-index: 10;">
+        <div class="auth-card p-4 p-sm-5 animate-fade-in-up" 
+             style="max-width: 480px; width: 100%; background: rgba(22, 38, 29, 0.78); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 32px; box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25);">
+            
+            <!-- Floating Top Circular Avatar -->
+            <div class="text-center position-relative mb-4" style="margin-top: -75px;">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                     style="width: 80px; height: 80px; background: #ffffff; border: 4px solid rgba(255, 255, 255, 0.35); box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45); overflow: hidden;">
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #e6f4ea, #d1e7dd);">
+                        <svg class="text-dark" style="width: 46px; height: 46px; color: #1c2e24;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Header: MASUK vs DAFTAR -->
+            <div class="d-flex justify-content-center gap-4 mb-4 pb-2 border-bottom" style="border-color: rgba(255, 255, 255, 0.12) !important;">
+                <a href="/login" class="text-decoration-none fw-semibold pb-2" style="font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); transition: color 0.15s;">
+                    Masuk
+                </a>
+                <a href="/register" class="text-decoration-none fw-bold pb-2" style="font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; color: #ffffff; border-bottom: 2px solid #86efac;">
+                    Daftar
+                </a>
+            </div>
+
+            <!-- Role Badge -->
+            <div class="text-center mb-3">
+                <span class="badge px-3 py-1.5 rounded-pill small fw-semibold" style="background: rgba(16, 185, 129, 0.15); color: #86efac; border: 1px solid rgba(134, 239, 172, 0.25); letter-spacing: 0.04em;">
+                    <i class="bi bi-person-plus-fill me-1"></i>Registrasi Pasien / Customer
+                </span>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger py-2 px-3 small d-flex align-items-center gap-2 mb-3 rounded-3" style="background: rgba(220, 38, 38, 0.2); border: 1px solid rgba(248, 113, 113, 0.4); color: #fecaca;">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <form action="/register" method="POST" autocomplete="on">
+                <!-- Name -->
+                <div class="mb-3">
+                    <div class="input-group" style="box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);">
+                        <span class="input-group-text border-0 text-white" style="background: #14241b; padding: 0.75rem 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                            <i class="bi bi-person-badge-fill" style="color: #86efac; font-size: 1.1rem;"></i>
+                        </span>
+                        <input type="text" class="form-control border-0" id="name" name="name" placeholder="Nama Lengkap Anda" required autocomplete="name"
+                               style="background: #ffffff; color: #131f18; font-size: 0.95rem; padding: 0.75rem 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-3">
+                    <div class="input-group" style="box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);">
+                        <span class="input-group-text border-0 text-white" style="background: #14241b; padding: 0.75rem 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                            <i class="bi bi-envelope-fill" style="color: #86efac; font-size: 1.1rem;"></i>
+                        </span>
+                        <input type="email" class="form-control border-0" id="email" name="email" placeholder="nama@email.com" required autocomplete="email"
+                               style="background: #ffffff; color: #131f18; font-size: 0.95rem; padding: 0.75rem 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="mb-3">
+                    <div class="input-group" style="box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);">
+                        <span class="input-group-text border-0 text-white" style="background: #14241b; padding: 0.75rem 1rem; border-top-left-radius: 12px; border-bottom-left-radius: 12px;">
+                            <i class="bi bi-lock-fill" style="color: #86efac; font-size: 1.1rem;"></i>
+                        </span>
+                        <input type="password" class="form-control border-0" id="password" name="password"
+                               placeholder="Kata Sandi (min. 8 karakter)" required autocomplete="new-password" minlength="8"
+                               style="background: #ffffff; color: #131f18; font-size: 0.95rem; padding: 0.75rem 1rem; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+                    </div>
+                </div>
+
+                <!-- Skin Concerns -->
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold text-white-50 text-uppercase mb-2" style="font-size: 0.72rem; letter-spacing: 0.08em;">
+                        Fokus Analisis (Opsional)
+                    </label>
+                    <div class="row g-2">
+                        {% for concern_val, concern_label in [('acne', 'Jerawat & Komedo'), ('redness', 'Kemerahan'), ('texture', 'Tekstur & Pori'), ('sunscreen', 'Sunscreen Check')] %}
+                        <div class="col-6">
+                            <div class="form-check p-2 rounded-3" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <input class="form-check-input ms-0 me-2" type="checkbox" name="skin_concerns" value="{{ concern_val }}" id="concern_{{ concern_val }}" style="cursor: pointer;">
+                                <label class="form-check-label small text-white fw-medium" for="concern_{{ concern_val }}" style="cursor: pointer; font-size: 0.78rem;">
+                                    {{ concern_label }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Consent -->
+                <div class="p-3 mb-3 rounded-3" style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="consent_privacy" name="consent_privacy" required style="cursor: pointer;">
+                        <label class="form-check-label small text-white-50" for="consent_privacy" style="font-size: 0.76rem; cursor: pointer; line-height: 1.4;">
+                            Saya memahami bahwa analisis AI SkinCheck bersifat <strong>indikasi objektif non-medis</strong>.
+                        </label>
+                    </div>
+                    <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="consent_camera" name="consent_camera" style="cursor: pointer;">
+                        <label class="form-check-label small text-white-50" for="consent_camera" style="font-size: 0.76rem; cursor: pointer; line-height: 1.4;">
+                            Memberikan izin akses kamera untuk pemindaian wajah mandiri.
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn w-100 py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2"
+                        style="background: #15251c; border: 1px solid rgba(134, 239, 172, 0.3); color: #ffffff; border-radius: 14px; font-size: 0.88rem; letter-spacing: 0.1em; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); transition: all 0.2s;"
+                        onmouseover="this.style.background='#0d1812'; this.style.borderColor='#86efac'; this.style.transform='translateY(-1px)';"
+                        onmouseout="this.style.background='#15251c'; this.style.borderColor='rgba(134, 239, 172, 0.3)'; this.style.transform='translateY(0)';">
+                    <span>DAFTAR SEKARANG</span>
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-4 pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.12) !important;">
+                <p class="small mb-0" style="color: rgba(255, 255, 255, 0.6); font-size: 0.8rem;">
+                    Sudah memiliki akun?
+                    <a href="/login" class="fw-semibold text-decoration-none ms-1" style="color: #a7f3d0;">Masuk di sini</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
