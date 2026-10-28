@@ -1,5 +1,5 @@
 from app.config import settings
-from app.config.database import engine, Base, SessionLocal
+from app.config.database import engine, Base, SessionLocal, mysql_connect_args
 from app.models.user import User
 from app.models.product import Product
 from app.models.skin_scan import SkinScan
@@ -16,13 +16,17 @@ def ensure_database_exists():
         password_part = f":{settings.DB_PASSWORD}" if settings.DB_PASSWORD else ""
         server_url = f"mysql+pymysql://{settings.DB_USERNAME}{password_part}@{settings.DB_HOST}:{settings.DB_PORT}"
         try:
-            temp_engine = create_engine(server_url)
+            # Same TLS handling as the main engine (needed for TiDB Cloud).
+            # If this step fails (e.g. the database was already created in
+            # the TiDB Cloud console), init_db() still continues below and
+            # creates the tables with Base.metadata.create_all().
+            temp_engine = create_engine(server_url, connect_args=mysql_connect_args())
             with temp_engine.connect() as conn:
                 conn.execute(text(f"CREATE DATABASE IF NOT EXISTS `{settings.DB_DATABASE}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"))
                 conn.commit()
             print(f"MySQL Database '{settings.DB_DATABASE}' is ready.")
         except Exception as e:
-            print(f"Catatan: Pastikan MySQL di XAMPP sudah dinyalakan ({e})")
+            print(f"Catatan: Pastikan database MySQL sudah aktif / sudah dibuat (di TiDB Cloud, buat dulu dari console). Detail: ({e})")
 
 def init_db():
     ensure_database_exists()

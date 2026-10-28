@@ -14,3 +14,12 @@ Pillow>=10.0.0
 tensorflow>=2.10.0
 pymysql>=1.1.0
 cryptography>=41.0.0
+# Previously missing, but actually imported by the code (audit 2026-10-28):
+# - opencv-python: ai_service.py (cv2, CLAHE, resize)
+# - google-generativeai: ai_assistant_service.py, admin_controller.py (Gemini)
+# - bcrypt: app/utils/auth.py imports bcrypt directly
+# - certifi: CA bundle used when DB_SSL=true (TiDB Cloud TLS)
+opencv-python>=4.8.0
+google-generativeai>=0.8.0
+bcrypt>=4.0.0
+certifi>=2024.0.0

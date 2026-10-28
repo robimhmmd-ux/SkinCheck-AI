@@ -122,9 +122,24 @@ class KerasComputerVisionProvider(AIProviderInterface):
     """
     
     def __init__(self, model_path: str = "facial-condition-model/finetuned_best.h5"):
+        # Resolve a relative model path against the project root first
+        # (app/services/ai_service.py -> parents[2] is the project root),
+        # so the model is found no matter which folder the server is
+        # started from. An absolute path, or a path that already exists
+        # relative to the working directory, is used as-is.
+        if not os.path.isabs(model_path) and not os.path.exists(model_path):
+            from pathlib import Path
+
+            root_candidate = str(
+                Path(__file__).resolve().parents[2]
+                / "facial-condition-model"
+                / "finetuned_best.h5"
+            )
+            if os.path.exists(root_candidate):
+                model_path = root_candidate
         self.model_path = model_path
         self.model = None
-        
+
         if os.path.exists(self.model_path):
             self._load_model()
         else:

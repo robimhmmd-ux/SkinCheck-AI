@@ -73,6 +73,13 @@ Project SkinChek/
 
 ---
 
+## ⚠️ Sebelum Menjalankan (penting)
+
+- **Model AI tidak ada di repo ini.** File `facial-condition-model/finetuned_best.h5` (174 MB) sengaja diabaikan GitHub karena melebihi batas 100 MB. Letakkan file model itu di `facial-condition-model/finetuned_best.h5` sebelum memakai fitur scan.
+- **Database:** project ini memakai MySQL. Untuk MySQL lokal pakai XAMPP/MySQL biasa; untuk database cloud gratis pakai TiDB Cloud — panduannya ada di `TIDB_SETUP.md` (termasuk `DB_SSL=true`).
+- **Jangan commit file `.env`.** Salin `.env.example` menjadi `.env` di komputermu sendiri dan isi kredensial di sana.
+- Setelah `.env` benar, jalankan dulu `python setup_db.py` untuk membuat tabel, baru `python run.py`.
+
 ## 🚀 Cara Menjalankan Project
 
 ### 1. Prasyarat

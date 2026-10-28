@@ -24,6 +24,12 @@ class Settings:
     DB_DATABASE: str = os.getenv("DB_DATABASE", "skincheck_db")
     DB_USERNAME: str = os.getenv("DB_USERNAME", "postgres")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
+    # TLS for hosted MySQL (e.g. TiDB Cloud public endpoint, which requires TLS).
+    # Local XAMPP/MySQL: leave DB_SSL=false. TiDB Cloud: set DB_SSL=true.
+    # DB_SSL_CA is optional: path to a CA bundle. If empty and certifi is
+    # installed, its bundle is used; otherwise the system default is used.
+    DB_SSL: bool = os.getenv("DB_SSL", "false").lower() == "true"
+    DB_SSL_CA: str = os.getenv("DB_SSL_CA", "")
 
     # Storage
     STORAGE_DRIVER: str = os.getenv("STORAGE_DRIVER", "local")
