@@ -1,0 +1,29 @@
+# Vercel Function requirements (api/index.py only).
+# Intentionally WITHOUT tensorflow / opencv-python / google-generativeai:
+# - tensorflow is only imported lazily inside ai_service._load_model()
+# - opencv (cv2) is only imported lazily inside ai_service functions
+# - google-generativeai is only imported lazily inside assistant functions
+# Keeping them out keeps the Vercel bundle small. Consequence: on Vercel,
+# AI face-scan analysis will fail (no model in repo anyway) until model
+# inference is moved to an external service. Auth, dashboard, history
+# and all non-AI pages still work.
+# Pinned: FastAPI 0.115.0 + Starlette 0.38.6 + Jinja2 3.1.4 are required,
+# because newer Starlette removed the old TemplateResponse(name, context)
+# style this codebase uses, which makes every HTML page return 500.
+fastapi==0.115.0
+starlette==0.38.6
+jinja2==3.1.4
+python-dotenv>=1.0.1
+python-multipart>=0.0.9
+pydantic>=2.8.0
+httpx>=0.27.0
+SQLAlchemy>=2.0.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.0.0
+itsdangerous>=2.1.0
+email-validator>=2.1.0
+Pillow>=10.0.0
+pymysql>=1.1.0
+cryptography>=41.0.0
+certifi>=2024.0.0
+numpy>=1.26.0

@@ -5,8 +5,16 @@ from fastapi import UploadFile
 from PIL import Image, ImageStat
 import io
 
-# Define secure storage path outside of the static folder
-STORAGE_DIR = Path("storage/scans")
+# Define secure storage path outside of the static folder.
+# On Vercel the repo filesystem is read-only except /tmp, so uploads
+# go to /tmp there (ephemeral per instance). Locally, or when
+# SKINCHECK_STORAGE_DIR is set, that directory is used instead.
+if os.environ.get("SKINCHECK_STORAGE_DIR"):
+    STORAGE_DIR = Path(os.environ["SKINCHECK_STORAGE_DIR"])
+elif os.environ.get("VERCEL"):
+    STORAGE_DIR = Path("/tmp/storage/scans")
+else:
+    STORAGE_DIR = Path("storage/scans")
 STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 
 class ImageValidationException(Exception):

@@ -1,0 +1,15 @@
+.git
+__pycache__
+*.pyc
+.pytest_cache
+test_*.py
+notebooks
+kaggle_training
+docs
+.agents
+.playwright-mcp
+lumera
+*.sqlite
+*.sqlite3
+storage/scans/*
+!storage/scans/.gitkeep
